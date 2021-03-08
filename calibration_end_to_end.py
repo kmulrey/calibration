@@ -21,9 +21,12 @@ base_dir='/vol/astro7/lofar/kmulrey/calibration/'
 parser = OptionParser()
 
 parser.add_option('-f', '--model_folder', default = 'jones_standard', help = 'jones matrix folder')
+parser.add_option('-r', '--reprocess_flag', default = 0, help = 'flag to reprocess model/power')
+
 (options, args) = parser.parse_args()
 
 antenna_model_folder = options.model_folder
+reprocess_flag = int(options.reprocess_flag)
 
 jones_dir=base_dir+antenna_model_folder
 
@@ -52,8 +55,10 @@ else:
     flag=2
     
 
-if flag==1:
+if flag==1 or reprocess_flag==1:
 
     cal.average_model(jones_dir)
     
-find_simulated_power(jones_dir, 'power')
+    
+    
+cal.find_simulated_power(jones_dir, 'power')
