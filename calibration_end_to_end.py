@@ -23,7 +23,7 @@ parser = OptionParser()
 parser.add_option('-f', '--model_folder', default = 'jones_standard', help = 'jones matrix folder')
 (options, args) = parser.parse_args()
 
-antenna_model_folder = int(options.model_folder)
+antenna_model_folder = options.model_folder
 
 jones_dir=base_dir+antenna_model_folder
 
