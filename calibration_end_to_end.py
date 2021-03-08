@@ -14,7 +14,7 @@ import cal_routines as cal
 import os.path
 from os import path
 
-base_dir='/vol/astro7/lofar/kmulrey/calibration'
+base_dir='/vol/astro7/lofar/kmulrey/calibration/'
 
 
 
@@ -30,12 +30,29 @@ jones_dir=base_dir+antenna_model_folder
 print(jones_dir)
 #data_dir='/vol/astro3/lofar/sim/kmulrey/calibration/final'
 
+flag=0
+# 0 if the averages already exist
+# 1 if averages need to be done
+# 2 if no path exists
+
 if antenna_model_folder=='jones_standard':
     print('running calibration with standard CR calibration')
     
 elif path.exists(jones_dir):
     print('running with {0}'.format(antenna_model_folder))
+    for f in np.arange(51):
+        freq=str(f+30)
+        if path.exists(jones_dir+'/'+'jones_all_'+freq+'_average.p')==False:
+            flag=1
+    if flag==1:
+        print('need to average model')
 
 else:
     print('no valid antenna model')
+    flag=2
+    
+
+    
+    
+    
 
