@@ -20,7 +20,7 @@ Z=120*np.pi
 
 ZL=75
 #data_dir='/vol/astro3/lofar/sim/kmulrey/calibration/final'
-
+LFmap_dir='/vol/astro3/lofar/sim/kmulrey/calibration/LFreduced/'
 
 
 def average_model(jones_dir):
@@ -59,3 +59,38 @@ def average_model(jones_dir):
     
 
 
+def do_integral_temp(theta_start,theta_stop, phi_start, phi_stop, temp, jones_theta, jones_phi):
+    
+
+    angle_th_stop=-0.5*np.cos(theta_stop*np.pi/180)*np.cos(theta_stop*np.pi/180)
+    angle_th_start=-0.5*np.cos(theta_start*np.pi/180)*np.cos(theta_start*np.pi/180)
+    angle_ph_stop=(phi_stop*np.pi/180)
+    angle_ph_start=(phi_start*np.pi/180)
+    antenna_response=jones_theta*jones_theta+jones_phi*jones_phi
+    
+    #print '{0}   {1}'.format(angle_start, angle_stop)
+    return (angle_th_start-angle_th_stop)*(angle_ph_stop-angle_ph_start)*antenna_response*temp
+
+
+def do_integral_freq(v_start, v_stop):
+    return (1.0/3.0)*(v_stop*v_stop*v_stop-v_start*v_start*v_start)
+
+
+
+def find_simulated_power(jones_dir, power_dir):
+
+    for f in np.arange(51):
+        freq=str(f+30)
+        pickfile = open(LFmap_dir+'/LFreduced_'+str(freq)+'.p','rb')
+        XX,YY,ZZ,XX2,YY2,times_utc,times_LST,ZZ2=pickle.load(pickfile, encoding="latin1")
+    
+        pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
+        pickfile.seek(0)
+        info=pickle.load(pickfile)
+        pickfile.close()
+        print(info['keys'])
+        '''
+            {'jones_thetaX':jones_thetaX_total,'jones_thetaY':jones_thetaY_total,'jones_phiX':jones_phiX_total,'jones_phiY':jones_phiY_total}
+        jones=info['jones_cr']
+        JJ=np.zeros([91,361,4],dtype='complex')
+        '''
