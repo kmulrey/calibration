@@ -88,7 +88,7 @@ def find_simulated_power(jones_dir, power_dir):
         pickfile.seek(0)
         info=pickle.load(pickfile)
         pickfile.close()
-        print(info['keys'])
+        print(info.keys())
         '''
             {'jones_thetaX':jones_thetaX_total,'jones_thetaY':jones_thetaY_total,'jones_phiX':jones_phiX_total,'jones_phiY':jones_phiY_total}
         jones=info['jones_cr']
