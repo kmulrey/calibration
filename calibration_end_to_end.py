@@ -52,7 +52,38 @@ else:
     flag=2
     
 
+if flag==1:
+    array_ind_outer=np.arange(576,(576+96))[::2]   # indices for CSOO2 outer
+    count=0
+    jones_thetaX_total=np.zeros([361,91])
+    jones_thetaY_total=np.zeros([361,91])
+    jones_phiX_total=np.zeros([361,91])
+    jones_phiY_total=np.zeros([361,91])
+    for f in np.arange(51):
+        freq=str(f+30)
+        for i in np.arange(len(array_ind_outer)):
+            ant_id=array_ind_outer[i]
+            file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(ant_id)+'.p','rb')
+            info=pickle.load(file, encoding="latin1")
+            file.close()
+            jones_aartfaac=info['jones_aartfaac']
+            jones_thetaX_total=jones_thetaX_total+np.abs(jones_aartfaac.T[0])
+            jones_thetaY_total=jones_thetaY_total+np.abs(jones_aartfaac.T[1])
+            jones_phiX_total=jones_phiX_total+np.abs(jones_aartfaac.T[2])
+            jones_phiY_total=jones_phiY_total+np.abs(jones_aartfaac.T[3])
+            count=count+1
+   
+        jones_thetaX_total=jones_thetaX_total/count
+        jones_thetaY_total=jones_thetaY_total/count
+        jones_phiX_total=jones_phiX_total/count
+        jones_phiY_total=jones_phiY_total/count
     
+
+    
+        info={'jones_thetaX':jones_thetaX,'jones_thetaY':jones_thetaY,'jones_phiX':jones_phiX,'jones_phiY':jones_phiY}
+        file2=open(jones_dir+'/jones_all_'+freq+'.p','wb')
+        pickle.dump(info,file2)
+        file2.close()
     
     
 
