@@ -89,8 +89,49 @@ def find_simulated_power(jones_dir, power_dir):
         info=pickle.load(pickfile)
         pickfile.close()
         print(info.keys())
-        '''
-            {'jones_thetaX':jones_thetaX_total,'jones_thetaY':jones_thetaY_total,'jones_phiX':jones_phiX_total,'jones_phiY':jones_phiY_total}
-        jones=info['jones_cr']
+        jones_thetaX=info['jones_thetaX']
+        jones_thetaY=info['jones_thetaY']
+        jones_phiX=info['jones_phiX']
+        jones_phiY=info['jones_phiY']
         JJ=np.zeros([91,361,4],dtype='complex')
-        '''
+
+        for el in np.arange(90):
+            for az in np.arange(360):
+                phi=az
+                i_az=az+180
+                if az>180:
+                    phi=az-360
+                    i_az=az-180
+
+                JJ[90-el][i_az][0]=jones_thetaX
+                JJ[90-el][i_az][1]=jones_thetaY
+                JJ[90-el][i_az][2]=jones_phiX
+                JJ[90-el][i_az][3]=jones_phiY
+                
+                
+                
+                
+        int_theta=np.arange(0.5,90,1.0)
+        int_theta=np.append([0],int_theta)
+        int_theta=np.append(int_theta,[90])
+
+        int_phi=np.arange(-179.5,180,1.0)
+        int_phi=np.append([-180],int_phi)
+        int_phi=np.append(int_phi,[180])
+        
+        total_int_temp_X=np.zeros(len(times_LST))
+        total_int_temp_Y=np.zeros(len(times_LST))
+        total_int_temp=np.zeros(len(times_LST))
+
+        total_int_v_A=np.zeros(len(times_LST))
+        total_int_v=np.zeros(len(times_LST))
+
+        total_int_X=np.zeros(len(times_LST))
+        total_int_Y=np.zeros(len(times_LST))
+        total_int=np.zeros(len(times_LST))
+
+
+
+        v_start=(float(freq)-0.5)*1e6
+        v_stop=(float(freq)+0.5)*1e6
+    
