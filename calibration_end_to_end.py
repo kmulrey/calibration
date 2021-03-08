@@ -53,6 +53,9 @@ else:
     
 
 if flag==1:
+
+    cal.average_model(jone_dir)
+    '''
     array_ind_outer=np.arange(576,(576+96))[::2]   # indices for CSOO2 outer
     count=0
     jones_thetaX_total=np.zeros([361,91])
@@ -85,5 +88,4 @@ if flag==1:
         pickle.dump(info,file2)
         file2.close()
     
-    
-
+    '''
