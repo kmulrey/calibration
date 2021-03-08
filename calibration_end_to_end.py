@@ -54,7 +54,7 @@ else:
 
 if flag==1:
 
-    cal.average_model(jone_dir)
+    cal.average_model(jones_dir)
     '''
     array_ind_outer=np.arange(576,(576+96))[::2]   # indices for CSOO2 outer
     count=0

@@ -23,7 +23,7 @@ ZL=75
 
 
 
-def average_model(jone_dir):
+def average_model(jones_dir):
     array_ind_outer=np.arange(576,(576+96))[::2]   # indices for CSOO2 outer
     count=0
     jones_thetaX_total=np.zeros([361,91])
