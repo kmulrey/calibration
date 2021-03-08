@@ -80,7 +80,7 @@ if flag==1:
     
 
     
-        info={'jones_thetaX':jones_thetaX,'jones_thetaY':jones_thetaY,'jones_phiX':jones_phiX,'jones_phiY':jones_phiY}
+        info={'jones_thetaX':jones_thetaX_total,'jones_thetaY':jones_thetaY_total,'jones_phiX':jones_phiX_total,'jones_phiY':jones_phiY_total}
         file2=open(jones_dir+'/jones_all_'+freq+'.p','wb')
         pickle.dump(info,file2)
         file2.close()
