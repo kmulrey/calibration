@@ -171,7 +171,6 @@ def find_simulated_power(jones_dir, power_dir):
     
     inds=np.asarray(times_LST).argsort()
 
-    print inds
 
     times_sorted=np.asarray(times_LST)[inds]
     times_sorted_utc=np.asarray(times_utc)[inds]
