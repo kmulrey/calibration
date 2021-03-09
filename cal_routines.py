@@ -79,8 +79,9 @@ def do_integral_freq(v_start, v_stop):
 
 def find_simulated_power(jones_dir, power_dir):
 
-    for f in np.arange(51):
+    for f in np.arange(2):
         freq=str(f+30)
+        print(freq)
         pickfile = open(LFmap_dir+'/LFreduced_'+str(freq)+'.p','rb')
         XX,YY,ZZ,XX2,YY2,times_utc,times_LST,ZZ2=pickle.load(pickfile, encoding="latin1")
     
@@ -88,7 +89,6 @@ def find_simulated_power(jones_dir, power_dir):
         pickfile.seek(0)
         info=pickle.load(pickfile)
         pickfile.close()
-        print(info.keys())
         jones_thetaX=info['jones_thetaX']
         jones_thetaY=info['jones_thetaY']
         jones_phiX=info['jones_phiX']
@@ -103,10 +103,10 @@ def find_simulated_power(jones_dir, power_dir):
                     phi=az-360
                     i_az=az-180
 
-                JJ[th][i_az][0]=jones_thetaX[i_az][th]
-                JJ[th][i_az][1]=jones_thetaY[i_az][th]
-                JJ[th][i_az][2]=jones_phiX[i_az][th]
-                JJ[th][i_az][3]=jones_phiY[i_az][th]
+                JJ[90-th][i_az][0]=jones_thetaX[i_az][th]
+                JJ[90-th][i_az][1]=jones_thetaY[i_az][th]
+                JJ[90-th][i_az][2]=jones_phiX[i_az][th]
+                JJ[90-th][i_az][3]=jones_phiY[i_az][th]
                 
                 
                 
@@ -135,3 +135,47 @@ def find_simulated_power(jones_dir, power_dir):
         v_start=(float(freq)-0.5)*1e6
         v_stop=(float(freq)+0.5)*1e6
     
+        for t in np.arange(len(times_LST)):
+            for theta in np.arange(len(int_theta)-1):
+                for phi in np.arange(len(int_phi)-1):
+                    temp=ZZ2[t][theta+90][phi]
+                    if (float('-inf') < float(temp) < float('inf'))==False:
+                        temp=0
+            
+                    jones_thetaX=np.abs(JJ[theta][phi][0])
+                    jones_phiX=np.abs(JJ[theta][phi][1])
+                    jones_thetaY=np.abs(JJ[theta][phi][2])
+                    jones_phiY=np.abs(JJ[theta][phi][3])
+                    theta_start=90-int_theta[theta]
+                    theta_stop=90-int_theta[theta+1]
+                    phi_start=int_phi[phi]
+                    phi_stop=int_phi[phi+1]
+                    jones_phi=1
+                    jones_theta=1
+            
+            
+                    intX=do_integral_temp(theta_start,theta_stop, phi_start, phi_stop, temp, jones_thetaX, jones_phiX)
+                    intY=do_integral_temp(theta_start,theta_stop, phi_start, phi_stop, temp, jones_thetaY, jones_phiY)
+                    int=do_integral_temp(theta_start,theta_stop, phi_start, phi_stop, temp, jones_theta, jones_phi)
+
+                    total_int_temp_X[t]=total_int_temp_X[t]+intX
+                    total_int_temp_Y[t]=total_int_temp_Y[t]+intY
+                    total_int_temp[t]=total_int_temp[t]+int
+
+
+            total_int_v[t]=do_integral_freq(v_start, v_stop)
+            total_int[t]=(kB/(c*c))*total_int_v[t]*total_int_temp[t]
+            total_int_X[t]=(kB/(c*c))*total_int_v[t]*total_int_temp_X[t]
+            total_int_Y[t]=(kB/(c*c))*total_int_v[t]*total_int_temp_Y[t]
+
+    
+    inds=np.asarray(times_LST).argsort()
+
+    print inds
+
+    times_sorted=np.asarray(times_LST)[inds]
+    times_sorted_utc=np.asarray(times_utc)[inds]
+
+    power_sorted=total_int[inds]
+    power_sorted_X=total_int_X[inds]
+    power_sorted_Y=total_int_Y[inds]
