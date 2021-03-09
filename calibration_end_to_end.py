@@ -27,7 +27,7 @@ parser.add_option('-s', '--reprocess_power_flag', default = 0, help = 'flag to r
 
 (options, args) = parser.parse_args()
 
-name = options.model_folder
+name = options.model_name
 
 reprocess_flag = int(options.reprocess_flag)
 reprocess_power_flag = int(options.reprocess_power_flag)
