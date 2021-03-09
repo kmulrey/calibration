@@ -41,7 +41,7 @@ print(jones_dir)
 print(power_dir)
 print(consolidate_dir)
 
-'''
+
 #print(jones_dir)
 #data_dir='/vol/astro3/lofar/sim/kmulrey/calibration/final'
 
@@ -50,7 +50,7 @@ flag=0
 # 1 if averages need to be done
 # 2 if no path exists
 
-if antenna_model_folder=='jones_standard':
+if name=='standard':
     print('running calibration with standard CR calibration')
     
 elif path.exists(jones_dir):
@@ -95,4 +95,7 @@ for f in np.arange(51):
 if power_flag==1 or reprocess_power_flag==1:
     print('calculating power as a function of LST')
     cal.find_simulated_power(jones_dir, power_dir)
-'''
+
+
+
+print('now consolidating info')
