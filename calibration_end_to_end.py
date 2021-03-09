@@ -99,3 +99,7 @@ if power_flag==1 or reprocess_power_flag==1:
 
 
 print('now consolidating info')
+
+
+if not os.path.exists(consolidate_dir):
+    os.makedirs(consolidate_dir)
