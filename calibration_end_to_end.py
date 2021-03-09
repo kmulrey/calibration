@@ -35,7 +35,7 @@ reprocess_power_flag = int(options.reprocess_power_flag)
 jones_dir=base_dir+antenna_model_folder
 power_dir=base_dir+power_folder
 
-print(jones_dir)
+#print(jones_dir)
 #data_dir='/vol/astro3/lofar/sim/kmulrey/calibration/final'
 
 flag=0
@@ -75,10 +75,15 @@ if not os.path.exists(power_dir):
     os.makedirs(power_dir)
     
 power_flag=0
+#0 if directory exists with all freq files
+#1 if not, or if reprocessing
+
+
 for f in np.arange(51):
     freq=str(f+30)
     if path.exists(power_dir+'/'+'integrated_power_'+str(freq)+'.txt')==False:
-            power_flag=1
+        power_flag=1
+        print('no power {0}, {1}'.format(freq,power_dir+'/'+'integrated_power_'+str(freq)+'.txt'))
    
 if power_flag==1 or reprocess_power_flag==1:
     print('calculating power as a function of LST')
