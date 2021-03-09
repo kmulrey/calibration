@@ -103,10 +103,10 @@ def find_simulated_power(jones_dir, power_dir):
                     phi=az-360
                     i_az=az-180
 
-                JJ[90-el][i_az][0]=jones_thetaX
-                JJ[90-el][i_az][1]=jones_thetaY
-                JJ[90-el][i_az][2]=jones_phiX
-                JJ[90-el][i_az][3]=jones_phiY
+                JJ[90-el][i_az][0]=jones_thetaX.T
+                JJ[90-el][i_az][1]=jones_thetaY.T
+                JJ[90-el][i_az][2]=jones_phiX.T
+                JJ[90-el][i_az][3]=jones_phiY.T
                 
                 
                 
