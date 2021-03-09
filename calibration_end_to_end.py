@@ -20,21 +20,28 @@ base_dir='/vol/astro7/lofar/kmulrey/calibration/'
 
 parser = OptionParser()
 
-parser.add_option('-f', '--model_folder', default = 'jones_standard', help = 'jones matrix folder')
-parser.add_option('-p', '--power_folder', default = 'power_standard', help = 'LST power folder')
+parser.add_option('-n', '--model_name', default = 'standard', help = 'run type name')
+
 parser.add_option('-r', '--reprocess_flag', default = 0, help = 'flag to reprocess model')
 parser.add_option('-s', '--reprocess_power_flag', default = 0, help = 'flag to reprocess power')
 
 (options, args) = parser.parse_args()
 
-antenna_model_folder = options.model_folder
-power_folder = options.power_folder
+name = options.model_folder
+
 reprocess_flag = int(options.reprocess_flag)
 reprocess_power_flag = int(options.reprocess_power_flag)
 
-jones_dir=base_dir+antenna_model_folder
-power_dir=base_dir+power_folder
+jones_dir=base_dir+'antenna_model/'+'jones_'+name
+power_dir=base_dir+'power/power_'+name
+consolidate_dir=base_dir+'consolidated_info/consolidated_'+name
 
+
+print(jones_dir)
+print(power_dir)
+print(consolidate_dir)
+
+'''
 #print(jones_dir)
 #data_dir='/vol/astro3/lofar/sim/kmulrey/calibration/final'
 
@@ -88,3 +95,4 @@ for f in np.arange(51):
 if power_flag==1 or reprocess_power_flag==1:
     print('calculating power as a function of LST')
     cal.find_simulated_power(jones_dir, power_dir)
+'''
