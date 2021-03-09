@@ -95,7 +95,7 @@ def find_simulated_power(jones_dir, power_dir):
         jones_phiY=info['jones_phiY']
         JJ=np.zeros([91,361,4],dtype='complex')
 
-        for el in np.arange(90):
+        for th in np.arange(90):
             for az in np.arange(360):
                 phi=az
                 i_az=az+180
@@ -103,10 +103,10 @@ def find_simulated_power(jones_dir, power_dir):
                     phi=az-360
                     i_az=az-180
 
-                JJ[90-el][i_az][0]=jones_thetaX.T
-                JJ[90-el][i_az][1]=jones_thetaY.T
-                JJ[90-el][i_az][2]=jones_phiX.T
-                JJ[90-el][i_az][3]=jones_phiY.T
+                JJ[th][i_az][0]=jones_thetaX[i_az][th]
+                JJ[th][i_az][1]=jones_thetaY[i_az][th]
+                JJ[th][i_az][2]=jones_phiX[i_az][th]
+                JJ[th][i_az][3]=jones_phiY[i_az][th]
                 
                 
                 
