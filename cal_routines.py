@@ -178,3 +178,9 @@ def find_simulated_power(jones_dir, power_dir):
     power_sorted=total_int[inds]
     power_sorted_X=total_int_X[inds]
     power_sorted_Y=total_int_Y[inds]
+
+
+    outfile=open(power_dir+'/integrated_power_'+str(freq)+'.txt','w')
+
+    for i in np.arange(len(times_LST)):
+        outfile.write('{0}  {1}  {2}  {3}  {4} \n'.format(times_sorted[i],times_sorted_utc[i],power_sorted[i],power_sorted_X[i],power_sorted_Y[i]))
