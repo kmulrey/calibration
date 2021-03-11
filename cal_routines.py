@@ -197,6 +197,10 @@ def consolidate(con_dir,power_dir,data_dir,station):
     power=np.zeros([nFreq,nTimes,nData])
     int_sim_X=np.zeros([nFreq,len(bins)])
     int_sim_Y=np.zeros([nFreq,len(bins)])
+    dh=0.25
+    bin_edges=np.arange(0,24.1,dh)
+    bins=np.arange(0.0,23.9,dh)
+    nTimes=len(bins)
 
 
     for f in np.arange(nFreq):
@@ -238,12 +242,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
     cable_lengths=['50','80','115']
     
     for c in np.arange(len(cable_lengths)):
-        dh=0.25
-        bin_edges=np.arange(0,24.1,dh)
-        bins=np.arange(0.0,23.9,dh)
-        nTimes=len(bins)
-
-
+        
         infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/'+station+'_noise_power_'+cable_lengths[c]+'.p','rb')
         tbbInfo=pickle.load(infile, encoding="latin1")
         infile.close()
