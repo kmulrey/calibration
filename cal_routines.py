@@ -290,9 +290,9 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name):
     sim_Y_115=sim_Y*337.0
     
     
-    cable_attenuation_50=np.genfromtxt('fit_data/attenuation/attenuation_coax9_50m.txt',usecols=1)
-    cable_attenuation_80=np.genfromtxt('fit_data/attenuation/attenuation_coax9_80m.txt',usecols=1)
-    cable_attenuation_115=np.genfromtxt('fit_data/attenuation/attenuation_coax9_115m.txt',usecols=1)
+    cable_attenuation_50=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_50m.txt',usecols=1)
+    cable_attenuation_80=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_80m.txt',usecols=1)
+    cable_attenuation_115=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_115m.txt',usecols=1)
     RCU_gain=np.genfromtxt(fit_data_dir+'/RCU_gain_new_5.txt',usecols=0)
     jones_vals=np.genfromtxt(fit_data+'/antenna_gain.txt')
 
