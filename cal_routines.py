@@ -405,15 +405,23 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name):
     frequencies=np.arange(30,80.5,1)
     times=np.arange(0,24.0,0.5)
     
-    file=open(consolidate_dir+'/power_all_50m.p','rb')
+    
+    file50='../fit_data/power_all_50m.p'
+    file80='../fit_data/power_all_80m.p'
+    file115='../fit_data/power_all_115m.p'
+    
+    file=open(file50,'rb')
+    #file=open(consolidate_dir+'/power_all_50m.p','rb')
     time_bins,sim_X,sim_Y,data_X_50,std_X_50,data_Y_50,std_Y_50=pickle.load(file, encoding="latin1")
     file.close()
-
-    file=open(consolidate_dir+'/power_all_80m.p','rb')
+    
+    file=open(file80,'rb')
+    #file=open(consolidate_dir+'/power_all_80m.p','rb')
     time_bins,sim_X,sim_Y,data_X_80,std_X_80,data_Y_80,std_Y_80=pickle.load(file, encoding="latin1")
     file.close()
-
-    file=open(consolidate_dir+'/power_all_115m.p','rb')
+    
+    file=open(file115,'rb')
+    #file=open(consolidate_dir+'/power_all_115m.p','rb')
     time_bins,sim_X,sim_Y,data_X_115,std_X_115,data_Y_115,std_Y_115=pickle.load(file, encoding="latin1")
     file.close()
     
