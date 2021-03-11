@@ -10,7 +10,8 @@ from datetime import date
 import math
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-
+from scipy.optimize import minimize
+import minimization_functions as min
 
 
 kB=1.38064852e-23
