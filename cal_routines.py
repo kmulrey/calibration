@@ -11,7 +11,6 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from scipy.optimize import minimize
-import minimization_functions as min
 
 
 kB=1.38064852e-23
@@ -22,6 +21,151 @@ Z=120*np.pi
 ZL=75
 #data_dir='/vol/astro3/lofar/sim/kmulrey/calibration/final'
 LFmap_dir='/vol/astro3/lofar/sim/kmulrey/calibration/LFreduced/'
+
+jones_file=open('../fit_data/antenna_gain.txt')
+
+jones_vals=np.genfromtxt(jones_file)
+#jones_vals=np.ones([51])
+
+gain_file=open('../fit_data/RCU_gain_new_5.txt')
+
+
+RCU_gain=np.genfromtxt(gain_file,usecols=0)
+#RCU_gain=np.ones([51])
+
+nFreq=51
+nTimes=96
+
+
+frequencies=np.arange(30,80.5,1)
+times=np.arange(0,24.0,0.25)
+
+
+
+
+def e_ACGMB_allCables(pars,data_X_50,std_X_50,sim_X_50,data_X_80,std_X_80,sim_X_80,data_X_115,std_X_115,sim_X_115,data_Y_50,std_Y_50,sim_Y_50,data_Y_80,std_Y_80,sim_Y_80,data_Y_115,std_Y_115,sim_Y_115,jones,cable_attenuation_50,cable_attenuation_80,cable_attenuation_115,RCU_gain,s):
+    
+    
+    nF=len(data_X_50)
+    nT=len(data_X_50[0])
+    a=pars[0]
+    c=pars[1]
+    g=pars[2]
+    
+    #g=np.power(10,(g_par10)
+    g115=np.power(10,(g)/10)
+    g80=np.power(10,(g-1.5)/10)
+    g50=np.power(10,(g-2.75)/10)
+    
+    
+    b=pars[3]
+    
+    d=np.zeros([nFreq])
+    
+    for f in np.arange(nFreq):
+        d[f]=b
+    
+
+    gain_curve=np.power(10,RCU_gain/10)
+    
+    rcu=g*gain_curve
+    rcu50=g50*gain_curve
+    rcu80=g80*gain_curve
+    rcu115=g115*gain_curve
+    
+    
+    A=np.zeros([nF])
+    A_X_50=np.zeros([nF])
+    A_Y_50=np.zeros([nF])
+    A_X_80=np.zeros([nF])
+    A_Y_80=np.zeros([nF])
+    A_X_115=np.zeros([nF])
+    A_Y_115=np.zeros([nF])
+    
+    
+    data_corr_X_50=np.zeros([nF,nT])
+    sim_corr_X_50=np.zeros([nF,nT])
+    data_corr_X_80=np.zeros([nF,nT])
+    sim_corr_X_80=np.zeros([nF,nT])
+    data_corr_X_115=np.zeros([nF,nT])
+    sim_corr_X_115=np.zeros([nF,nT])
+    data_corr_Y_50=np.zeros([nF,nT])
+    sim_corr_Y_50=np.zeros([nF,nT])
+    data_corr_Y_80=np.zeros([nF,nT])
+    sim_corr_Y_80=np.zeros([nF,nT])
+    data_corr_Y_115=np.zeros([nF,nT])
+    sim_corr_Y_115=np.zeros([nF,nT])
+    
+    sim_corrected_X_50=np.zeros([nF,nT])
+    sim_corrected_X_80=np.zeros([nF,nT])
+    sim_corrected_X_115=np.zeros([nF,nT])
+    sim_corrected_Y_50=np.zeros([nF,nT])
+    sim_corrected_Y_80=np.zeros([nF,nT])
+    sim_corrected_Y_115=np.zeros([nF,nT])
+    
+    
+    
+    for f in np.arange(nF):
+        for t in np.arange(nT):
+            sim_corr_X_50[f][t]=(sim_X_50[f][t]+a*jones[f])
+            sim_corr_X_80[f][t]=(sim_X_80[f][t]+a*jones[f])
+            sim_corr_X_115[f][t]=(sim_X_115[f][t]+a*jones[f])
+            sim_corr_Y_50[f][t]=(sim_Y_50[f][t]+a*jones[f])
+            sim_corr_Y_80[f][t]=(sim_Y_80[f][t]+a*jones[f])
+            sim_corr_Y_115[f][t]=(sim_Y_115[f][t]+a*jones[f])
+            
+            data_corr_X_50[f][t]=((data_X_50[f][t]-d[f])/(rcu50[f]*s)-c)*np.power(10.0,(cable_attenuation_50[f]/10.0))
+            data_corr_X_80[f][t]=((data_X_80[f][t]-d[f])/(rcu80[f]*s)-c)*np.power(10.0,(cable_attenuation_80[f]/10.0))
+            data_corr_X_115[f][t]=((data_X_115[f][t]-d[f])/(rcu115[f]*s)-c)*np.power(10.0,(cable_attenuation_115[f]/10.0))
+            data_corr_Y_50[f][t]=((data_Y_50[f][t]-d[f])/(rcu50[f]*s)-c)*np.power(10.0,(cable_attenuation_50[f]/10.0))
+            data_corr_Y_80[f][t]=((data_Y_80[f][t]-d[f])/(rcu80[f]*s)-c)*np.power(10.0,(cable_attenuation_80[f]/10.0))
+            data_corr_Y_115[f][t]=((data_Y_115[f][t]-d[f])/(rcu115[f]*s)-c)*np.power(10.0,(cable_attenuation_115[f]/10.0))
+
+
+
+    for f in np.arange(nF):
+        A_X_50[f]=np.average(data_corr_X_50[f])/np.average(sim_corr_X_50[f])
+        A_X_80[f]=np.average(data_corr_X_80[f])/np.average(sim_corr_X_80[f])
+        A_X_115[f]=np.average(data_corr_X_115[f])/np.average(sim_corr_X_115[f])
+        A_Y_50[f]=np.average(data_corr_Y_50[f])/np.average(sim_corr_Y_50[f])
+        A_Y_80[f]=np.average(data_corr_Y_80[f])/np.average(sim_corr_Y_80[f])
+        A_Y_115[f]=np.average(data_corr_Y_115[f])/np.average(sim_corr_Y_115[f])
+    
+    
+    for f in np.arange(nF):
+        for t in np.arange(nT):
+            sim_corrected_X_50[f][t]=((((sim_X_50[f][t]+a*jones[f])*A_X_50[f])/np.power(10.0,(cable_attenuation_50[f]/10.0)))+c)*rcu50[f]*s+d[f]
+            sim_corrected_X_80[f][t]=((((sim_X_80[f][t]+a*jones[f])*A_X_80[f])/np.power(10.0,(cable_attenuation_80[f]/10.0)))+c)*rcu80[f]*s+d[f]
+            sim_corrected_X_115[f][t]=((((sim_X_115[f][t]+a*jones[f])*A_X_115[f])/np.power(10.0,(cable_attenuation_115[f]/10.0)))+c)*rcu115[f]*s+d[f]
+            sim_corrected_Y_50[f][t]=((((sim_Y_50[f][t]+a*jones[f])*A_Y_50[f])/np.power(10.0,(cable_attenuation_50[f]/10.0)))+c)*rcu50[f]*s+d[f]
+            sim_corrected_Y_80[f][t]=((((sim_Y_80[f][t]+a*jones[f])*A_Y_80[f])/np.power(10.0,(cable_attenuation_80[f]/10.0)))+c)*rcu80[f]*s+d[f]
+            sim_corrected_Y_115[f][t]=((((sim_Y_115[f][t]+a*jones[f])*A_Y_115[f])/np.power(10.0,(cable_attenuation_115[f]/10.0)))+c)*rcu115[f]*s+d[f]
+
+    X2=0
+    
+    X2_X_50=0
+    X2_X_80=0
+    X2_X_115=0
+    
+    X2_Y_50=0
+    X2_Y_80=0
+    X2_Y_115=0
+    
+    for f in np.arange(nF):
+        for t in np.arange(nT):
+            
+            X2_X_50=np.power((data_X_50[f][t]-sim_corrected_X_50[f][t]),2)/(std_X_50[f][t]*std_X_50[f][t])
+            X2_X_80=np.power((data_X_80[f][t]-sim_corrected_X_80[f][t]),2)/(std_X_80[f][t]*std_X_80[f][t])
+            X2_X_115=np.power((data_X_115[f][t]-sim_corrected_X_115[f][t]),2)/(std_X_115[f][t]*std_X_115[f][t])
+            X2_Y_50=np.power((data_Y_50[f][t]-sim_corrected_Y_50[f][t]),2)/(std_Y_50[f][t]*std_Y_50[f][t])
+            X2_Y_80=np.power((data_Y_80[f][t]-sim_corrected_Y_80[f][t]),2)/(std_Y_80[f][t]*std_Y_80[f][t])
+            X2_Y_115=np.power((data_Y_115[f][t]-sim_corrected_Y_115[f][t]),2)/(std_Y_115[f][t]*std_Y_115[f][t])
+
+            X2=X2+X2_X_50+X2_X_80+X2_X_115+X2_Y_50+X2_Y_80+X2_Y_115
+
+    return 100*X2/(6*nF*nT)
+
+
 
 
 def average_model(jones_dir):
@@ -305,7 +449,12 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name):
     b=1.54646899e-02
 
     gain_curve=np.power(10,RCU_gain/10)
-    res=minimize(min.e_ACGMB_allCables,[a,c,g,b],args=(data_X_50,std_X_50,sim_X_50,data_X_80,std_X_80,sim_X_80,data_X_115,std_X_115,sim_X_115,data_Y_50,std_Y_50,sim_Y_50,data_Y_80,std_Y_80,sim_Y_80,data_Y_115,std_Y_115,sim_Y_115,jones_vals,cable_attenuation_50,cable_attenuation_80,cable_attenuation_115,RCU_gain,s),method='Nelder-Mead', options={'disp': True})
+    
+  
+    
+    
+    
+    res=minimize(e_ACGMB_allCables,[a,c,g,b],args=(data_X_50,std_X_50,sim_X_50,data_X_80,std_X_80,sim_X_80,data_X_115,std_X_115,sim_X_115,data_Y_50,std_Y_50,sim_Y_50,data_Y_80,std_Y_80,sim_Y_80,data_Y_115,std_Y_115,sim_Y_115,jones_vals,cable_attenuation_50,cable_attenuation_80,cable_attenuation_115,RCU_gain,s),method='Nelder-Mead', options={'disp': True})
 
 
     print('\n')
