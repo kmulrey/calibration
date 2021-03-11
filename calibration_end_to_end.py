@@ -37,7 +37,7 @@ power_dir=base_dir+'power/power_'+name
 consolidate_dir=base_dir+'consolidated_info/consolidated_'+name
 data_dir='/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/'
 station='CS002'
-
+antenna_model_folder='jones_'+name
 print(jones_dir)
 print(power_dir)
 print(consolidate_dir)
