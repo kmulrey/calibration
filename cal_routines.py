@@ -255,3 +255,147 @@ def consolidate(con_dir,power_dir,data_dir,station):
         pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m.p','wb')
         pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
         pickfile.close()
+
+
+
+
+
+
+def do_fit(consolidate_dir,fit_data_dir,fit_dir,name):
+    nFreq=51
+    nTimes=96
+    frequencies=np.arange(30,80.5,1)
+    times=np.arange(0,24.0,0.5)
+    
+    file=open(consolidate_dir+'/power_all_50m.p','rb')
+    time_bins,sim_X,sim_Y,data_X_50,std_X_50,data_Y_50,std_Y_50=pickle.load(file, encoding="latin1")
+    file.close()
+
+    file=open(consolidate_dir+'/power_all_80m.p','rb')
+    time_bins,sim_X,sim_Y,data_X_80,std_X_80,data_Y_80,std_Y_80=pickle.load(file, encoding="latin1")
+    file.close()
+
+    file=open(consolidate_dir+'/power_all_115m.p','rb')
+    time_bins,sim_X,sim_Y,data_X_115,std_X_115,data_Y_115,std_Y_115=pickle.load(file, encoding="latin1")
+    file.close()
+    
+    
+    
+    sim_X_50=sim_X*337.0
+    sim_X_80=sim_X*337.0
+    sim_X_115=sim_X*337.0
+
+    sim_Y_50=sim_Y*337.0
+    sim_Y_80=sim_Y*337.0
+    sim_Y_115=sim_Y*337.0
+    
+    
+    cable_attenuation_50=np.genfromtxt('fit_data/attenuation/attenuation_coax9_50m.txt',usecols=1)
+    cable_attenuation_80=np.genfromtxt('fit_data/attenuation/attenuation_coax9_80m.txt',usecols=1)
+    cable_attenuation_115=np.genfromtxt('fit_data/attenuation/attenuation_coax9_115m.txt',usecols=1)
+    RCU_gain=np.genfromtxt(fit_data_dir+'/RCU_gain_new_5.txt',usecols=0)
+    jones_vals=np.genfromtxt(fit_data+'/antenna_gain.txt')
+
+
+    g=11.08423462
+    c=3.0e-11
+    a=5.0e-13
+    s=9e7
+    b=1.54646899e-02
+
+    gain_curve=np.power(10,RCU_gain/10)
+    res=minimize(min.e_ACGMB_allCables,[a,c,g,b],args=(data_X_50,std_X_50,sim_X_50,data_X_80,std_X_80,sim_X_80,data_X_115,std_X_115,sim_X_115,data_Y_50,std_Y_50,sim_Y_50,data_Y_80,std_Y_80,sim_Y_80,data_Y_115,std_Y_115,sim_Y_115,jones_vals,cable_attenuation_50,cable_attenuation_80,cable_attenuation_115,RCU_gain,s),method='Nelder-Mead', options={'disp': True})
+
+
+    print('\n')
+    print('___________________ done with fit _________________')
+    print('\n')
+
+    print(res['success'])
+    print(res['fun'])
+    pars=res['x']
+    print(pars)
+
+    a=pars[0]
+    c=pars[1]
+    g=pars[2]
+    
+    g115=pars[2]
+    g80=pars[2]-1.5
+    g50=pars[2]-2.75
+    b=pars[3]*0.9
+
+    print('a={0}'.format(a))
+    print('c={0}'.format(c))
+    print('g={0}'.format(g))
+    print('d={0}'.format(b))
+    print('s={0}'.format(s))
+
+
+    A_X=np.zeros([nFreq])
+    A_Y=np.zeros([nFreq])
+
+    d=np.zeros([nFreq])
+
+    for f in np.arange(nFreq):
+        d[f]=b#m*(float(f))+b
+
+    cable_atten=cable_attenuation_80
+    rcu=np.power(10,(g80)/10)*gain_curve
+
+    sim_corrX=np.zeros([nFreq,nTimes])
+    sim_corrY=np.zeros([nFreq,nTimes])
+
+    data_corrX=np.zeros([nFreq,nTimes])
+    data_corrY=np.zeros([nFreq,nTimes])
+
+    sim_to_dataX=np.zeros([nFreq,nTimes])
+    sim_to_dataY=np.zeros([nFreq,nTimes])
+
+    sim_to_data_rawX=np.zeros([nFreq,nTimes])
+    sim_to_data_rawY=np.zeros([nFreq,nTimes])
+
+
+    for f in np.arange(nFreq):
+        for t in np.arange(nTimes):
+            sim_corrX[f][t]=(sim_X_80[f][t]+a*jones_vals[f])
+            data_corrX[f][t]=(((((data_X_80[f][t]-d[f])/s))/rcu[f])-c)*np.power(10.0,(cable_atten[f]/10.0))
+
+            sim_corrY[f][t]=(sim_Y_80[f][t]+a*jones_vals[f])
+            data_corrY[f][t]=(((((data_Y_80[f][t]-d[f])/s))/rcu[f])-c)*np.power(10.0,(cable_atten[f]/10.0))
+
+    for f in np.arange(nFreq):
+        A_X[f]=np.average(data_corrX[f])/np.average(sim_corrX[f])
+        A_Y[f]=np.average(data_corrY[f])/np.average(sim_corrY[f])
+
+
+
+    for f in np.arange(nFreq):
+        for t in np.arange(nTimes):
+            sim_to_dataX[f][t]=(((((sim_X_80[f][t]+a*jones_vals[f])*A_X[f])/np.power(10.0,(cable_atten[f]/10.0))+c)*rcu[f])*s+d[f])
+            sim_to_dataY[f][t]=(((((sim_Y_80[f][t]+a*jones_vals[f])*A_Y[f])/np.power(10.0,(cable_atten[f]/10.0))+c)*rcu[f])*s+d[f])
+
+    data=data_X_80
+    std=std_X_80
+    sim=sim_X_80
+    cable_atten=cable_attenuation_80
+
+
+
+
+    cal_X=np.sqrt(1/((A_X*(1/np.power(10.0,(cable_atten/10.0)))*rcu)*s))
+    cal_Y=np.sqrt(1/((A_Y*(1/np.power(10.0,(cable_atten/10.0)))*rcu)*s))
+
+    cal=(cal_Y+cal_X)/2.0
+
+    cal_raw=np.sqrt(np.average(sim,axis=1)/np.average(data,axis=1))
+    
+    
+    
+    outputfile=fit_dir+'/fits_'+name+'.p'
+
+
+    analysisinfo={'a':a,'c':c,'cal':cal,'g':g,'d':b,'sim_X':sim_X,'sim_Y':sim_Y,'sim_to_data_X':sim_to_dataX,'sim_to_data_Y':sim_to_dataY,'data_X':data_X_80,'data_Y':data_Y_80,'std_X':std_X_80,'std_Y':std_Y_80,'x2':res['fun']}
+    fout=open(outputfile,"wb")
+    pickle.dump(analysisinfo,fout)
+    fout.close()

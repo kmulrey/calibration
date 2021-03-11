@@ -36,6 +36,10 @@ jones_dir=base_dir+'antenna_model/'+'jones_'+name
 power_dir=base_dir+'power/power_'+name
 consolidate_dir=base_dir+'consolidated_info/consolidated_'+name
 data_dir='/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/'
+fit_data_dir=base_dir+'fit_data'
+fit_dir=base_dir+'fits/'
+
+
 station='CS002'
 antenna_model_folder='jones_'+name
 print(jones_dir)
@@ -106,3 +110,8 @@ if not os.path.exists(consolidate_dir):
     os.makedirs(consolidate_dir)
 
 cal.consolidate(consolidate_dir,power_dir,data_dir,station)
+
+
+
+    
+cal.do_fit(consolidate_dir,fit_data_dir,fit_dir,name)
