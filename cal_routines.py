@@ -188,7 +188,7 @@ def find_simulated_power(con_dir,jones_dir, power_dir):
 
 
 
-def consolidate(power_dir,data_dir,station):
+def consolidate(con_dir,power_dir,data_dir,station):
 
     nTimes=24
     nFreq=51
