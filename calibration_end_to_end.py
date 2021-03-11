@@ -35,7 +35,8 @@ reprocess_power_flag = int(options.reprocess_power_flag)
 jones_dir=base_dir+'antenna_model/'+'jones_'+name
 power_dir=base_dir+'power/power_'+name
 consolidate_dir=base_dir+'consolidated_info/consolidated_'+name
-
+data_dir='/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/'
+station='CS002'
 
 print(jones_dir)
 print(power_dir)
@@ -103,3 +104,5 @@ print('now consolidating info')
 
 if not os.path.exists(consolidate_dir):
     os.makedirs(consolidate_dir)
+
+cal.consolidate(power_dir,data_dir,station)

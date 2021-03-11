@@ -185,3 +185,69 @@ def find_simulated_power(jones_dir, power_dir):
         for i in np.arange(len(times_LST)):
             outfile.write('{0}  {1}  {2}  {3}  {4} \n'.format(times_sorted[i],times_sorted_utc[i],power_sorted[i],power_sorted_X[i],power_sorted_Y[i]))
         outfile.close()
+
+
+
+def consolidate(power_dir,data_dir,station):
+
+    nTimes=24
+    nFreq=51
+    nData=5
+    frequencies=np.arange(30,80.5,1)
+    power=np.zeros([nFreq,nTimes,nData])
+    total_power=np.zeros([nTimes,nData])
+
+
+
+    for f in np.arange(nFreq):
+        file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
+        temp=np.genfromtxt(file)
+    
+        for t in np.arange(nTimes):
+            power[f][t][0]=temp[t][0]
+            power[f][t][1]=temp[t][1]
+            power[f][t][2]=temp[t][2]
+            power[f][t][3]=temp[t][4]
+            power[f][t][4]=temp[t][3]
+    
+    for t in np.arange(nTimes):
+        for f in np.arange(nFreq):
+            total_power[t][0]=power[f][t][0]
+            total_power[t][1]=power[f][t][1]
+            total_power[t][2]=total_power[t][2]+power[f][t][2]
+            total_power[t][3]=total_power[t][3]+power[f][t][3]
+            total_power[t][4]=total_power[t][4]+power[f][t][4]
+            
+            
+            
+    cable_lengths=['50','80','115']
+    for c in np.arange(1):
+        dh=0.25
+        bin_edges=np.arange(0,24.1,dh)
+        bins=np.arange(0.0,23.9,dh)
+        nTimes=len(bins)
+
+        gain_X=np.zeros([nTimes])
+        gain_Y=np.zeros([nTimes])
+        gain_std_X=np.zeros([nTimes])
+        gain_std_Y=np.zeros([nTimes])
+
+        infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/'+station+'_noise_power_'+cable_lengths[c]+'.p','rb')
+        tbbInfo=pickle.load(infile, encoding="latin1")
+        infile.close()
+
+        avg_power_X=tbbInfo['avg_power_X_50'].T
+        std_power_X=tbbInfo['std_power_X_50'].T
+        avg_power_Y=tbbInfo['avg_power_Y_50'].T
+        std_power_Y=tbbInfo['std_power_Y_50'].T
+
+        count_X=tbbInfo['count_X_'+cable_lengths[c]].T
+        count_Y=tbbInfo['count_Y_'+cable_lengths[c]].T
+
+
+        total_power_X=np.sum(avg_power_X, axis=0)
+        total_power_Y=np.sum(avg_power_Y, axis=0)
+
+
+        total_std_X = np.sqrt(np.sum((std_power_X.T*std_power_X.T).T,axis=0))
+        total_std_Y = np.sqrt(np.sum((std_power_Y.T*std_power_Y.T).T,axis=0))
