@@ -77,7 +77,7 @@ def do_integral_freq(v_start, v_stop):
 
 
 
-def find_simulated_power(con_dir,jones_dir, power_dir):
+def find_simulated_power(jones_dir, power_dir):
 
     for f in np.arange(51):
         freq=str(f+30)
