@@ -103,15 +103,27 @@ if power_flag==1 or reprocess_power_flag==1:
 
 
 
-print('now consolidating info')
+
+consol_flag=0
+#0 if directory exists with all freq files
+#1 if not, or if reprocessing
 
 
-if not os.path.exists(consolidate_dir):
-    os.makedirs(consolidate_dir)
+for f in np.arange(51):
+    freq=str(f+30)
+    if path.exists(consolidate_dir+'/consolidated_'+name+'/power_all_80m.p')==False:
+        consol_flag=1
+        print('no consolidated info {0}'.format(consolidate_dir+'/consolidated_'+name))
+   
+if consol_flag=1:
+    print('now consolidating info')
+    if not os.path.exists(consolidate_dir):
+        os.makedirs(consolidate_dir)
 
-cal.consolidate(consolidate_dir,power_dir,data_dir,station)
+    cal.consolidate(consolidate_dir,power_dir,data_dir,station)
 
 
+print('doing fit')
 
     
 cal.do_fit(consolidate_dir,fit_data_dir,fit_dir,name)
