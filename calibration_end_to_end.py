@@ -111,9 +111,9 @@ consol_flag=0
 
 for f in np.arange(51):
     freq=str(f+30)
-    if path.exists(consolidate_dir+'/consolidated_'+name+'/power_all_80m.p')==False:
+    if path.exists(consolidate_dir+'/power_all_80m.p')==False:
         consol_flag=1
-        print('no consolidated info {0}'.format(consolidate_dir+'/consolidated_'+name))
+        print('no consolidated info {0}'.format(consolidate_dir))
    
 if consol_flag==1:
     print('now consolidating info')
@@ -126,4 +126,4 @@ if consol_flag==1:
 print('doing fit')
 
     
-cal.do_fit(consolidate_dir,fit_data_dir,fit_dir,name)
+#cal.do_fit(consolidate_dir,fit_data_dir,fit_dir,name)
