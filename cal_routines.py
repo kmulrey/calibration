@@ -77,7 +77,7 @@ def do_integral_freq(v_start, v_stop):
 
 
 
-def find_simulated_power(jones_dir, power_dir):
+def find_simulated_power(con_dir,jones_dir, power_dir):
 
     for f in np.arange(51):
         freq=str(f+30)
@@ -227,27 +227,47 @@ def consolidate(power_dir,data_dir,station):
         bins=np.arange(0.0,23.9,dh)
         nTimes=len(bins)
 
-        gain_X=np.zeros([nTimes])
-        gain_Y=np.zeros([nTimes])
-        gain_std_X=np.zeros([nTimes])
-        gain_std_Y=np.zeros([nTimes])
 
         infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/'+station+'_noise_power_'+cable_lengths[c]+'.p','rb')
         tbbInfo=pickle.load(infile, encoding="latin1")
         infile.close()
 
-        avg_power_X=tbbInfo['avg_power_X_50'].T
-        std_power_X=tbbInfo['std_power_X_50'].T
-        avg_power_Y=tbbInfo['avg_power_Y_50'].T
-        std_power_Y=tbbInfo['std_power_Y_50'].T
-
-        count_X=tbbInfo['count_X_'+cable_lengths[c]].T
-        count_Y=tbbInfo['count_Y_'+cable_lengths[c]].T
+        avg_power_X=tbbInfo['avg_power_X_'+cable_lengths[c]].T
+        std_power_X=tbbInfo['std_power_X_'+cable_lengths[c]].T
+        avg_power_Y=tbbInfo['avg_power_Y_'+cable_lengths[c]].T
+        std_power_Y=tbbInfo['std_power_Y_'+cable_lengths[c]].T
 
 
-        total_power_X=np.sum(avg_power_X, axis=0)
-        total_power_Y=np.sum(avg_power_Y, axis=0)
+        int_sim_X=np.zeros([nFreq,len(bins)])
+        int_sim_Y=np.zeros([nFreq,len(bins)])
 
+        for f in np.arange(nFreq):
 
-        total_std_X = np.sqrt(np.sum((std_power_X.T*std_power_X.T).T,axis=0))
-        total_std_Y = np.sqrt(np.sum((std_power_Y.T*std_power_Y.T).T,axis=0))
+            fX = interp1d(power[f].T[0], power[f].T[3],kind='cubic',fill_value='extrapolate')
+            fY = interp1d(power[f].T[0], power[f].T[4],kind='cubic',fill_value='extrapolate')
+
+            int_sim_X[f]=fX(bins)
+            int_sim_Y[f]=fY(bins)
+
+        holdX=int_sim_X
+        holdY=int_sim_Y
+
+        # correct for hour offset
+        for t in np.arange(nTimes-4):
+            int_sim_X.T[t]=holdX.T[t+4]
+            int_sim_Y.T[t]=holdY.T[t+4]
+
+        int_sim_X.T[92]=holdX.T[0]
+        int_sim_X.T[93]=holdX.T[1]
+        int_sim_X.T[94]=holdX.T[2]
+        int_sim_X.T[95]=holdX.T[3]
+
+        int_sim_Y.T[92]=holdY.T[0]
+        int_sim_Y.T[93]=holdY.T[1]
+        int_sim_Y.T[94]=holdY.T[2]
+        int_sim_Y.T[95]=holdY.T[3]
+
+        
+        pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m.p','wb')
+        pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
+        pickfile.close()

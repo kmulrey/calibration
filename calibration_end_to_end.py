@@ -105,4 +105,4 @@ print('now consolidating info')
 if not os.path.exists(consolidate_dir):
     os.makedirs(consolidate_dir)
 
-cal.consolidate(power_dir,data_dir,station)
+cal.consolidate(consolidate_dir,power_dir,data_dir,station)
