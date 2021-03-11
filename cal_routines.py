@@ -23,7 +23,7 @@ ZL=75
 LFmap_dir='/vol/astro3/lofar/sim/kmulrey/calibration/LFreduced/'
 
 
-jones_vals=np.genfromtxt(../fit_data/antenna_gain.txt')
+jones_vals=np.genfromtxt('../fit_data/antenna_gain.txt')
 RCU_gain=np.genfromtxt('../fit_data/RCU_gain_new_5.txt',usecols=0)
 
 nFreq=51
