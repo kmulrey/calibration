@@ -190,24 +190,24 @@ def find_simulated_power(con_dir,jones_dir, power_dir):
 
 def consolidate(con_dir,power_dir,data_dir,station):
 
-    nTimes=24
+    nTimesSim=24
     nFreq=51
     nData=5
     frequencies=np.arange(30,80.5,1)
-    power=np.zeros([nFreq,nTimes,nData])
-    int_sim_X=np.zeros([nFreq,len(bins)])
-    int_sim_Y=np.zeros([nFreq,len(bins)])
+    power=np.zeros([nFreq,nTimesSim,nData])
     dh=0.25
     bin_edges=np.arange(0,24.1,dh)
     bins=np.arange(0.0,23.9,dh)
     nTimes=len(bins)
+    int_sim_X=np.zeros([nFreq,len(bins)])
+    int_sim_Y=np.zeros([nFreq,len(bins)])
 
 
     for f in np.arange(nFreq):
         file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
         temp=np.genfromtxt(file)
     
-        for t in np.arange(nTimes):
+        for t in np.arange(nTimesSim):
             power[f][t][0]=temp[t][0]
             power[f][t][1]=temp[t][1]
             power[f][t][2]=temp[t][2]
