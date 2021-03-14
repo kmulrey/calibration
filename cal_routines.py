@@ -341,6 +341,10 @@ def consolidate(con_dir,power_dir,data_dir,station):
 
 
     for f in np.arange(nFreq):
+    
+        int_sim_X=np.zeros([nFreq,len(bins)])
+        int_sim_Y=np.zeros([nFreq,len(bins)])
+        
         file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
         temp=np.genfromtxt(file)
     
@@ -392,7 +396,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
         pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m.p','wb')
         
         ##### hack! to write X and Y backwards because they are flipped somewhere
-        pickle.dump((bins,int_sim_Y,int_sim_X,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
+        pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
         pickfile.close()
 
 
