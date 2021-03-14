@@ -391,7 +391,9 @@ def consolidate(con_dir,power_dir,data_dir,station):
         std_power_Y=tbbInfo['std_power_Y_'+cable_lengths[c]].T
 
         pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m.p','wb')
-        pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
+        
+        ##### hack! to write X and Y backwards because they are flipped somewhere
+        pickle.dump((bins,int_sim_Y,int_sim_X,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
         pickfile.close()
 
 
@@ -406,22 +408,22 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name):
     times=np.arange(0,24.0,0.5)
     
     
-    file50='../fit_data/power_all_50m.p'
-    file80='../fit_data/power_all_80m.p'
-    file115='../fit_data/power_all_115m.p'
+    #file50='../fit_data/power_all_50m.p'
+    #file80='../fit_data/power_all_80m.p'
+    #file115='../fit_data/power_all_115m.p'
     
-    file=open(file50,'rb')
-    #file=open(consolidate_dir+'/power_all_50m.p','rb')
+    #file=open(file50,'rb')
+    file=open(consolidate_dir+'/power_all_50m.p','rb')
     time_bins,sim_X,sim_Y,data_X_50,std_X_50,data_Y_50,std_Y_50=pickle.load(file, encoding="latin1")
     file.close()
     
-    file=open(file80,'rb')
-    #file=open(consolidate_dir+'/power_all_80m.p','rb')
+    #file=open(file80,'rb')
+    file=open(consolidate_dir+'/power_all_80m.p','rb')
     time_bins,sim_X,sim_Y,data_X_80,std_X_80,data_Y_80,std_Y_80=pickle.load(file, encoding="latin1")
     file.close()
     
-    file=open(file115,'rb')
-    #file=open(consolidate_dir+'/power_all_115m.p','rb')
+    #file=open(file115,'rb')
+    file=open(consolidate_dir+'/power_all_115m.p','rb')
     time_bins,sim_X,sim_Y,data_X_115,std_X_115,data_Y_115,std_Y_115=pickle.load(file, encoding="latin1")
     file.close()
     
