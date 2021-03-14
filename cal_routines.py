@@ -222,7 +222,7 @@ def find_simulated_power(jones_dir, power_dir):
         print(freq)
         pickfile = open(LFmap_dir+'/LFreduced_'+str(freq)+'.p','rb')
         XX,YY,ZZ,XX2,YY2,times_utc,times_LST,ZZ2=pickle.load(pickfile, encoding="latin1")
-    
+        print(jones_dir+'/jones_all_{0}.p')
         pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
         pickfile.seek(0)
         info=pickle.load(pickfile)
