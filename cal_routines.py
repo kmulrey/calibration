@@ -199,7 +199,9 @@ def average_model(jones_dir):
 
 def do_integral_temp(theta_start,theta_stop, phi_start, phi_stop, temp, jones_theta, jones_phi):
     
-
+    #print '_____________________________'
+    #print '{0}   {1}   {2}   {3}   {4}'.format(theta_start,theta_stop, phi_start, phi_stop, temp)
+    
     angle_th_stop=-0.5*np.cos(theta_stop*np.pi/180)*np.cos(theta_stop*np.pi/180)
     angle_th_start=-0.5*np.cos(theta_start*np.pi/180)*np.cos(theta_start*np.pi/180)
     angle_ph_stop=(phi_stop*np.pi/180)
@@ -208,11 +210,9 @@ def do_integral_temp(theta_start,theta_stop, phi_start, phi_stop, temp, jones_th
     
     #print '{0}   {1}'.format(angle_start, angle_stop)
     return (angle_th_start-angle_th_stop)*(angle_ph_stop-angle_ph_start)*antenna_response*temp
-
-
+    
 def do_integral_freq(v_start, v_stop):
     return (1.0/3.0)*(v_stop*v_stop*v_stop-v_start*v_start*v_start)
-
 
 
 def find_simulated_power(jones_dir, power_dir):
@@ -261,7 +261,6 @@ def find_simulated_power(jones_dir, power_dir):
         total_int_temp_Y=np.zeros(len(times_LST))
         total_int_temp=np.zeros(len(times_LST))
 
-        total_int_v_A=np.zeros(len(times_LST))
         total_int_v=np.zeros(len(times_LST))
 
         total_int_X=np.zeros(len(times_LST))
