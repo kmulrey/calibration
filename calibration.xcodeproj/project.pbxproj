@@ -9,6 +9,7 @@
 /* Begin PBXFileReference section */
 		41558B9325F687F700D1DFD6 /* cal_routines.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = cal_routines.py; sourceTree = "<group>"; };
 		41558B9425F687F700D1DFD6 /* calibration_end_to_end.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = calibration_end_to_end.py; sourceTree = "<group>"; };
+		41A85FAA25FE12700059AC0F /* write_and_save_model.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = write_and_save_model.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -16,6 +17,7 @@
 			isa = PBXGroup;
 			children = (
 				41558B9325F687F700D1DFD6 /* cal_routines.py */,
+				41A85FAA25FE12700059AC0F /* write_and_save_model.py */,
 				41558B9425F687F700D1DFD6 /* calibration_end_to_end.py */,
 			);
 			sourceTree = "<group>";
