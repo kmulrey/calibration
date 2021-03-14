@@ -322,7 +322,7 @@ def find_simulated_power(jones_dir, power_dir):
         for i in np.arange(len(times_LST)):
             outfile.write('{0}  {1}  {2}  {3}  {4} \n'.format(times_sorted[i],times_sorted_utc[i],power_sorted[i],power_sorted_X[i],power_sorted_Y[i]))
         outfile.close()
-
+        print(outfile)
 
 
 def consolidate(con_dir,power_dir,data_dir,station):
