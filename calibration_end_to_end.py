@@ -114,7 +114,8 @@ for f in np.arange(51):
     if path.exists(consolidate_dir+'/power_all_80m.p')==False:
         consol_flag=1
         print('no consolidated info {0}'.format(consolidate_dir))
-   
+        
+consol_flag=1
 if consol_flag==1:
     print('now consolidating info')
     if not os.path.exists(consolidate_dir):
