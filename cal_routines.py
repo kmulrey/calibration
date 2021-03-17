@@ -324,7 +324,7 @@ def find_simulated_power(jones_dir, power_dir):
         outfile.close()
         print(outfile)
 
-
+'''
 def consolidate(con_dir,power_dir,data_dir,station):
 
     nTimesSim=24
@@ -452,25 +452,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
     gain_std_X=np.zeros([nTimes])
     gain_std_Y=np.zeros([nTimes])
 
-    infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/CS002_noise_power_80.p','rb')
-    tbbInfo=pickle.load(infile, encoding="latin1")
-    infile.close()
-
-    avg_power_X=tbbInfo['avg_power_X_80'].T
-    std_power_X=tbbInfo['std_power_X_80'].T
-    avg_power_Y=tbbInfo['avg_power_Y_80'].T
-    std_power_Y=tbbInfo['std_power_Y_80'].T
-
-    count_X=tbbInfo['count_X_80'].T
-    count_Y=tbbInfo['count_Y_80'].T
-
-
-    total_power_X=np.sum(avg_power_X, axis=0)
-    total_power_Y=np.sum(avg_power_Y, axis=0)
-
-
-    total_std_X = np.sqrt(np.sum((std_power_X.T*std_power_X.T).T,axis=0))
-    total_std_Y = np.sqrt(np.sum((std_power_Y.T*std_power_Y.T).T,axis=0))
+    
 
 
     
@@ -579,6 +561,25 @@ def consolidate(con_dir,power_dir,data_dir,station):
         sim_gain_X_total[t]=10*np.log10(np.sum(int_sim_X,axis=0)[t]/np.sum(int_sim_X,axis=0)[0])
         sim_gain_Y_total[t]=10*np.log10(np.sum(int_sim_Y,axis=0)[t]/np.sum(int_sim_Y,axis=0)[0])
 
+    infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/CS002_noise_power_80.p','rb')
+    tbbInfo=pickle.load(infile, encoding="latin1")
+    infile.close()
+
+    avg_power_X=tbbInfo['avg_power_X_80'].T
+    std_power_X=tbbInfo['std_power_X_80'].T
+    avg_power_Y=tbbInfo['avg_power_Y_80'].T
+    std_power_Y=tbbInfo['std_power_Y_80'].T
+
+    #count_X=tbbInfo['count_X_80'].T
+    #count_Y=tbbInfo['count_Y_80'].T
+
+
+    #total_power_X=np.sum(avg_power_X, axis=0)
+    #total_power_Y=np.sum(avg_power_Y, axis=0)
+
+
+    #total_std_X = np.sqrt(np.sum((std_power_X.T*std_power_X.T).T,axis=0))
+    #total_std_Y = np.sqrt(np.sum((std_power_Y.T*std_power_Y.T).T,axis=0))
 
 
     pickfile = open(con_dir+'/power_all_80m.p','wb')
@@ -586,7 +587,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
     pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
 
     pickfile.close()
-'''
+
 
 
 
