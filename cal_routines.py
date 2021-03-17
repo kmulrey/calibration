@@ -171,16 +171,19 @@ def average_model(jones_dir):
     for f in np.arange(51):
         freq=str(f+30)
         for i in np.arange(len(array_ind_outer)):
-            ant_id=array_ind_outer[i]
-            file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(ant_id)+'.p','rb')
-            info=pickle.load(file, encoding="latin1")
-            file.close()
-            jones_aartfaac=info['jones_aartfaac']
-            jones_thetaX_total=jones_thetaX_total+np.abs(jones_aartfaac.T[0])
-            jones_thetaY_total=jones_thetaY_total+np.abs(jones_aartfaac.T[1])
-            jones_phiX_total=jones_phiX_total+np.abs(jones_aartfaac.T[2])
-            jones_phiY_total=jones_phiY_total+np.abs(jones_aartfaac.T[3])
-            count=count+1
+            try:
+                ant_id=array_ind_outer[i]
+                file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(ant_id)+'.p','rb')
+                info=pickle.load(file, encoding="latin1")
+                file.close()
+                jones_aartfaac=info['jones_aartfaac']
+                jones_thetaX_total=jones_thetaX_total+np.abs(jones_aartfaac.T[0])
+                jones_thetaY_total=jones_thetaY_total+np.abs(jones_aartfaac.T[1])
+                jones_phiX_total=jones_phiX_total+np.abs(jones_aartfaac.T[2])
+                jones_phiY_total=jones_phiY_total+np.abs(jones_aartfaac.T[3])
+                count=count+1
+            except:
+                print('can\'t find '+file)
    
         jones_thetaX_total=jones_thetaX_total/count
         jones_thetaY_total=jones_thetaY_total/count
