@@ -680,7 +680,7 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     outputfile=fit_dir+'/fits_'+name+'_'+station+'.p'
 
 
-    analysisinfo={'a':a,'c':c,'cal':cal,'g':g,'d':b,'sim_X':sim_X,'sim_Y':sim_Y,'sim_to_data_X':sim_to_dataX,'sim_to_data_Y':sim_to_dataY,'data_X':data_X_80,'data_Y':data_Y_80,'std_X':std_X_80,'std_Y':std_Y_80,'x2':res['fun']}
+    analysisinfo={'a':a,'c':c,'cal':cal,'g':g,'d':b,'sim_X':sim_X,'sim_Y':sim_Y,'sim_to_data_X':sim_to_dataX,'sim_to_data_Y':sim_to_dataY,'data_X':data_X_80,'data_Y':data_Y_80,'std_X':std_X_80,'std_Y':std_Y_80,'x2':res['fun'],'A_X':A_X,'A_Y':A_Y}
     fout=open(outputfile,"wb")
     pickle.dump(analysisinfo,fout)
     fout.close()
