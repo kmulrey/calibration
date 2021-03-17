@@ -406,46 +406,23 @@ def consolidate(con_dir,power_dir,data_dir,station):
 
 def consolidate(con_dir,power_dir,data_dir,station):
     
-    nTimes=24
+    nTimes1=24
     nFreq=51
-
     nData=5
-
     frequencies=np.arange(30,80.5,1)
-    
-        
-    
-
-
     power=np.zeros([nFreq,nTimes,nData])
-
-    #total_power=np.zeros([nTimes,nData])
-
     
     for f in np.arange(nFreq):
-        #file=open('power/integrated_power_'+str(f+30)+'.txt','rb')
         file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
-
         temp=np.genfromtxt(file)
     
-        for t in np.arange(nTimes):
+        for t in np.arange(nTimes1):
             power[f][t][0]=temp[t][0]
             power[f][t][1]=temp[t][1]
             power[f][t][2]=temp[t][2]
             power[f][t][3]=temp[t][4]
             power[f][t][4]=temp[t][3]
     
-    '''
-    for t in np.arange(nTimes):
-        for f in np.arange(nFreq):
-            total_power[t][0]=power[f][t][0]
-            total_power[t][1]=power[f][t][1]
-            total_power[t][2]=total_power[t][2]+power[f][t][2]
-            total_power[t][3]=total_power[t][3]+power[f][t][3]
-            total_power[t][4]=total_power[t][4]+power[f][t][4]
-
-    '''
-
 
     dh=0.25
     bin_edges=np.arange(0,24.1,dh)
@@ -484,16 +461,6 @@ def consolidate(con_dir,power_dir,data_dir,station):
     int_sim_Y.T[93]=holdY.T[1]
     int_sim_Y.T[94]=holdY.T[2]
     int_sim_Y.T[95]=holdY.T[3]
-
-    '''
-
-    for t in np.arange(len(bins)):
-        for f in np.arange(nFreq):
-            int_sim_X_total[t]=int_sim_X_total[t]+int_sim_X[f][t]
-            int_sim_Y_total[t]=int_sim_Y_total[t]+int_sim_Y[f][t]
-    '''
-
-
 
 
     infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/CS002_noise_power_80.p','rb')
