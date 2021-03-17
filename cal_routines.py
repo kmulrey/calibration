@@ -324,7 +324,7 @@ def find_simulated_power(jones_dir, power_dir):
         outfile.close()
         print(outfile)
 
-
+'''
 def consolidate(con_dir,power_dir,data_dir,station):
 
     nTimesSim=24
@@ -399,7 +399,194 @@ def consolidate(con_dir,power_dir,data_dir,station):
         ##### hack! to write X and Y backwards because they are flipped somewhere
         pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
         pickfile.close()
+        
+'''
 
+
+
+def consolidate(con_dir,power_dir,data_dir,station):
+    
+    nTimes=24
+    nFreq=51
+
+    nData=5
+
+    frequencies=np.arange(30,80.5,1)
+
+    power=np.zeros([nFreq,nTimes,nData])
+
+    total_power=np.zeros([nTimes,nData])
+
+    
+    for f in np.arange(nFreq):
+        file=open('power/integrated_power_'+str(f+30)+'.txt','rb')
+
+        temp=np.genfromtxt(file)
+    
+        for t in np.arange(nTimes):
+            power[f][t][0]=temp[t][0]
+            power[f][t][1]=temp[t][1]
+            power[f][t][2]=temp[t][2]
+            power[f][t][3]=temp[t][4]
+            power[f][t][4]=temp[t][3]
+    
+    
+    for t in np.arange(nTimes):
+        for f in np.arange(nFreq):
+            total_power[t][0]=power[f][t][0]
+            total_power[t][1]=power[f][t][1]
+            total_power[t][2]=total_power[t][2]+power[f][t][2]
+            total_power[t][3]=total_power[t][3]+power[f][t][3]
+            total_power[t][4]=total_power[t][4]+power[f][t][4]
+
+    
+    
+    dh=0.25
+    bin_edges=np.arange(0,24.1,dh)
+    bins=np.arange(0.0,23.9,dh)
+    nTimes=len(bins)
+
+    gain_X=np.zeros([nTimes])
+    gain_Y=np.zeros([nTimes])
+    gain_std_X=np.zeros([nTimes])
+    gain_std_Y=np.zeros([nTimes])
+
+    infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/CS002_noise_power_80.p','rb')
+    tbbInfo=pickle.load(infile, encoding="latin1")
+    infile.close()
+
+    avg_power_X=tbbInfo['avg_power_X_80'].T
+    std_power_X=tbbInfo['std_power_X_80'].T
+    avg_power_Y=tbbInfo['avg_power_Y_80'].T
+    std_power_Y=tbbInfo['std_power_Y_80'].T
+
+    count_X=tbbInfo['count_X_80'].T
+    count_Y=tbbInfo['count_Y_80'].T
+
+
+    total_power_X=np.sum(avg_power_X, axis=0)
+    total_power_Y=np.sum(avg_power_Y, axis=0)
+
+
+    total_std_X = np.sqrt(np.sum((std_power_X.T*std_power_X.T).T,axis=0))
+    total_std_Y = np.sqrt(np.sum((std_power_Y.T*std_power_Y.T).T,axis=0))
+
+
+    
+    for t in np.arange(nTimes):
+        gain_X[t]=10*np.log10(total_power_X[t]/total_power_X[0])
+        gain_Y[t]=10*np.log10(total_power_Y[t]/total_power_Y[0])
+        gain_std_X[t]=10*np.log10((total_power_X[t]+total_std_X[t])/total_power_X[t])
+        gain_std_Y[t]=10*np.log10((total_power_Y[t]+total_std_Y[t])/total_power_Y[t])
+
+    
+    int_sim_X=np.zeros([nFreq,len(bins)])
+    int_sim_Y=np.zeros([nFreq,len(bins)])
+    int_sim_X_total=np.zeros([len(bins)])
+    int_sim_Y_total=np.zeros([len(bins)])
+    
+    int_sim_X_rolled=np.zeros([nFreq,len(bins)])
+    int_sim_Y_rolled=np.zeros([nFreq,len(bins)])
+    int_sim_X_total_rolled=np.zeros([len(bins)])
+    int_sim_Y_total_rolled=np.zeros([len(bins)])
+
+    for f in np.arange(nFreq):
+
+        fX = interp1d(power[f].T[0], power[f].T[3],kind='cubic',fill_value='extrapolate')
+        fY = interp1d(power[f].T[0], power[f].T[4],kind='cubic',fill_value='extrapolate')
+
+        int_sim_X[f]=fX(bins)
+        int_sim_Y[f]=fY(bins)
+
+
+
+    int_sim_X
+    holdY=int_sim_Y
+
+
+    for t in np.arange(nTimes-4):
+        int_sim_X.T[t]=holdX.T[t+4]
+        int_sim_Y.T[t]=holdY.T[t+4]
+
+    int_sim_X.T[92]=holdX.T[0]
+    int_sim_X.T[93]=holdX.T[1]
+    int_sim_X.T[94]=holdX.T[2]
+        int_sim_X.T[95]=holdX.T[3]
+
+    int_sim_Y.T[92]=holdY.T[0]
+        int_sim_Y.T[93]=holdY.T[1]
+    int_sim_Y.T[94]=holdY.T[2]
+    int_sim_Y.T[95]=holdY.T[3]
+
+    for t in np.arange(nTimes-4):
+        int_sim_X_rolled.T[t]=holdX.T[t+4]
+        int_sim_Y_rolled.T[t]=holdY.T[t+4]
+
+    int_sim_X_rolled.T[92]=holdX.T[0]
+    int_sim_X_rolled.T[93]=holdX.T[1]
+    int_sim_X_rolled.T[94]=holdX.T[2]
+    int_sim_X_rolled.T[95]=holdX.T[3]
+
+    int_sim_Y_rolled.T[92]=holdY.T[0]
+    int_sim_Y_rolled.T[93]=holdY.T[1]
+    int_sim_Y_rolled.T[94]=holdY.T[2]
+    int_sim_Y_rolled.T[95]=holdY.T[3]
+
+
+
+    for t in np.arange(len(bins)):
+        for f in np.arange(nFreq):
+            int_sim_X_total[t]=int_sim_X_total[t]+int_sim_X[f][t]
+            int_sim_Y_total[t]=int_sim_Y_total[t]+int_sim_Y[f][t]
+            int_sim_X_total_rolled[t]=int_sim_X_total_rolled[t]+int_sim_X_rolled[f][t]
+            int_sim_Y_total_rolled[t]=int_sim_Y_total_rolled[t]+int_sim_Y_rolled[f][t]
+
+
+
+    data_gain_X=np.zeros([nFreq,len(bins)])
+    data_gain_Y=np.zeros([nFreq,len(bins)])
+    sim_gain_X=np.zeros([nFreq,len(bins)])
+    sim_gain_Y=np.zeros([nFreq,len(bins)])
+
+    sim_gain_X_rolled=np.zeros([nFreq,len(bins)])
+    sim_gain_Y_rolled=np.zeros([nFreq,len(bins)])
+
+    data_gain_X_total=np.zeros([len(bins)])
+    data_gain_Y_total=np.zeros([len(bins)])
+    data_gain_X_std_total=np.zeros([len(bins)])
+    data_gain_Y_std_total=np.zeros([len(bins)])
+    sim_gain_X_total=np.zeros([len(bins)])
+    sim_gain_Y_total=np.zeros([len(bins)])
+    sim_gain_X_total_rolled=np.zeros([len(bins)])
+    sim_gain_Y_total_rolled=np.zeros([len(bins)])
+
+
+
+
+    for f in np.arange(nFreq):
+        for t in np.arange(len(bins)):
+            data_gain_X[f][t]=10*np.log10(avg_power_X[f][t]/avg_power_X[f][0])
+            data_gain_Y[f][t]=10*np.log10(avg_power_Y[f][t]/avg_power_Y[f][0])
+            sim_gain_X[f][t]=10*np.log10(int_sim_X[f][t]/int_sim_X[f][0])
+            sim_gain_Y[f][t]=10*np.log10(int_sim_Y[f][t]/int_sim_Y[f][0])
+    
+    for t in np.arange(len(bins)):
+        data_gain_X_total[t]=10*np.log10(np.sum(avg_power_X,axis=0)[t]/np.sum(avg_power_X,axis=0)[0])
+        data_gain_Y_total[t]=10*np.log10(np.sum(avg_power_Y,axis=0)[t]/np.sum(avg_power_Y,axis=0)[0])
+        data_gain_X_std_total[t]=10*np.log10(np.sum(avg_power_X,axis=0)[t]/np.sum(avg_power_X,axis=0)[0])
+        data_gain_Y_std_total[t]=10*np.log10(np.sum(avg_power_Y,axis=0)[t]/np.sum(avg_power_Y,axis=0)[0])
+
+        sim_gain_X_total[t]=10*np.log10(np.sum(int_sim_X,axis=0)[t]/np.sum(int_sim_X,axis=0)[0])
+        sim_gain_Y_total[t]=10*np.log10(np.sum(int_sim_Y,axis=0)[t]/np.sum(int_sim_Y,axis=0)[0])
+
+
+
+         open(con_dir+'/power_all_'+cable_lengths[c]+'m.p','wb')
+    pickfile = open(con_dir+'/power_all_80m.p','wb')
+
+    pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
+
+    pickfile.close()
 
 
 
