@@ -372,10 +372,10 @@ def find_simulated_power_single(jones_dir, power_dir, ant_id):
                     phi=az-360
                     i_az=az-180
 
-                JJ[90-th][i_az][0]=jones[z][a][0]
-                JJ[90-th][i_az][1]=jones[z][a][1]
-                JJ[90-th][i_az][2]=jones[z][a][2]
-                JJ[90-th][i_az][3]=jones[z][a][3]
+                JJ[90-th][i_az][0]=jones[th][a][0]
+                JJ[90-th][i_az][1]=jones[th][a][1]
+                JJ[90-th][i_az][2]=jones[th][a][2]
+                JJ[90-th][i_az][3]=jones[th][a][3]
                 
        
         int_theta=np.arange(0.5,90,1.0)
