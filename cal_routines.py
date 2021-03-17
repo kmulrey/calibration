@@ -324,7 +324,7 @@ def find_simulated_power(jones_dir, power_dir):
         outfile.close()
         print(outfile)
 
-'''
+
 def consolidate(con_dir,power_dir,data_dir,station):
 
     nTimesSim=24
@@ -586,7 +586,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
     pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
 
     pickfile.close()
-
+'''
 
 
 
