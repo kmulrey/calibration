@@ -464,8 +464,8 @@ def consolidate(con_dir,power_dir,data_dir,station,ant_id):
     power=np.zeros([nFreq,nTimes1,nData])
     
     for f in np.arange(nFreq):
-        #file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
-        file=open(power_dir+'/integrated_power_'+str(freq)+'_'+str(ant_id)+'.txt','w')
+        file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
+        #file=open(power_dir+'/integrated_power_'+str(freq)+'_'+str(ant_id)+'.txt','w')
         temp=np.genfromtxt(file)
     
         for t in np.arange(nTimes1):
@@ -527,7 +527,8 @@ def consolidate(con_dir,power_dir,data_dir,station,ant_id):
         std_power_Y=tbbInfo['std_power_Y_'+cable_lengths[c]].T
 
 
-        pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m_'+station+'_'+str(ant_id)+'.p','wb')
+        #pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m_'+station+'_'+str(ant_id)+'.p','wb')
+        pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m_'+station+'.p','wb')
 
         pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
 
@@ -544,15 +545,15 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     times=np.arange(0,24.0,0.5)
     
     
-    file=open(consolidate_dir+'/power_all_50m_'+station+str(ant_id)+'.p','rb')
+    file=open(consolidate_dir+'/power_all_50m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_50,std_X_50,data_Y_50,std_Y_50=pickle.load(file, encoding="latin1")
     file.close()
     
-    file=open(consolidate_dir+'/power_all_80m_'+station+str(ant_id)+'.p','rb')
+    file=open(consolidate_dir+'/power_all_80m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_80,std_X_80,data_Y_80,std_Y_80=pickle.load(file, encoding="latin1")
     file.close()
     
-    file=open(consolidate_dir+'/power_all_115m_'+station+str(ant_id)+'.p','rb')
+    file=open(consolidate_dir+'/power_all_115m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_115,std_X_115,data_Y_115,std_Y_115=pickle.load(file, encoding="latin1")
     file.close()
     

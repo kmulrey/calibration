@@ -99,8 +99,8 @@ for f in np.arange(51):
    
 if power_flag==1 or reprocess_power_flag==1:
     print('calculating power as a function of LST')
-    #cal.find_simulated_power(jones_dir, power_dir)
-    cal.find_simulated_power_single(jones_dir, power_dir, 2)
+    cal.find_simulated_power(jones_dir, power_dir)
+    #cal.find_simulated_power_single(jones_dir, power_dir, 2)
 
 
 
