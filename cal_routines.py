@@ -183,7 +183,7 @@ def average_model(jones_dir):
                 jones_phiY_total=jones_phiY_total+np.abs(jones_aartfaac.T[3])
                 count=count+1
             except:
-                print('can\'t find '+file)
+                print('can\'t find '+freq+'   '+str(ant_id))
    
         jones_thetaX_total=jones_thetaX_total/count
         jones_thetaY_total=jones_thetaY_total/count
