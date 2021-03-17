@@ -511,10 +511,10 @@ def consolidate(con_dir,power_dir,data_dir,station):
     int_sim_X.T[92]=holdX.T[0]
     int_sim_X.T[93]=holdX.T[1]
     int_sim_X.T[94]=holdX.T[2]
-        int_sim_X.T[95]=holdX.T[3]
+    int_sim_X.T[95]=holdX.T[3]
 
     int_sim_Y.T[92]=holdY.T[0]
-        int_sim_Y.T[93]=holdY.T[1]
+    int_sim_Y.T[93]=holdY.T[1]
     int_sim_Y.T[94]=holdY.T[2]
     int_sim_Y.T[95]=holdY.T[3]
 
