@@ -410,7 +410,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
     nFreq=51
     nData=5
     frequencies=np.arange(30,80.5,1)
-    power=np.zeros([nFreq,nTimes,nData])
+    power=np.zeros([nFreq,nTimes1,nData])
     
     for f in np.arange(nFreq):
         file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
