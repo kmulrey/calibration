@@ -219,10 +219,10 @@ def find_simulated_power(jones_dir, power_dir):
 
     for f in np.arange(51):
         freq=str(f+30)
-        print(freq)
+        #print(freq)
         pickfile = open(LFmap_dir+'/LFreduced_'+str(freq)+'.p','rb')
         XX,YY,ZZ,XX2,YY2,times_utc,times_LST,ZZ2=pickle.load(pickfile, encoding="latin1")
-        print(jones_dir+'/jones_all_{0}.p')
+        #print(jones_dir+'/jones_all_{0}.p')
         pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
         pickfile.seek(0)
         info=pickle.load(pickfile)
@@ -318,11 +318,11 @@ def find_simulated_power(jones_dir, power_dir):
 
 
         outfile=open(power_dir+'/integrated_power_'+str(freq)+'.txt','w')
-        print(power_dir+'/integrated_power_'+str(freq)+'.txt')
+        #print(power_dir+'/integrated_power_'+str(freq)+'.txt')
         for i in np.arange(len(times_LST)):
             outfile.write('{0}  {1}  {2}  {3}  {4} \n'.format(times_sorted[i],times_sorted_utc[i],power_sorted[i],power_sorted_X[i],power_sorted_Y[i]))
         outfile.close()
-        print(outfile)
+        #print(outfile)
 
 
 

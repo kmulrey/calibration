@@ -73,7 +73,7 @@ else:
     
 # find average antenna model
 
-if flag==1 or reprocess_flag==1:
+if flag==1 or reprocess_flag==1 and name!='standard':
 
     cal.average_model(jones_dir)
     
