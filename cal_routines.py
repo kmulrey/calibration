@@ -181,10 +181,10 @@ def average_model(jones_dir):
                 
                 for a in np.arange(361):
                     for z in np.arange(91):
-                        jones_thetaX_total[a][z]=jonesA_thetaX_total[a][z]+np.abs(jones_aartfaac[z][a][0])
-                        jones_thetaY_total[a][z]=jonesA_thetaY_total[a][z]+np.abs(jones_aartfaac[z][a][1])
-                        jones_phiX_total[a][z]=jonesA_phiX_total[a][z]+np.abs(jones_aartfaac[z][a][2])
-                        jones_phiY_total[a][z]=jonesA_phiY_total[a][z]+np.abs(jones_aartfaac[z][a][3])
+                        jones_thetaX_total[a][z]=jones_thetaX_total[a][z]+np.abs(jones_aartfaac[z][a][0])
+                        jones_thetaY_total[a][z]=jones_thetaY_total[a][z]+np.abs(jones_aartfaac[z][a][1])
+                        jones_phiX_total[a][z]=jones_phiX_total[a][z]+np.abs(jones_aartfaac[z][a][2])
+                        jones_phiY_total[a][z]=jones_phiY_total[a][z]+np.abs(jones_aartfaac[z][a][3])
                 #jones_thetaX_total=jones_thetaX_total+np.abs(jones_aartfaac.T[0])
                 #jones_thetaY_total=jones_thetaY_total+np.abs(jones_aartfaac.T[1])
                 #jones_phiX_total=jones_phiX_total+np.abs(jones_aartfaac.T[2])
