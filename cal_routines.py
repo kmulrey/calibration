@@ -414,21 +414,14 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station):
     times=np.arange(0,24.0,0.5)
     
     
-    #file50='../fit_data/power_all_50m.p'
-    #file80='../fit_data/power_all_80m.p'
-    #file115='../fit_data/power_all_115m.p'
-    
-    #file=open(file50,'rb')
     file=open(consolidate_dir+'/power_all_50m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_50,std_X_50,data_Y_50,std_Y_50=pickle.load(file, encoding="latin1")
     file.close()
     
-    #file=open(file80,'rb')
     file=open(consolidate_dir+'/power_all_80m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_80,std_X_80,data_Y_80,std_Y_80=pickle.load(file, encoding="latin1")
     file.close()
     
-    #file=open(file115,'rb')
     file=open(consolidate_dir+'/power_all_115m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_115,std_X_115,data_Y_115,std_Y_115=pickle.load(file, encoding="latin1")
     file.close()
@@ -551,7 +544,7 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station):
     
     
     
-    outputfile=fit_dir+'/fits_'+name+'.p'
+    outputfile=fit_dir+'/fits_'+name+'_'+station+'.p'
 
 
     analysisinfo={'a':a,'c':c,'cal':cal,'g':g,'d':b,'sim_X':sim_X,'sim_Y':sim_Y,'sim_to_data_X':sim_to_dataX,'sim_to_data_Y':sim_to_dataY,'data_X':data_X_80,'data_Y':data_Y_80,'std_X':std_X_80,'std_Y':std_Y_80,'x2':res['fun']}
