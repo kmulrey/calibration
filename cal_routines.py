@@ -346,6 +346,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
         int_sim_Y=np.zeros([nFreq,len(bins)])
         
         file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
+        print(file)
         temp=np.genfromtxt(file)
     
         for t in np.arange(nTimesSim):
