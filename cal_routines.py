@@ -177,10 +177,17 @@ def average_model(jones_dir):
                 info=pickle.load(file, encoding="latin1")
                 file.close()
                 jones_aartfaac=info['jones_aartfaac']
-                jones_thetaX_total=jones_thetaX_total+np.abs(jones_aartfaac.T[0])
-                jones_thetaY_total=jones_thetaY_total+np.abs(jones_aartfaac.T[1])
-                jones_phiX_total=jones_phiX_total+np.abs(jones_aartfaac.T[2])
-                jones_phiY_total=jones_phiY_total+np.abs(jones_aartfaac.T[3])
+                
+                for a in np.arange(361):
+                    for z in np.arange(91):
+                        jones_thetaX_total[a][z]=jonesA_thetaX_total[a][z]+np.abs(jones_aartfaac[z][a][0])
+                        jones_thetaY_total[a][z]=jonesA_thetaY_total[a][z]+np.abs(jones_aartfaac[z][a][1])
+                        jones_phiX_total[a][z]=jonesA_phiX_total[a][z]+np.abs(jones_aartfaac[z][a][2])
+                        jones_phiY_total[a][z]=jonesA_phiY_total[a][z]+np.abs(jones_aartfaac[z][a][3])
+                #jones_thetaX_total=jones_thetaX_total+np.abs(jones_aartfaac.T[0])
+                #jones_thetaY_total=jones_thetaY_total+np.abs(jones_aartfaac.T[1])
+                #jones_phiX_total=jones_phiX_total+np.abs(jones_aartfaac.T[2])
+                #jones_phiY_total=jones_phiY_total+np.abs(jones_aartfaac.T[3])
                 count=count+1
             except:
                 print('can\'t find '+freq+'   '+str(ant_id))
@@ -218,7 +225,7 @@ def do_integral_freq(v_start, v_stop):
     return (1.0/3.0)*(v_stop*v_stop*v_stop-v_start*v_start*v_start)
 
 
-def find_simulated_power(jones_dir, power_dir):
+def find_simulated_power(jones_dir, power_dir,a):
 
     for f in np.arange(51):
         freq=str(f+30)
@@ -226,31 +233,46 @@ def find_simulated_power(jones_dir, power_dir):
         pickfile = open(LFmap_dir+'/LFreduced_'+str(freq)+'.p','rb')
         XX,YY,ZZ,XX2,YY2,times_utc,times_LST,ZZ2=pickle.load(pickfile, encoding="latin1")
         #print(jones_dir+'/jones_all_{0}.p')
-        pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
-        pickfile.seek(0)
-        info=pickle.load(pickfile)
-        pickfile.close()
-        jones_thetaX=info['jones_thetaX']
-        jones_thetaY=info['jones_thetaY']
-        jones_phiX=info['jones_phiX']
-        jones_phiY=info['jones_phiY']
         JJ=np.zeros([91,361,4],dtype='complex')
 
-        for th in np.arange(90):
-            for az in np.arange(360):
-                phi=az
-                i_az=az+180
-                if az>180:
-                    phi=az-360
-                    i_az=az-180
+        if a<0:
+            pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
+            pickfile.seek(0)
+            info=pickle.load(pickfile)
+            pickfile.close()
+            jones_thetaX=info['jones_thetaX']
+            jones_thetaY=info['jones_thetaY']
+            jones_phiX=info['jones_phiX']
+            jones_phiY=info['jones_phiY']
 
+            for th in np.arange(90):
+                for az in np.arange(360):
+                    phi=az
+                    i_az=az+180
+                    if az>180:
+                        phi=az-360
+                        i_az=az-180
+
+                    JJ[90-th][i_az][0]=jones_thetaX[i_az][th]
+                    JJ[90-th][i_az][1]=jones_thetaY[i_az][th]
+                    JJ[90-th][i_az][2]=jones_phiX[i_az][th]
+                    JJ[90-th][i_az][3]=jones_phiY[i_az][th]
+                
+        else:
+                file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(a)+'.p','rb')
+                info=pickle.load(file, encoding="latin1")
+                file.close()
+                jones_aartfaac=info['jones_aartfaac']
+                jones_thetaX=jones_aartfaac.T[0]
+                jones_thetaY=jones_aartfaac.T[1]
+                jones_phiX=jones_aartfaac.T[2]
+                jones_phiY=jones_aartfaac.T[3]
+                
+                
                 JJ[90-th][i_az][0]=jones_thetaX[i_az][th]
                 JJ[90-th][i_az][1]=jones_thetaY[i_az][th]
                 JJ[90-th][i_az][2]=jones_phiX[i_az][th]
                 JJ[90-th][i_az][3]=jones_phiY[i_az][th]
-                
-                
-                
                 
         int_theta=np.arange(0.5,90,1.0)
         int_theta=np.append([0],int_theta)
