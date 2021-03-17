@@ -447,10 +447,10 @@ def consolidate(con_dir,power_dir,data_dir,station):
     bins=np.arange(0.0,23.9,dh)
     nTimes=len(bins)
 
-    gain_X=np.zeros([nTimes])
-    gain_Y=np.zeros([nTimes])
-    gain_std_X=np.zeros([nTimes])
-    gain_std_Y=np.zeros([nTimes])
+    #gain_X=np.zeros([nTimes])
+    #gain_Y=np.zeros([nTimes])
+    #gain_std_X=np.zeros([nTimes])
+    #gain_std_Y=np.zeros([nTimes])
 
     
 
@@ -468,10 +468,10 @@ def consolidate(con_dir,power_dir,data_dir,station):
     int_sim_X_total=np.zeros([len(bins)])
     int_sim_Y_total=np.zeros([len(bins)])
     
-    int_sim_X_rolled=np.zeros([nFreq,len(bins)])
-    int_sim_Y_rolled=np.zeros([nFreq,len(bins)])
-    int_sim_X_total_rolled=np.zeros([len(bins)])
-    int_sim_Y_total_rolled=np.zeros([len(bins)])
+    #int_sim_X_rolled=np.zeros([nFreq,len(bins)])
+    #int_sim_Y_rolled=np.zeros([nFreq,len(bins)])
+    #int_sim_X_total_rolled=np.zeros([len(bins)])
+    #int_sim_Y_total_rolled=np.zeros([len(bins)])
 
     for f in np.arange(nFreq):
 
@@ -500,6 +500,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
     int_sim_Y.T[94]=holdY.T[2]
     int_sim_Y.T[95]=holdY.T[3]
 
+    '''
     for t in np.arange(nTimes-4):
         int_sim_X_rolled.T[t]=holdX.T[t+4]
         int_sim_Y_rolled.T[t]=holdY.T[t+4]
@@ -513,30 +514,30 @@ def consolidate(con_dir,power_dir,data_dir,station):
     int_sim_Y_rolled.T[93]=holdY.T[1]
     int_sim_Y_rolled.T[94]=holdY.T[2]
     int_sim_Y_rolled.T[95]=holdY.T[3]
-
+    '''
 
 
     for t in np.arange(len(bins)):
         for f in np.arange(nFreq):
             int_sim_X_total[t]=int_sim_X_total[t]+int_sim_X[f][t]
             int_sim_Y_total[t]=int_sim_Y_total[t]+int_sim_Y[f][t]
-            int_sim_X_total_rolled[t]=int_sim_X_total_rolled[t]+int_sim_X_rolled[f][t]
-            int_sim_Y_total_rolled[t]=int_sim_Y_total_rolled[t]+int_sim_Y_rolled[f][t]
+            #int_sim_X_total_rolled[t]=int_sim_X_total_rolled[t]+int_sim_X_rolled[f][t]
+            #int_sim_Y_total_rolled[t]=int_sim_Y_total_rolled[t]+int_sim_Y_rolled[f][t]
 
 
 
-    data_gain_X=np.zeros([nFreq,len(bins)])
-    data_gain_Y=np.zeros([nFreq,len(bins)])
+    #data_gain_X=np.zeros([nFreq,len(bins)])
+    #data_gain_Y=np.zeros([nFreq,len(bins)])
     sim_gain_X=np.zeros([nFreq,len(bins)])
     sim_gain_Y=np.zeros([nFreq,len(bins)])
 
     sim_gain_X_rolled=np.zeros([nFreq,len(bins)])
     sim_gain_Y_rolled=np.zeros([nFreq,len(bins)])
 
-    data_gain_X_total=np.zeros([len(bins)])
-    data_gain_Y_total=np.zeros([len(bins)])
-    data_gain_X_std_total=np.zeros([len(bins)])
-    data_gain_Y_std_total=np.zeros([len(bins)])
+    #data_gain_X_total=np.zeros([len(bins)])
+    #data_gain_Y_total=np.zeros([len(bins)])
+    #data_gain_X_std_total=np.zeros([len(bins)])
+    #data_gain_Y_std_total=np.zeros([len(bins)])
     sim_gain_X_total=np.zeros([len(bins)])
     sim_gain_Y_total=np.zeros([len(bins)])
     sim_gain_X_total_rolled=np.zeros([len(bins)])
