@@ -415,12 +415,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
     
         
     
-    dh=0.25
-    bin_edges=np.arange(0,24.1,dh)
-    bins=np.arange(0.0,23.9,dh)
-    nTimes=len(bins)
 
-    
 
     power=np.zeros([nFreq,nTimes,nData])
 
@@ -451,6 +446,11 @@ def consolidate(con_dir,power_dir,data_dir,station):
 
     '''
 
+
+    dh=0.25
+    bin_edges=np.arange(0,24.1,dh)
+    bins=np.arange(0.0,23.9,dh)
+    nTimes=len(bins)
 
     
     int_sim_X=np.zeros([nFreq,len(bins)])
