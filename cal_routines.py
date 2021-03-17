@@ -324,84 +324,6 @@ def find_simulated_power(jones_dir, power_dir):
         outfile.close()
         print(outfile)
 
-'''
-def consolidate(con_dir,power_dir,data_dir,station):
-
-    nTimesSim=24
-    nFreq=51
-    nData=5
-    frequencies=np.arange(30,80.5,1)
-    power=np.zeros([nFreq,nTimesSim,nData])
-    dh=0.25
-    bin_edges=np.arange(0,24.1,dh)
-    bins=np.arange(0.0,23.9,dh)
-    nTimes=len(bins)
-    int_sim_X=np.zeros([nFreq,len(bins)])
-    int_sim_Y=np.zeros([nFreq,len(bins)])
-
-
-    for f in np.arange(nFreq):
-    
-        int_sim_X=np.zeros([nFreq,len(bins)])
-        int_sim_Y=np.zeros([nFreq,len(bins)])
-        
-        file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
-        print(file)
-        temp=np.genfromtxt(file)
-    
-        for t in np.arange(nTimesSim):
-            power[f][t][0]=temp[t][0]
-            power[f][t][1]=temp[t][1]
-            power[f][t][2]=temp[t][2]
-            power[f][t][3]=temp[t][4]
-            power[f][t][4]=temp[t][3]
-    
-
-        fX = interp1d(power[f].T[0], power[f].T[3],kind='cubic',fill_value='extrapolate')
-        fY = interp1d(power[f].T[0], power[f].T[4],kind='cubic',fill_value='extrapolate')
-        
-        int_sim_X[f]=fX(bins)
-        int_sim_Y[f]=fY(bins)
-
-        holdX=int_sim_X
-        holdY=int_sim_Y
-
-        # correct for hour offset
-        for t in np.arange(nTimes-4):
-            int_sim_X.T[t]=holdX.T[t+4]
-            int_sim_Y.T[t]=holdY.T[t+4]
-
-        int_sim_X.T[92]=holdX.T[0]
-        int_sim_X.T[93]=holdX.T[1]
-        int_sim_X.T[94]=holdX.T[2]
-        int_sim_X.T[95]=holdX.T[3]
-
-        int_sim_Y.T[92]=holdY.T[0]
-        int_sim_Y.T[93]=holdY.T[1]
-        int_sim_Y.T[94]=holdY.T[2]
-        int_sim_Y.T[95]=holdY.T[3]
-            
-    cable_lengths=['50','80','115']
-    
-    for c in np.arange(len(cable_lengths)):
-        
-        infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/'+station+'_noise_power_'+cable_lengths[c]+'.p','rb')
-        tbbInfo=pickle.load(infile, encoding="latin1")
-        infile.close()
-
-        avg_power_X=tbbInfo['avg_power_X_'+cable_lengths[c]].T
-        std_power_X=tbbInfo['std_power_X_'+cable_lengths[c]].T
-        avg_power_Y=tbbInfo['avg_power_Y_'+cable_lengths[c]].T
-        std_power_Y=tbbInfo['std_power_Y_'+cable_lengths[c]].T
-
-        pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m.p','wb')
-        
-        ##### hack! to write X and Y backwards because they are flipped somewhere
-        pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
-        pickfile.close()
-        
-'''
-
 
 
 def consolidate(con_dir,power_dir,data_dir,station):
@@ -465,7 +387,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
     
     for c in np.arange(len(cable_lengths)):
 
-        infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/CS002_noise_power_'+cable_lengths[c]+'.p','rb')
+        infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/'+station+'_noise_power_'+cable_lengths[c]+'.p','rb')
         tbbInfo=pickle.load(infile, encoding="latin1")
         infile.close()
 
@@ -475,7 +397,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
         std_power_Y=tbbInfo['std_power_Y_'+cable_lengths[c]].T
 
 
-        pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m.p','wb')
+        pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m_'+station+'.p','wb')
 
         pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
 
@@ -485,7 +407,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
 
 
 
-def do_fit(consolidate_dir,fit_data_dir,fit_dir,name):
+def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station):
     nFreq=51
     nTimes=96
     frequencies=np.arange(30,80.5,1)
@@ -497,17 +419,17 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name):
     #file115='../fit_data/power_all_115m.p'
     
     #file=open(file50,'rb')
-    file=open(consolidate_dir+'/power_all_50m.p','rb')
+    file=open(consolidate_dir+'/power_all_50m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_50,std_X_50,data_Y_50,std_Y_50=pickle.load(file, encoding="latin1")
     file.close()
     
     #file=open(file80,'rb')
-    file=open(consolidate_dir+'/power_all_80m.p','rb')
+    file=open(consolidate_dir+'/power_all_80m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_80,std_X_80,data_Y_80,std_Y_80=pickle.load(file, encoding="latin1")
     file.close()
     
     #file=open(file115,'rb')
-    file=open(consolidate_dir+'/power_all_115m.p','rb')
+    file=open(consolidate_dir+'/power_all_115m_'+station+'.p'','rb')
     time_bins,sim_X,sim_Y,data_X_115,std_X_115,data_Y_115,std_Y_115=pickle.load(file, encoding="latin1")
     file.close()
     

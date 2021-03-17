@@ -127,4 +127,4 @@ if consol_flag==1:
 print('doing fit')
 
     
-cal.do_fit(consolidate_dir,fit_data_dir,fit_dir,name)
+cal.do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station)
