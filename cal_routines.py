@@ -227,7 +227,7 @@ def do_integral_freq(v_start, v_stop):
     return (1.0/3.0)*(v_stop*v_stop*v_stop-v_start*v_start*v_start)
 
 
-def find_simulated_power(jones_dir, power_dir,a):
+def find_simulated_power(jones_dir, power_dir):
 
     for f in np.arange(51):
         freq=str(f+30)
@@ -237,45 +237,30 @@ def find_simulated_power(jones_dir, power_dir,a):
         #print(jones_dir+'/jones_all_{0}.p')
         JJ=np.zeros([91,361,4],dtype='complex')
 
-        if a<0:
-            pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
-            pickfile.seek(0)
-            info=pickle.load(pickfile)
-            pickfile.close()
-            jones_thetaX=info['jones_thetaX']
-            jones_thetaY=info['jones_thetaY']
-            jones_phiX=info['jones_phiX']
-            jones_phiY=info['jones_phiY']
+        
+        pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
+        pickfile.seek(0)
+        info=pickle.load(pickfile)
+        pickfile.close()
+        jones_thetaX=info['jones_thetaX']
+        jones_thetaY=info['jones_thetaY']
+        jones_phiX=info['jones_phiX']
+        jones_phiY=info['jones_phiY']
 
-            for th in np.arange(90):
-                for az in np.arange(360):
-                    phi=az
-                    i_az=az+180
-                    if az>180:
-                        phi=az-360
-                        i_az=az-180
+        for th in np.arange(90):
+            for az in np.arange(360):
+                phi=az
+                i_az=az+180
+                if az>180:
+                    phi=az-360
+                    i_az=az-180
 
-                    JJ[90-th][i_az][0]=jones_thetaX[i_az][th]
-                    JJ[90-th][i_az][1]=jones_thetaY[i_az][th]
-                    JJ[90-th][i_az][2]=jones_phiX[i_az][th]
-                    JJ[90-th][i_az][3]=jones_phiY[i_az][th]
-                
-        else:
-                file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(a)+'.p','rb')
-                info=pickle.load(file, encoding="latin1")
-                file.close()
-                jones_aartfaac=info['jones_aartfaac']
-                jones_thetaX=jones_aartfaac.T[0]
-                jones_thetaY=jones_aartfaac.T[1]
-                jones_phiX=jones_aartfaac.T[2]
-                jones_phiY=jones_aartfaac.T[3]
-                
-                
                 JJ[90-th][i_az][0]=jones_thetaX[i_az][th]
                 JJ[90-th][i_az][1]=jones_thetaY[i_az][th]
                 JJ[90-th][i_az][2]=jones_phiX[i_az][th]
                 JJ[90-th][i_az][3]=jones_phiY[i_az][th]
                 
+       
         int_theta=np.arange(0.5,90,1.0)
         int_theta=np.append([0],int_theta)
         int_theta=np.append(int_theta,[90])

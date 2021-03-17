@@ -73,7 +73,7 @@ else:
     
 # find average antenna model
 
-if flag==1 or reprocess_flag==1 and name!='standard':
+if flag==1 and name!='standard':
 
     cal.average_model(jones_dir)
     
@@ -99,7 +99,7 @@ for f in np.arange(51):
    
 if power_flag==1 or reprocess_power_flag==1:
     print('calculating power as a function of LST')
-    cal.find_simulated_power(jones_dir, power_dir,0)
+    cal.find_simulated_power(jones_dir, power_dir)
 
 
 
