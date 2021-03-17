@@ -423,7 +423,6 @@ def consolidate(con_dir,power_dir,data_dir,station):
             power[f][t][3]=temp[t][4]
             power[f][t][4]=temp[t][3]
     
-
     dh=0.25
     bin_edges=np.arange(0,24.1,dh)
     bins=np.arange(0.0,23.9,dh)
@@ -462,22 +461,25 @@ def consolidate(con_dir,power_dir,data_dir,station):
     int_sim_Y.T[94]=holdY.T[2]
     int_sim_Y.T[95]=holdY.T[3]
 
+    cable_lengths=['50','80','115']
+    
+    for c in np.arange(len(cable_lengths)):
 
-    infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/CS002_noise_power_80.p','rb')
-    tbbInfo=pickle.load(infile, encoding="latin1")
-    infile.close()
+        infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/CS002_noise_power_'+cable_lengths[c]+'.p','rb')
+        tbbInfo=pickle.load(infile, encoding="latin1")
+        infile.close()
 
-    avg_power_X=tbbInfo['avg_power_X_80'].T
-    std_power_X=tbbInfo['std_power_X_80'].T
-    avg_power_Y=tbbInfo['avg_power_Y_80'].T
-    std_power_Y=tbbInfo['std_power_Y_80'].T
+        avg_power_X=tbbInfo['avg_power_X_'+cable_lengths[c]].T
+        std_power_X=tbbInfo['std_power_X_'+cable_lengths[c]].T
+        avg_power_Y=tbbInfo['avg_power_Y_'+cable_lengths[c]].T
+        std_power_Y=tbbInfo['std_power_Y_'+cable_lengths[c]].T
 
 
-    pickfile = open(con_dir+'/power_all_80m.p','wb')
+        pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m.p','wb')
 
-    pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
+        pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
 
-    pickfile.close()
+        pickfile.close()
 
 
 
