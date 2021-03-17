@@ -171,8 +171,8 @@ def average_model(jones_dir):
     for f in np.arange(51):
         freq=str(f+30)
         for i in np.arange(len(array_ind_outer)):
-            #try:
-            for p in np.arange(1):
+            try:
+            #for p in np.arange(1):
                 ant_id=array_ind_outer[i]
                 file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(ant_id)+'.p','rb')
                 info=pickle.load(file, encoding="latin1")
@@ -190,8 +190,8 @@ def average_model(jones_dir):
                 #jones_phiX_total=jones_phiX_total+np.abs(jones_aartfaac.T[2])
                 #jones_phiY_total=jones_phiY_total+np.abs(jones_aartfaac.T[3])
                 count=count+1
-            #except:
-            #    print('can\'t find '+freq+'   '+str(ant_id))
+            except:
+                print('can\'t find '+freq+'   '+str(ant_id))
    
         jones_thetaX_total=jones_thetaX_total/count
         jones_thetaY_total=jones_thetaY_total/count
