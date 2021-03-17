@@ -419,7 +419,8 @@ def consolidate(con_dir,power_dir,data_dir,station):
 
     
     for f in np.arange(nFreq):
-        file=open('power/integrated_power_'+str(f+30)+'.txt','rb')
+        #file=open('power/integrated_power_'+str(f+30)+'.txt','rb')
+        file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
 
         temp=np.genfromtxt(file)
     
