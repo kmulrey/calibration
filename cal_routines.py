@@ -543,8 +543,10 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     nTimes=96
     frequencies=np.arange(30,80.5,1)
     times=np.arange(0,24.0,0.5)
-    
-    
+    print(consolidate_dir+'/power_all_50m_'+station+'.p')
+    print(consolidate_dir+'/power_all_80m_'+station+'.p')
+    print(consolidate_dir+'/power_all_115m_'+station+'.p')
+
     file=open(consolidate_dir+'/power_all_50m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_50,std_X_50,data_Y_50,std_Y_50=pickle.load(file, encoding="latin1")
     file.close()
@@ -575,9 +577,9 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     jones_vals=np.genfromtxt(fit_data_dir+'/antenna_gain.txt')
 
 
-    g=11.08423462
+    g=13.08423462
     c=3.0e-11
-    a=5.0e-13
+    a=5.0e-15
     s=9e7
     b=1.54646899e-02
 
