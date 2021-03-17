@@ -501,10 +501,9 @@ def consolidate(con_dir,power_dir,data_dir,station):
 
 
 
-    int_sim_X
+
+    holdX=int_sim_X
     holdY=int_sim_Y
-
-
     for t in np.arange(nTimes-4):
         int_sim_X.T[t]=holdX.T[t+4]
         int_sim_Y.T[t]=holdY.T[t+4]
