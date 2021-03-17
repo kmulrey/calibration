@@ -581,7 +581,6 @@ def consolidate(con_dir,power_dir,data_dir,station):
 
 
 
-         open(con_dir+'/power_all_'+cable_lengths[c]+'m.p','wb')
     pickfile = open(con_dir+'/power_all_80m.p','wb')
 
     pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
