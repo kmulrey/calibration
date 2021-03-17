@@ -455,13 +455,13 @@ def consolidate(con_dir,power_dir,data_dir,station):
     
 
 
-    
+    '''
     for t in np.arange(nTimes):
         gain_X[t]=10*np.log10(total_power_X[t]/total_power_X[0])
         gain_Y[t]=10*np.log10(total_power_Y[t]/total_power_Y[0])
         gain_std_X[t]=10*np.log10((total_power_X[t]+total_std_X[t])/total_power_X[t])
         gain_std_Y[t]=10*np.log10((total_power_Y[t]+total_std_Y[t])/total_power_Y[t])
-
+    '''
     
     int_sim_X=np.zeros([nFreq,len(bins)])
     int_sim_Y=np.zeros([nFreq,len(bins)])
@@ -543,7 +543,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
     sim_gain_Y_total_rolled=np.zeros([len(bins)])
 
 
-
+    '''
 
     for f in np.arange(nFreq):
         for t in np.arange(len(bins)):
@@ -560,7 +560,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
 
         sim_gain_X_total[t]=10*np.log10(np.sum(int_sim_X,axis=0)[t]/np.sum(int_sim_X,axis=0)[0])
         sim_gain_Y_total[t]=10*np.log10(np.sum(int_sim_Y,axis=0)[t]/np.sum(int_sim_Y,axis=0)[0])
-
+    '''
     infile=open('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/CS002_noise_power_80.p','rb')
     tbbInfo=pickle.load(infile, encoding="latin1")
     infile.close()
