@@ -446,7 +446,7 @@ def find_simulated_power_single(jones_dir, power_dir, ant_id):
         power_sorted_Y=total_int_Y[inds]
 
 
-        outfile=open(power_dir+'/integrated_power_'+str(freq)+'_'+std(ant_id)+'.txt','w')
+        outfile=open(power_dir+'/integrated_power_'+str(freq)+'_'+str(ant_id)+'.txt','w')
         #print(power_dir+'/integrated_power_'+str(freq)+'.txt')
         for i in np.arange(len(times_LST)):
             outfile.write('{0}  {1}  {2}  {3}  {4} \n'.format(times_sorted[i],times_sorted_utc[i],power_sorted[i],power_sorted_X[i],power_sorted_Y[i]))
@@ -465,7 +465,7 @@ def consolidate(con_dir,power_dir,data_dir,station,ant_id):
     
     for f in np.arange(nFreq):
         #file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
-        file=open(power_dir+'/integrated_power_'+str(freq)+'_'+std(ant_id)+'.txt','w')
+        file=open(power_dir+'/integrated_power_'+str(freq)+'_'+str(ant_id)+'.txt','w')
         temp=np.genfromtxt(file)
     
         for t in np.arange(nTimes1):
