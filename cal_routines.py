@@ -338,7 +338,124 @@ def find_simulated_power(jones_dir, power_dir):
 
 
 
-def consolidate(con_dir,power_dir,data_dir,station):
+def find_simulated_power_single(jones_dir, power_dir, ant_id):
+
+    for f in np.arange(51):
+        freq=str(f+30)
+        #print(freq)
+        pickfile = open(LFmap_dir+'/LFreduced_'+str(freq)+'.p','rb')
+        XX,YY,ZZ,XX2,YY2,times_utc,times_LST,ZZ2=pickle.load(pickfile, encoding="latin1")
+        #print(jones_dir+'/jones_all_{0}.p')
+        JJ=np.zeros([91,361,4],dtype='complex')
+
+        '''
+        pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
+        pickfile.seek(0)
+        info=pickle.load(pickfile)
+        pickfile.close()
+        jones_thetaX=info['jones_thetaX']
+        jones_thetaY=info['jones_thetaY']
+        jones_phiX=info['jones_phiX']
+        jones_phiY=info['jones_phiY']
+        '''
+        
+        file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(ant_id)+'.p','rb')
+        info=pickle.load(file, encoding="latin1")
+        file.close()
+        jones=info['jones_aartfaac']
+          
+        for th in np.arange(90):
+            for az in np.arange(360):
+                phi=az
+                i_az=az+180
+                if az>180:
+                    phi=az-360
+                    i_az=az-180
+
+                JJ[90-th][i_az][0]=jones[z][a][0]
+                JJ[90-th][i_az][1]=jones[z][a][1]
+                JJ[90-th][i_az][2]=jones[z][a][2]
+                JJ[90-th][i_az][3]=jones[z][a][3]
+                
+       
+        int_theta=np.arange(0.5,90,1.0)
+        int_theta=np.append([0],int_theta)
+        int_theta=np.append(int_theta,[90])
+
+        int_phi=np.arange(-179.5,180,1.0)
+        int_phi=np.append([-180],int_phi)
+        int_phi=np.append(int_phi,[180])
+        
+        total_int_temp_X=np.zeros(len(times_LST))
+        total_int_temp_Y=np.zeros(len(times_LST))
+        total_int_temp=np.zeros(len(times_LST))
+
+        total_int_v=np.zeros(len(times_LST))
+
+        total_int_X=np.zeros(len(times_LST))
+        total_int_Y=np.zeros(len(times_LST))
+        total_int=np.zeros(len(times_LST))
+
+
+
+        v_start=(float(freq)-0.5)*1e6
+        v_stop=(float(freq)+0.5)*1e6
+    
+        for t in np.arange(len(times_LST)):
+            for theta in np.arange(len(int_theta)-1):
+                for phi in np.arange(len(int_phi)-1):
+                    temp=ZZ2[t][theta+90][phi]
+                    if (float('-inf') < float(temp) < float('inf'))==False:
+                        temp=0
+            
+                    jones_thetaX=np.abs(JJ[theta][phi][0])
+                    jones_phiX=np.abs(JJ[theta][phi][1])
+                    jones_thetaY=np.abs(JJ[theta][phi][2])
+                    jones_phiY=np.abs(JJ[theta][phi][3])
+                    theta_start=90-int_theta[theta]
+                    theta_stop=90-int_theta[theta+1]
+                    phi_start=int_phi[phi]
+                    phi_stop=int_phi[phi+1]
+                    jones_phi=1
+                    jones_theta=1
+            
+            
+                    intX=do_integral_temp(theta_start,theta_stop, phi_start, phi_stop, temp, jones_thetaX, jones_phiX)
+                    intY=do_integral_temp(theta_start,theta_stop, phi_start, phi_stop, temp, jones_thetaY, jones_phiY)
+                    int=do_integral_temp(theta_start,theta_stop, phi_start, phi_stop, temp, jones_theta, jones_phi)
+
+                    total_int_temp_X[t]=total_int_temp_X[t]+intX
+                    total_int_temp_Y[t]=total_int_temp_Y[t]+intY
+                    total_int_temp[t]=total_int_temp[t]+int
+
+
+            total_int_v[t]=do_integral_freq(v_start, v_stop)
+            total_int[t]=(kB/(c*c))*total_int_v[t]*total_int_temp[t]
+            total_int_X[t]=(kB/(c*c))*total_int_v[t]*total_int_temp_X[t]
+            total_int_Y[t]=(kB/(c*c))*total_int_v[t]*total_int_temp_Y[t]
+
+    
+        inds=np.asarray(times_LST).argsort()
+
+
+        times_sorted=np.asarray(times_LST)[inds]
+        times_sorted_utc=np.asarray(times_utc)[inds]
+
+        power_sorted=total_int[inds]
+        power_sorted_X=total_int_X[inds]
+        power_sorted_Y=total_int_Y[inds]
+
+
+        outfile=open(power_dir+'/integrated_power_'+str(freq)+'_'+std(ant_id)+'.txt','w')
+        #print(power_dir+'/integrated_power_'+str(freq)+'.txt')
+        for i in np.arange(len(times_LST)):
+            outfile.write('{0}  {1}  {2}  {3}  {4} \n'.format(times_sorted[i],times_sorted_utc[i],power_sorted[i],power_sorted_X[i],power_sorted_Y[i]))
+        outfile.close()
+        #print(outfile)
+
+
+
+def consolidate(con_dir,power_dir,data_dir,station,ant_id):
     
     nTimes1=24
     nFreq=51
@@ -347,7 +464,8 @@ def consolidate(con_dir,power_dir,data_dir,station):
     power=np.zeros([nFreq,nTimes1,nData])
     
     for f in np.arange(nFreq):
-        file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
+        #file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
+        file=open(power_dir+'/integrated_power_'+str(freq)+'_'+std(ant_id)+'.txt','w')
         temp=np.genfromtxt(file)
     
         for t in np.arange(nTimes1):
@@ -409,7 +527,7 @@ def consolidate(con_dir,power_dir,data_dir,station):
         std_power_Y=tbbInfo['std_power_Y_'+cable_lengths[c]].T
 
 
-        pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m_'+station+'.p','wb')
+        pickfile = open(con_dir+'/power_all_'+cable_lengths[c]+'m_'+station+'_'+str(ant_id)+'.p','wb')
 
         pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y),pickfile)
 
@@ -419,22 +537,22 @@ def consolidate(con_dir,power_dir,data_dir,station):
 
 
 
-def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station):
+def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     nFreq=51
     nTimes=96
     frequencies=np.arange(30,80.5,1)
     times=np.arange(0,24.0,0.5)
     
     
-    file=open(consolidate_dir+'/power_all_50m_'+station+'.p','rb')
+    file=open(consolidate_dir+'/power_all_50m_'+station+str(ant_id)+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_50,std_X_50,data_Y_50,std_Y_50=pickle.load(file, encoding="latin1")
     file.close()
     
-    file=open(consolidate_dir+'/power_all_80m_'+station+'.p','rb')
+    file=open(consolidate_dir+'/power_all_80m_'+station+str(ant_id)+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_80,std_X_80,data_Y_80,std_Y_80=pickle.load(file, encoding="latin1")
     file.close()
     
-    file=open(consolidate_dir+'/power_all_115m_'+station+'.p','rb')
+    file=open(consolidate_dir+'/power_all_115m_'+station+str(ant_id)+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_115,std_X_115,data_Y_115,std_Y_115=pickle.load(file, encoding="latin1")
     file.close()
     

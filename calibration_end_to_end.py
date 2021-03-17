@@ -99,8 +99,8 @@ for f in np.arange(51):
    
 if power_flag==1 or reprocess_power_flag==1:
     print('calculating power as a function of LST')
-    cal.find_simulated_power(jones_dir, power_dir)
-
+    #cal.find_simulated_power(jones_dir, power_dir)
+    cal.find_simulated_power_single(jones_dir, power_dir, 2)
 
 
 
@@ -121,10 +121,10 @@ if consol_flag==1:
     if not os.path.exists(consolidate_dir):
         os.makedirs(consolidate_dir)
 
-    cal.consolidate(consolidate_dir,power_dir,data_dir,station)
+    cal.consolidate(consolidate_dir,power_dir,data_dir,station,2)
 
 
 print('doing fit')
 
     
-cal.do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station)
+cal.do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,2)
