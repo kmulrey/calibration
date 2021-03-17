@@ -429,7 +429,7 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station):
     file.close()
     
     #file=open(file115,'rb')
-    file=open(consolidate_dir+'/power_all_115m_'+station+'.p'','rb')
+    file=open(consolidate_dir+'/power_all_115m_'+station+'.p','rb')
     time_bins,sim_X,sim_Y,data_X_115,std_X_115,data_Y_115,std_Y_115=pickle.load(file, encoding="latin1")
     file.close()
     
