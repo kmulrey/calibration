@@ -171,7 +171,7 @@ def average_model(jones_dir):
     for f in np.arange(51):
         freq=str(f+30)
         for i in np.arange(len(array_ind_outer)):
-            try:
+            #try:
             for p in np.arange(1):
                 ant_id=array_ind_outer[i]
                 file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(ant_id)+'.p','rb')
