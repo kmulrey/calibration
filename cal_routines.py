@@ -174,8 +174,8 @@ def average_model(jones_dir):
         jones_phiX_total=np.zeros([361,91])
         jones_phiY_total=np.zeros([361,91])
         freq=str(f+30)
-        #for i in np.arange(len(array_ind_outer)):
-        for i in np.arange(1):
+        for i in np.arange(len(array_ind_outer)):
+        #for i in np.arange(1):
 
             try:
             #for p in np.arange(1):
@@ -683,7 +683,7 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     
     
     
-    outputfile=fit_dir+'/fits_'+name+'_'+station+'_3.p'
+    outputfile=fit_dir+'/fits_'+name+'_'+station+'.p'
 
 
     analysisinfo={'a':a,'c':c,'cal':cal,'g':g,'d':b,'sim_X':sim_X,'sim_Y':sim_Y,'sim_to_data_X':sim_to_dataX,'sim_to_data_Y':sim_to_dataY,'data_X':data_X_80,'data_Y':data_Y_80,'std_X':std_X_80,'std_Y':std_Y_80,'x2':res['fun'],'A_X':A_X,'A_Y':A_Y}
