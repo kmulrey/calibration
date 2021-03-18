@@ -238,7 +238,7 @@ def find_simulated_power(jones_dir, power_dir):
         JJ=np.zeros([91,361,4],dtype='complex')
 
         
-        pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
+        pickfile = open(jones_dir+'/jones_all_{0}_antenna_2.p'.format(freq),'rb')
         pickfile.seek(0)
         info=pickle.load(pickfile)
         pickfile.close()
@@ -329,7 +329,7 @@ def find_simulated_power(jones_dir, power_dir):
         power_sorted_Y=total_int_Y[inds]
 
 
-        outfile=open(power_dir+'/integrated_power_'+str(freq)+'.txt','w')
+        outfile=open(power_dir+'/integrated_power_'+str(freq)+'_2.txt','w')
         #print(power_dir+'/integrated_power_'+str(freq)+'.txt')
         for i in np.arange(len(times_LST)):
             outfile.write('{0}  {1}  {2}  {3}  {4} \n'.format(times_sorted[i],times_sorted_utc[i],power_sorted[i],power_sorted_X[i],power_sorted_Y[i]))
@@ -464,7 +464,7 @@ def consolidate(con_dir,power_dir,data_dir,station,ant_id):
     power=np.zeros([nFreq,nTimes1,nData])
     
     for f in np.arange(nFreq):
-        file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
+        file=open(power_dir+'/integrated_power_'+str(f+30)+'_2.txt','rb')
         #file=open(power_dir+'/integrated_power_'+str(freq)+'_'+str(ant_id)+'.txt','w')
         temp=np.genfromtxt(file)
     
@@ -561,13 +561,13 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     
     
     
-    sim_X_50=sim_X*337.0*8e4
-    sim_X_80=sim_X*337.0*8e4
-    sim_X_115=sim_X*337.0*8e4
+    sim_X_50=sim_X*337.0#*8e4
+    sim_X_80=sim_X*337.0#*8e4
+    sim_X_115=sim_X*337.0#*8e4
 
-    sim_Y_50=sim_Y*337.0*8e4
-    sim_Y_80=sim_Y*337.0*8e4
-    sim_Y_115=sim_Y*337.0*8e4
+    sim_Y_50=sim_Y*337.0#*8e4
+    sim_Y_80=sim_Y*337.0#*8e4
+    sim_Y_115=sim_Y*337.0#*8e4
     
     
     cable_attenuation_50=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_50m.txt',usecols=1)
@@ -677,7 +677,7 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     
     
     
-    outputfile=fit_dir+'/fits_'+name+'_'+station+'_mult.p'
+    outputfile=fit_dir+'/fits_'+name+'_'+station+'_2.p'
 
 
     analysisinfo={'a':a,'c':c,'cal':cal,'g':g,'d':b,'sim_X':sim_X,'sim_Y':sim_Y,'sim_to_data_X':sim_to_dataX,'sim_to_data_Y':sim_to_dataY,'data_X':data_X_80,'data_Y':data_Y_80,'std_X':std_X_80,'std_Y':std_Y_80,'x2':res['fun'],'A_X':A_X,'A_Y':A_Y}
