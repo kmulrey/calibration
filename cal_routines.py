@@ -164,11 +164,15 @@ def e_ACGMB_allCables(pars,data_X_50,std_X_50,sim_X_50,data_X_80,std_X_80,sim_X_
 def average_model(jones_dir):
     array_ind_outer=np.arange(576,(576+96))[::2]   # indices for CSOO2 outer
     count=0
-    jones_thetaX_total=np.zeros([361,91])
-    jones_thetaY_total=np.zeros([361,91])
-    jones_phiX_total=np.zeros([361,91])
-    jones_phiY_total=np.zeros([361,91])
+    #jones_thetaX_total=np.zeros([361,91])
+    #jones_thetaY_total=np.zeros([361,91])
+    #jones_phiX_total=np.zeros([361,91])
+    #jones_phiY_total=np.zeros([361,91])
     for f in np.arange(51):
+        jones_thetaX_total=np.zeros([361,91])
+        jones_thetaY_total=np.zeros([361,91])
+        jones_phiX_total=np.zeros([361,91])
+        jones_phiY_total=np.zeros([361,91])
         freq=str(f+30)
         for i in np.arange(len(array_ind_outer)):
             try:
@@ -238,7 +242,7 @@ def find_simulated_power(jones_dir, power_dir):
         JJ=np.zeros([91,361,4],dtype='complex')
 
         
-        pickfile = open(jones_dir+'/jones_all_{0}_antenna_2.p'.format(freq),'rb')
+        pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
         pickfile.seek(0)
         info=pickle.load(pickfile)
         pickfile.close()
@@ -329,7 +333,7 @@ def find_simulated_power(jones_dir, power_dir):
         power_sorted_Y=total_int_Y[inds]
 
 
-        outfile=open(power_dir+'/integrated_power_'+str(freq)+'_2.txt','w')
+        outfile=open(power_dir+'/integrated_power_'+str(freq)+'.txt','w')
         #print(power_dir+'/integrated_power_'+str(freq)+'.txt')
         for i in np.arange(len(times_LST)):
             outfile.write('{0}  {1}  {2}  {3}  {4} \n'.format(times_sorted[i],times_sorted_utc[i],power_sorted[i],power_sorted_X[i],power_sorted_Y[i]))
@@ -464,7 +468,7 @@ def consolidate(con_dir,power_dir,data_dir,station,ant_id):
     power=np.zeros([nFreq,nTimes1,nData])
     
     for f in np.arange(nFreq):
-        file=open(power_dir+'/integrated_power_'+str(f+30)+'_2.txt','rb')
+        file=open(power_dir+'/integrated_power_'+str(f+30)+'.txt','rb')
         #file=open(power_dir+'/integrated_power_'+str(freq)+'_'+str(ant_id)+'.txt','w')
         temp=np.genfromtxt(file)
     
