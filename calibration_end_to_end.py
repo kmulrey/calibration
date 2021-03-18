@@ -64,6 +64,7 @@ elif path.exists(jones_dir):
         freq=str(f+30)
         if path.exists(jones_dir+'/'+'jones_all_'+freq+'.p')==False:
             flag=1
+    flag=1
     if flag==1:
         print('need to average model')
 
