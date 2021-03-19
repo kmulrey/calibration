@@ -78,7 +78,7 @@ if flag==1 and name!='standard':
     cal.average_model(jones_dir)
     
     
-'''
+
     
 # find correct LST power
 
@@ -128,4 +128,4 @@ print('doing fit')
 
     
 cal.do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,2)
-'''
+
