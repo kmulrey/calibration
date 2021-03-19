@@ -163,17 +163,15 @@ def e_ACGMB_allCables(pars,data_X_50,std_X_50,sim_X_50,data_X_80,std_X_80,sim_X_
 
 def average_model(jones_dir):
     array_ind_outer=np.arange(576,(576+96))[::2]   # indices for CSOO2 outer
-    count=0
-    #jones_thetaX_total=np.zeros([361,91])
-    #jones_thetaY_total=np.zeros([361,91])
-    #jones_phiX_total=np.zeros([361,91])
-    #jones_phiY_total=np.zeros([361,91])
+
     for f in np.arange(51):
         jones_thetaX_total=np.zeros([361,91])
         jones_thetaY_total=np.zeros([361,91])
         jones_phiX_total=np.zeros([361,91])
         jones_phiY_total=np.zeros([361,91])
         freq=str(f+30)
+        count=0
+
         for i in np.arange(len(array_ind_outer)):
         #for i in np.arange(1):
 
