@@ -108,7 +108,7 @@ consol_flag=0
 #0 if directory exists with all freq files
 #1 if not, or if reprocessing
 
-if path.exists(consolidate_dir+'/power_all_80m.p')==False:
+if path.exists(consolidate_dir+'/power_all_80m_'+station+'.p')==False:
     consol_flag=1
     print('no consolidated info {0}'.format(consolidate_dir))
         

@@ -565,13 +565,13 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     
     
     
-    sim_X_50=sim_X*337.0*121#*2e4
-    sim_X_80=sim_X*337.0*121#*2e4
-    sim_X_115=sim_X*337.0*121#*2e4
+    sim_X_50=sim_X*337.0#*121#*2e4
+    sim_X_80=sim_X*337.0#*121#*2e4
+    sim_X_115=sim_X*337.0#*121#*2e4
 
-    sim_Y_50=sim_Y*337.0*121#*2e4
-    sim_Y_80=sim_Y*337.0*121#*2e4
-    sim_Y_115=sim_Y*337.0*121#*2e4
+    sim_Y_50=sim_Y*337.0#*121#*2e4
+    sim_Y_80=sim_Y*337.0#*121#*2e4
+    sim_Y_115=sim_Y*337.0#*121#*2e4
     
     
     cable_attenuation_50=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_50m.txt',usecols=1)
@@ -579,9 +579,10 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     cable_attenuation_115=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_115m.txt',usecols=1)
     RCU_gain=np.genfromtxt(fit_data_dir+'/RCU_gain_new_5.txt',usecols=0)
     jones_vals=np.genfromtxt(fit_data_dir+'/antenna_gain.txt')
+    jones_vals=11*np.ones([51])
 
 
-    g=13.08423462
+    g=11.08423462
     c=3.0e-11
     a=5.0e-15
     s=9e7
