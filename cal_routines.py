@@ -565,13 +565,13 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     
     
     
-    sim_X_50=sim_X*337.0#*2e4
-    sim_X_80=sim_X*337.0#*2e4
-    sim_X_115=sim_X*337.0#*2e4
+    sim_X_50=sim_X*337.0*121#*2e4
+    sim_X_80=sim_X*337.0*121#*2e4
+    sim_X_115=sim_X*337.0*121#*2e4
 
-    sim_Y_50=sim_Y*337.0#*2e4
-    sim_Y_80=sim_Y*337.0#*2e4
-    sim_Y_115=sim_Y*337.0#*2e4
+    sim_Y_50=sim_Y*337.0*121#*2e4
+    sim_Y_80=sim_Y*337.0*121#*2e4
+    sim_Y_115=sim_Y*337.0*121#*2e4
     
     
     cable_attenuation_50=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_50m.txt',usecols=1)
