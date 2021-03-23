@@ -108,12 +108,9 @@ consol_flag=0
 #0 if directory exists with all freq files
 #1 if not, or if reprocessing
 
-
-for f in np.arange(51):
-    freq=str(f+30)
-    if path.exists(consolidate_dir+'/power_all_80m.p')==False:
-        consol_flag=1
-        print('no consolidated info {0}'.format(consolidate_dir))
+if path.exists(consolidate_dir+'/power_all_80m.p')==False:
+    consol_flag=1
+    print('no consolidated info {0}'.format(consolidate_dir))
         
 consol_flag=1
 if consol_flag==1:
