@@ -209,13 +209,13 @@ def average_model(jones_dir):
                         
                         
                         jones_thetaX_total_real[a][z]=jones_aartfaac[z][a][0].real+jones_thetaX_total_real[a][z]
-                        jones_phiX_total_real[a][z]=jones_aartfaac[z][a][1].real+jones_phiX_total_real[a][z]
-                        jones_thetaY_total_real[a][z]=jones_aartfaac[z][a][2].real+jones_thetaY_total_real[a][z]
+                        jones_phiX_total_real[a][z]=jones_aartfaac[z][a][2].real+jones_phiX_total_real[a][z]
+                        jones_thetaY_total_real[a][z]=jones_aartfaac[z][a][1].real+jones_thetaY_total_real[a][z]
                         jones_phiY_total_real[a][z]=jones_aartfaac[z][a][3].real+jones_phiY_total_real[a][z]
 
                         jones_thetaX_total_im[a][z]=jones_aartfaac[z][a][0].imag+jones_thetaX_total_im[a][z]
-                        jones_phiX_total_im[a][z]=jones_aartfaac[z][a][1].imag+jones_phiX_total_im[a][z]
-                        jones_thetaY_total_im[a][z]=jones_aartfaac[z][a][2].imag+jones_thetaY_total_im[a][z]
+                        jones_phiX_total_im[a][z]=jones_aartfaac[z][a][2].imag+jones_phiX_total_im[a][z]
+                        jones_thetaY_total_im[a][z]=jones_aartfaac[z][a][1].imag+jones_thetaY_total_im[a][z]
                         jones_phiY_total_im[a][z]=jones_aartfaac[z][a][3].imag+jones_phiY_total_im[a][z]
                
                
