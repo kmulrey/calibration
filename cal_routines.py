@@ -169,6 +169,22 @@ def average_model(jones_dir):
         jones_thetaY_total=np.zeros([361,91])
         jones_phiX_total=np.zeros([361,91])
         jones_phiY_total=np.zeros([361,91])
+        
+        jones_thetaX_total_real=np.zeros([361,91])
+        jones_thetaY_total_real=np.zeros([361,91])
+        jones_phiX_total_real=np.zeros([361,91])
+        jones_phiY_total_real=np.zeros([361,91])
+
+        jones_thetaX_total_im=np.zeros([361,91])
+        jones_thetaY_total_im=np.zeros([361,91])
+        jones_phiX_total_im=np.zeros([361,91])
+        jones_phiY_total_im=np.zeros([361,91])
+        
+        jones_thetaX_complex=np.zeros([361,91],dtype=complex)
+        jones_thetaY_complex=np.zeros([361,91],dtype=complex)
+        jones_phiX_complex=np.zeros([361,91],dtype=complex)
+        jones_phiY_complex=np.zeros([361,91],dtype=complex)
+        
         freq=str(f+30)
         count=0
 
@@ -186,13 +202,23 @@ def average_model(jones_dir):
                 for a in np.arange(361):
                     for z in np.arange(91):
                         jones_thetaX_total[a][z]=jones_thetaX_total[a][z]+np.abs(jones_aartfaac[z][a][0])
-                        jones_thetaY_total[a][z]=jones_thetaY_total[a][z]+np.abs(jones_aartfaac[z][a][1])
-                        jones_phiX_total[a][z]=jones_phiX_total[a][z]+np.abs(jones_aartfaac[z][a][2])
+                        jones_thetaY_total[a][z]=jones_thetaY_total[a][z]+np.abs(jones_aartfaac[z][a][2])
+                        jones_phiX_total[a][z]=jones_phiX_total[a][z]+np.abs(jones_aartfaac[z][a][1])
                         jones_phiY_total[a][z]=jones_phiY_total[a][z]+np.abs(jones_aartfaac[z][a][3])
-                #jones_thetaX_total=jones_thetaX_total+np.abs(jones_aartfaac.T[0])
-                #jones_thetaY_total=jones_thetaY_total+np.abs(jones_aartfaac.T[1])
-                #jones_phiX_total=jones_phiX_total+np.abs(jones_aartfaac.T[2])
-                #jones_phiY_total=jones_phiY_total+np.abs(jones_aartfaac.T[3])
+                        
+                        
+                        
+                        jones_thetaX_total_real[a][z]=jones_aartfaac[z][a][0].real+jones_thetaX_total_real[a][z]
+                        jones_phiX_total_real[a][z]=jones_aartfaac[z][a][1].real+jones_phiX_total_real[a][z]
+                        jones_thetaY_total_real[a][z]=jones_aartfaac[z][a][2].real+jones_thetaY_total_real[a][z]
+                        jones_phiY_total_real[a][z]=jones_aartfaac[z][a][3].real+jones_phiY_total_real[a][z]
+
+                        jones_thetaX_total_im[a][z]=jones_aartfaac[z][a][0].imag+jones_thetaX_total_im[a][z]
+                        jones_phiX_total_im[a][z]=jones_aartfaac[z][a][1].imag+jones_phiX_total_im[a][z]
+                        jones_thetaY_total_im[a][z]=jones_aartfaac[z][a][2].imag+jones_thetaY_total_im[a][z]
+                        jones_phiY_total_im[a][z]=jones_aartfaac[z][a][3].imag+jones_phiY_total_im[a][z]
+               
+               
                 count=count+1
             except:
                 print('can\'t find '+freq+'   '+str(ant_id))
@@ -202,10 +228,27 @@ def average_model(jones_dir):
         jones_thetaY_total=jones_thetaY_total/count
         jones_phiX_total=jones_phiX_total/count
         jones_phiY_total=jones_phiY_total/count
+        
+        jones_thetaX_real=jones_thetaX_total_real/count
+        jones_thetaY_real=jones_thetaY_total_real/count
+        jones_phiX_real=jones_phiX_total_real/count
+        jones_phiY_real=jones_phiY_total_real/count
+
+        jones_thetaX_im=jones_thetaX_total_im/count
+        jones_thetaY_im=jones_thetaY_total_im/count
+        jones_phiX_im=jones_phiX_total_im/count
+        jones_phiY_im=jones_phiY_total_im/count
+        
+        for a in np.arange(361):
+            for z in np.arange(91):
+                jones_thetaX_complex[a][z]=jones_thetaX_real[a][z]+jones_thetaX_im[a][z]*1j
+                jones_thetaY_complex[a][z]=jones_thetaY_real[a][z]+jones_thetaY_im[a][z]*1j
+                jones_phiX_complex[a][z]=jones_phiX_real[a][z]+jones_phiX_im[a][z]*1j
+                jones_phiY_complex[a][z]=jones_phiY_real[a][z]+jones_phiY_im[a][z]*1j
     
 
     
-        info={'jones_thetaX':jones_thetaX_total,'jones_thetaY':jones_thetaY_total,'jones_phiX':jones_phiX_total,'jones_phiY':jones_phiY_total}
+        info={'jones_thetaX':jones_thetaX_total,'jones_thetaY':jones_thetaY_total,'jones_phiX':jones_phiX_total,'jones_phiY':jones_phiY_total,'jones_thetaX_complex':jones_thetaX_complex,'jones_thetaY_complex':jones_thetaY_complex,'jones_phiX_complex':jones_phiX_complex,'jones_phiY_complex':jones_phiY_complex}
         file2=open(jones_dir+'/jones_all_'+freq+'.p','wb')
         pickle.dump(info,file2)
         file2.close()
