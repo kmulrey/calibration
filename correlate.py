@@ -532,7 +532,7 @@ for a in np.arange(nantennas):
     
 info={'corval_standard':corval_standard,'corval_cal':corval_cal,'corval_cal_lna':corval_cal_lna}
 
-outfile=open('correlations/'event+'_'+station+'_'+caltype+'_'+'.p','wb')
+outfile=open('correlations/'+event+'_'+station+'_'+caltype+'_'+'.p','wb')
 pickle.dump(info,outfile)
 outfile.close()
     
