@@ -466,7 +466,8 @@ for j in np.arange(nantennas):
     time3=5e-9*np.arange(0,len(filt_new[0]))
 
     roll=40
-    
+    roll2=40
+
   
     
     ############## make data/sims match ##############
