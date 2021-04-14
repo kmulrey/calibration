@@ -365,3 +365,174 @@ f_imag_phi1_std = interp1d(frequencies_50, jm_std.T[3].imag)
 
 
 
+
+
+
+
+
+for j in np.arange(nantennas):
+
+    a=j*2
+    print('antenna: ',a)
+    coreasfile = sim_list[j]
+    print(coreasfile)
+    data=np.genfromtxt(coreasfile)
+    data[:,1:]*=2.99792458e4 # convert Ex, Ey and Ez (not time!) to Volt/meter
+    dlength=data.shape[0]
+    poldata=np.ndarray([dlength,2])
+    az_rot=sim_azimuth+3*np.pi/2    #conversion from CORSIKA coordinates to 0=east, pi/2=north
+    zen_rot=sim_zenith
+    XYZ=np.zeros([dlength,3])
+    XYZ[:,0]=-data[:,2] #conversion from CORSIKA coordinates to 0=east, pi/2=north
+    XYZ[:,1]=data[:,1]
+    XYZ[:,2]=data[:,3]
+    XYZcoreas.append(XYZ)
+    
+    
+    poldata[:, 0] = -data[:, 2] * np.cos(zen_rot)*np.cos(az_rot) + data[:, 1] * np.cos(zen_rot)*np.sin(az_rot) - np.sin(zen_rot)*data[:, 3]
+    poldata[:,1] = np.sin(az_rot)*data[:,2] + np.cos(az_rot)*data[:,1] # -sin(phi) *x + cos(phi)*y in coREAS 0=positive y, 1=negative x
+    #spec=np.fft.rfft(poldata, axis=-2)
+    spec=np.fft.rfft(poldata, axis=-2)
+
+    tstep = data[1,0]-data[0,0]
+    
+    #frequencies = np.fft.rfftfreq(dlength, tstep) # Ends at 5000 MHz as it should for tstep=0.1 ns
+    frequencies = np.fft.rfftfreq(dlength, tstep) # Ends at 5000 MHz as it should for tstep=0.1 ns
+   
+    freqstep = (frequencies[1] - frequencies[0]) / 1.0e6 # MHz
+
+    
+    instr_spec_new=np.ndarray([int(dlength/2+1),2],dtype=complex)
+    instr_spec_new_lna=np.ndarray([int(dlength/2+1),2],dtype=complex)
+    instr_spec_std=np.ndarray([int(dlength/2+1),2],dtype=complex)
+
+  
+
+    
+    jm_use_theta0_new=f_real_theta0_new(frequencies)+f_imag_theta0_new(frequencies)*1j
+    jm_use_phi0_new=f_real_phi0_new(frequencies)+f_imag_phi0_new(frequencies)*1j
+    jm_use_theta1_new=f_real_theta1_new(frequencies)+f_imag_theta1_new(frequencies)*1j
+    jm_use_phi1_new=f_real_phi1_new(frequencies)+f_imag_phi1_new(frequencies)*1j
+    
+    jm_use_theta0_new_lna=f_real_theta0_new_lna(frequencies)+f_imag_theta0_new_lna(frequencies)*1j
+    jm_use_phi0_new_lna=f_real_phi0_new_lna(frequencies)+f_imag_phi0_new_lna(frequencies)*1j
+    jm_use_theta1_new_lna=f_real_theta1_new_lna(frequencies)+f_imag_theta1_new_lna(frequencies)*1j
+    jm_use_phi1_new_lna=f_real_phi1_new_lna(frequencies)+f_imag_phi1_new_lna(frequencies)*1j
+    
+    jm_use_theta0_std=f_real_theta0_std(frequencies)+f_imag_theta0_std(frequencies)*1j
+    jm_use_phi0_std=f_real_phi0_std(frequencies)+f_imag_phi0_std(frequencies)*1j
+    jm_use_theta1_std=f_real_theta1_std(frequencies)+f_imag_theta1_std(frequencies)*1j
+    jm_use_phi1_std=f_real_phi1_std(frequencies)+f_imag_phi1_std(frequencies)*1j
+
+    instr_spec_new[:,0] = jm_use_theta0_new * spec[:,0] + jm_use_phi0_new * spec[:,1]
+    instr_spec_new[:,1] = jm_use_theta1_new * spec[:,0] + jm_use_phi1_new * spec[:,1]
+    
+    instr_spec_new_lna[:,0] = jm_use_theta0_new_lna * spec[:,0] + jm_use_phi0_new_lna * spec[:,1]
+    instr_spec_new_lna[:,1] = jm_use_theta1_new_lna * spec[:,0] + jm_use_phi1_new_lna * spec[:,1]
+    
+    instr_spec_std[:,0] = jm_use_theta0_std * spec[:,0] + jm_use_phi0_std * spec[:,1]
+    instr_spec_std[:,1] = jm_use_theta1_std * spec[:,0] + jm_use_phi1_std * spec[:,1]
+    
+    #inv_spec=np.fft.irfft(spec, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
+    inv_spec_new=np.fft.irfft(instr_spec_new, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
+    inv_spec_new_lna=np.fft.irfft(instr_spec_new_lna, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
+    inv_spec_std=np.fft.irfft(instr_spec_std, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
+
+    
+    lowco=0
+    hico=500
+    #print(inv_spec_new.shape)
+    fb = int(np.floor(lowco/freqstep))
+    lb = int(np.floor(hico/freqstep)+1)
+    window = np.zeros([1,int(dlength/2+1),1])
+    window[0,fb:lb+1,0]=1
+    pol1_rev=np.fft.irfft(spec[:,1])
+    maxfreqbin= int(np.floor(tstep/5e-9 * dlength/2.)+1) # Apply frequency bandpass only up to 100 MHz i.e. LOFAR maximum
+    shortspec_new=np.array([instr_spec_new[0:maxfreqbin,0]*window[0,0:maxfreqbin,0],instr_spec_new[0:maxfreqbin,1]*window[0,0:maxfreqbin,0]])
+    shortspec_new_lna=np.array([instr_spec_new_lna[0:maxfreqbin,0]*window[0,0:maxfreqbin,0],instr_spec_new_lna[0:maxfreqbin,1]*window[0,0:maxfreqbin,0]])
+    shortspec_std=np.array([instr_spec_std[0:maxfreqbin,0]*window[0,0:maxfreqbin,0],instr_spec_std[0:maxfreqbin,1]*window[0,0:maxfreqbin,0]])
+  
+    filt_new=np.fft.irfft(shortspec_new, axis=-1)
+    filt_new_lna=np.fft.irfft(shortspec_new_lna, axis=-1)
+    filt_std=np.fft.irfft(shortspec_std, axis=-1)
+
+    dlength_new=filt_new.shape[1]
+    filt_new *= 1.0*dlength_new/dlength
+    filt_new_lna *= 1.0*dlength_new/dlength
+    filt_std *= 1.0*dlength_new/dlength
+
+    #print(pol0_rev.shape)
+    time2=tstep*np.arange(0,len(filt_new[0]))
+    time3=5e-9*np.arange(0,len(filt_new[0]))
+
+    roll=40
+    
+  
+    
+    ############## make data/sims match ##############
+   
+    arg=np.argmax(data_0pol[a])
+
+   
+    data1_0=data_0pol[a]
+    data1_1=data_1pol[a]
+
+    data1new_0=data_0pol_new[a]
+    data1new_1=data_1pol_new[a]
+    
+    data2_0=np.roll(filt_std[0],roll2)
+    data2_1=np.roll(filt_std[1],roll2)
+
+    data3_0=np.roll(filt_new[0],roll2)
+    data3_1=np.roll(filt_new[1],roll2)
+    
+    window=40
+    arg0=np.argmax(data1_0)
+
+   
+    
+    print('_______________________________')
+    print(data_standard.shape)
+    print(data_standard[j][0].shape)
+    print(data1_0[(arg-40):(arg+40)].shape)
+    
+    data_standard[j][0]=data1_0[(arg-40):(arg+40)]
+    data_standard[j][1]=data1_1[(arg-40):(arg+40)]
+
+    data_new[j][0]=data1new_0[(arg-40):(arg+40)]
+    data_new[j][1]=data1new_1[(arg-40):(arg+40)]
+    
+    sim_standard[j][0]=np.roll(filt_std[0],roll2)
+    sim_standard[j][1]=np.roll(filt_std[1],roll2)
+    
+    sim_new[j][0]=np.roll(filt_new[0],roll2)
+    sim_new[j][1]=np.roll(filt_new[1],roll2)
+    
+    sim_new_lna[j][0]=np.roll(filt_new_lna[0],roll2)
+    sim_new_lna[j][1]=np.roll(filt_new_lna[1],roll2)
+    
+
+
+corval_standard=np.zeros([nantennas,2])
+corval_cal=np.zeros([nantennas,2])
+corval_cal_lna=np.zeros([nantennas,2])
+
+for a in np.arange(nantennas):
+#for a in np.arange(1):
+
+    #a=0
+
+    corval_standard[a][0]=correlate(data_standard[a][0],-1*sim_standard[a][0],event,station,str(a),'0','standard')
+    corval_standard[a][1]=correlate(data_standard[a][1],-1*sim_standard[a][1],event,station,str(a),'1','standard')
+
+    corval_cal[a][0]=correlate(data_new[a][0],-1*sim_new[a][0],event,station,str(a),'0',caltype)
+    corval_cal[a][1]=correlate(data_new[a][1],-1*sim_new[a][1],event,station,str(a),'1',caltype)
+    corval_cal_lna[a][0]=correlate(data_new[a][0],sim_new_lna[a][0],event,station,str(a),'0',caltype+'_lna')
+    corval_cal_lna[a][1]=correlate(data_new[a][1],sim_new_lna[a][1],event,station,str(a),'1',caltype+'_lna')
+    
+info={'corval_standard':corval_standard,'corval_cal':corval_cal,'corval_cal_lna':corval_cal_lna}
+
+outfile=open('correlations/'event+'_'+station+'_'+caltype+'_'+'.p','wb')
+pickle.dump(info,outfile)
+outfile.close()
+    
