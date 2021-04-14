@@ -112,7 +112,7 @@ def correlate(data,sim,event,station,antenna,pol,caltype):
 
     # show the pretty plots
     plt.tight_layout()
-    plt.savefig('plots/correlated/'+event+'_'+station+'_'+antenna+'_pol'+pol+'_'+caltype+'.png',dpi=300)
+    plt.savefig('/vol/astro7/lofar/kmulrey/calibration/compare/plots/correlated/'+event+'_'+station+'_'+antenna+'_pol'+pol+'_'+caltype+'.png',dpi=300)
 
     #plt.show()
     plt.close()
@@ -533,7 +533,7 @@ for a in np.arange(nantennas):
     
 info={'corval_standard':corval_standard,'corval_cal':corval_cal,'corval_cal_lna':corval_cal_lna}
 
-outfile=open('correlations/'+event+'_'+station+'_'+caltype+'_'+'.p','wb')
+outfile=open('/vol/astro7/lofar/kmulrey/calibration/compare/orrelations/'+event+'_'+station+'_'+caltype+'_'+'.p','wb')
 pickle.dump(info,outfile)
 outfile.close()
     
