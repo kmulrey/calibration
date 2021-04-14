@@ -11,6 +11,7 @@
 		41558B9425F687F700D1DFD6 /* calibration_end_to_end.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = calibration_end_to_end.py; sourceTree = "<group>"; };
 		41A85FAA25FE12700059AC0F /* write_and_save_model.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = write_and_save_model.py; sourceTree = "<group>"; };
 		41F9D2C72625EAC600A54232 /* single_end_to_end.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = single_end_to_end.py; sourceTree = "<group>"; };
+		41F9D2C82626DE1100A54232 /* correlate.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = correlate.py; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -20,6 +21,7 @@
 				41558B9325F687F700D1DFD6 /* cal_routines.py */,
 				41A85FAA25FE12700059AC0F /* write_and_save_model.py */,
 				41558B9425F687F700D1DFD6 /* calibration_end_to_end.py */,
+				41F9D2C82626DE1100A54232 /* correlate.py */,
 				41F9D2C72625EAC600A54232 /* single_end_to_end.py */,
 			);
 			sourceTree = "<group>";
