@@ -72,7 +72,7 @@ else:
     flag=2
     
 # find average antenna model
-flag=1
+flag=0
 if flag==1 and name!='standard':
     print('averaging model')
 
