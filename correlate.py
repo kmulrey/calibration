@@ -8,8 +8,11 @@ from scipy.interpolate import griddata
 import datetime
 from datetime import date
 import math
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+matplotlib.use('Agg')
 import glob
 import re
 from scipy import signal
