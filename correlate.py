@@ -117,7 +117,7 @@ def correlate(data,sim,event,station,antenna,pol,caltype):
     plt.tight_layout()
     plt.savefig('/vol/astro7/lofar/kmulrey/calibration/compare/plots/correlated/'+event+'_'+station+'_'+antenna+'_pol'+pol+'_'+caltype+'.png',dpi=300)
     #plt.show()
-    #plt.close()
+    plt.close()
     return np.max(crosscorr)
 
 
