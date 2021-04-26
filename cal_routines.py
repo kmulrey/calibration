@@ -389,7 +389,7 @@ def find_simulated_power_single(jones_dir, power_dir, antenna_no):
 
     for f in np.arange(51):
         freq=str(f+30)
-        #print(freq)
+        print(freq)
         pickfile = open(LFmap_dir+'/LFreduced_'+str(freq)+'.p','rb')
         XX,YY,ZZ,XX2,YY2,times_utc,times_LST,ZZ2=pickle.load(pickfile, encoding="latin1")
         #print(jones_dir+'/jones_all_{0}.p')
