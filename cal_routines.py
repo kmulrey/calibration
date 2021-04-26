@@ -385,7 +385,7 @@ def find_simulated_power(jones_dir, power_dir):
         outfile.close()
         #print(outfile)
 
-def find_simulated_power_signle(jones_dir, power_dir, antenna_no):
+def find_simulated_power_single(jones_dir, power_dir, antenna_no):
 
     for f in np.arange(51):
         freq=str(f+30)
