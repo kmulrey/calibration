@@ -385,9 +385,7 @@ def find_simulated_power(jones_dir, power_dir):
         outfile.close()
         #print(outfile)
 
-
-
-def find_simulated_power_single(jones_dir, power_dir, ant_id):
+def find_simulated_power_signle(jones_dir, power_dir, antenna_no):
 
     for f in np.arange(51):
         freq=str(f+30)
@@ -397,22 +395,15 @@ def find_simulated_power_single(jones_dir, power_dir, ant_id):
         #print(jones_dir+'/jones_all_{0}.p')
         JJ=np.zeros([91,361,4],dtype='complex')
 
-        '''
-        pickfile = open(jones_dir+'/jones_all_{0}.p'.format(freq),'rb')
-        pickfile.seek(0)
-        info=pickle.load(pickfile)
-        pickfile.close()
-        jones_thetaX=info['jones_thetaX']
-        jones_thetaY=info['jones_thetaY']
-        jones_phiX=info['jones_phiX']
-        jones_phiY=info['jones_phiY']
-        '''
-        
-        file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(ant_id)+'.p','rb')
+        file=open(jones_dir+'/jones_all_'+freq+'_antenna_'+str(antenna_no)+'.p','rb')
         info=pickle.load(file, encoding="latin1")
         file.close()
-        jones=info['jones_aartfaac']
-          
+        jones_aartfaac=info['jones_aartfaac']
+        #jones_thetaX=np.abs(jones_aartfaac[z][a][0])
+        #jones_thetaY=np.abs(jones_aartfaac[z][a][2])
+        #jones_phiX=np.abs(jones_aartfaac[z][a][1])
+        #jones_phiY=np.abs(jones_aartfaac[z][a][3]0
+        
         for th in np.arange(90):
             for az in np.arange(360):
                 phi=az
@@ -421,11 +412,14 @@ def find_simulated_power_single(jones_dir, power_dir, ant_id):
                     phi=az-360
                     i_az=az-180
 
-                JJ[90-th][i_az][0]=jones[th][i_az][0]
-                JJ[90-th][i_az][1]=jones[th][i_az][1]
-                JJ[90-th][i_az][2]=jones[th][i_az][2]
-                JJ[90-th][i_az][3]=jones[th][i_az][3]
+                JJ[90-th][i_az][0]=jones_aartfaac[th][i_az][0]
+                JJ[90-th][i_az][1]=jones_aartfaac[th][i_az][2]
+                JJ[90-th][i_az][2]=jones_aartfaac[th][i_az][1]
+                JJ[90-th][i_az][3]=jones_aartfaac[th][i_az][3]
                 
+        
+        
+      
        
         int_theta=np.arange(0.5,90,1.0)
         int_theta=np.append([0],int_theta)
@@ -495,7 +489,7 @@ def find_simulated_power_single(jones_dir, power_dir, ant_id):
         power_sorted_Y=total_int_Y[inds]
 
 
-        outfile=open(power_dir+'/integrated_power_'+str(freq)+'_'+str(ant_id)+'.txt','w')
+        outfile=open(power_dir+'/integrated_power_'+str(freq)+'_antenna_'+antenna_no+'.txt','w')
         #print(power_dir+'/integrated_power_'+str(freq)+'.txt')
         for i in np.arange(len(times_LST)):
             outfile.write('{0}  {1}  {2}  {3}  {4} \n'.format(times_sorted[i],times_sorted_utc[i],power_sorted[i],power_sorted_X[i],power_sorted_Y[i]))
