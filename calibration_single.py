@@ -74,7 +74,6 @@ if power_flag==1 or reprocess_power_flag==1:
     cal.find_simulated_power_single(jones_dir, power_dir, antenna_no)
 
 
-consolidate_single(con_dir,power_dir,data_dir,station,antenna_no)
 if path.exists(consolidate_dir+'/power_'+station+'_antenna_'+str(antenna_no)+'.p')==False:
     consol_flag=1
     print('no consolidated info {0}'.format(consolidate_dir))
