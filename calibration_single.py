@@ -20,7 +20,7 @@ base_dir='/vol/astro7/lofar/kmulrey/calibration/'
 
 parser = OptionParser()
 
-parser.add_option('-n', '--model_name', default = 'standard', help = 'run type name')
+parser.add_option('-n', '--model_name', default = 'R700', help = 'run type name')
 parser.add_option('-a', '--antenna', default = '664', help = 'antenna number')
 
 parser.add_option('-r', '--reprocess_flag', default = 0, help = 'flag to reprocess model')
@@ -49,3 +49,26 @@ print(jones_dir)
 print(power_dir)
 print(consolidate_dir)
 print(antenna_no)
+
+
+
+
+
+if not os.path.exists(power_dir):
+    os.makedirs(power_dir)
+
+
+power_flag=0
+
+
+
+for f in np.arange(51):
+    freq=str(f+30)
+    if path.exists(power_dir+'/integrated_power_'+str(freq)+'_antenna_'+str(antenna_no)+'.txt')==False:
+        power_flag=1
+        print('no power {0}, {1}'.format(freq,power_dir+'/'+'integrated_power_'+str(freq)+'.txt'))
+   
+if power_flag==1 or reprocess_power_flag==1:
+    print('calculating power as a function of LST')
+    #cal.find_simulated_power(jones_dir, power_dir)
+    cal.find_simulated_power_single(jones_dir, power_dir, antenna_no)
