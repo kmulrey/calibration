@@ -72,3 +72,16 @@ if power_flag==1 or reprocess_power_flag==1:
     print('calculating power as a function of LST')
     #cal.find_simulated_power(jones_dir, power_dir)
     cal.find_simulated_power_single(jones_dir, power_dir, antenna_no)
+
+
+consolidate_single(con_dir,power_dir,data_dir,station,antenna_no)
+if path.exists(consolidate_dir+'/power_'+station+'_antenna_'+str(antenna_no)+'.p')==False:
+    consol_flag=1
+    print('no consolidated info {0}'.format(consolidate_dir))
+        
+if consol_flag==1:
+    print('now consolidating info')
+    if not os.path.exists(consolidate_dir):
+        os.makedirs(consolidate_dir)
+
+    cal.consolidate_single(consolidate_dir,power_dir,data_dir,station,antenna_no)

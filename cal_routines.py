@@ -580,7 +580,156 @@ def consolidate(con_dir,power_dir,data_dir,station,ant_id):
 
 
 
+def consolidate_single(con_dir,power_dir,data_dir,station,antenna_no):
+    
+    nTimes1=24
+    nFreq=51
+    nData=5
+    frequencies=np.arange(30,80.5,1)
+    power=np.zeros([nFreq,nTimes1,nData])
+    
+    for f in np.arange(nFreq):
+        file=open(power_dir+'/integrated_power_'+str(f+30)+'_antenna_'+str(antenna_no)+'.txt','rb')
+        #file=open(power_dir+'/integrated_power_'+str(freq)+'_'+str(ant_id)+'.txt','w')
+        temp=np.genfromtxt(file)
+    
+        for t in np.arange(nTimes1):
+            power[f][t][0]=temp[t][0]
+            power[f][t][1]=temp[t][1]
+            power[f][t][2]=temp[t][2]
+            power[f][t][3]=temp[t][4]
+            power[f][t][4]=temp[t][3]
+    
+    dh=0.25
+    bin_edges=np.arange(0,24.1,dh)
+    bins=np.arange(0.0,23.9,dh)
+    nTimes=len(bins)
 
+    int_sim_X=np.zeros([nFreq,len(bins)])
+    int_sim_Y=np.zeros([nFreq,len(bins)])
+    int_sim_X_total=np.zeros([len(bins)])
+    int_sim_Y_total=np.zeros([len(bins)])
+
+    for f in np.arange(nFreq):
+
+        fX = interp1d(power[f].T[0], power[f].T[3],kind='cubic',fill_value='extrapolate')
+        fY = interp1d(power[f].T[0], power[f].T[4],kind='cubic',fill_value='extrapolate')
+
+        int_sim_X[f]=fX(bins)
+        int_sim_Y[f]=fY(bins)
+
+
+
+
+    holdX=int_sim_X
+    holdY=int_sim_Y
+    for t in np.arange(nTimes-4):
+        int_sim_X.T[t]=holdX.T[t+4]
+        int_sim_Y.T[t]=holdY.T[t+4]
+
+    int_sim_X.T[92]=holdX.T[0]
+    int_sim_X.T[93]=holdX.T[1]
+    int_sim_X.T[94]=holdX.T[2]
+    int_sim_X.T[95]=holdX.T[3]
+
+    int_sim_Y.T[92]=holdY.T[0]
+    int_sim_Y.T[93]=holdY.T[1]
+    int_sim_Y.T[94]=holdY.T[2]
+    int_sim_Y.T[95]=holdY.T[3]
+    
+    #fig = plt.figure()
+    #ax1 = fig.add_subplot(1,1,1)
+    #ax1.plot(int_sim_X[40])
+    #plt.show()
+    
+    
+    ind_info=np.genfromtxt('/vol/astro7/lofar/kmulrey/calibration/corresponding_aartfaac_lofar_antennas_CS002.txt')
+    aart_ind=ind_info.T[0]
+    lofar_ind=ind_info.T[1]
+    lofar_ant=lofar_ind[aart_ind==antenna_no]
+
+    print('----> lofar antenna ',lofar_ant)
+
+    
+    
+    
+    file='/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/CS002_noise_power_antennas.p'
+    file=open(file,'rb')
+    info=pickle.load(file, encoding="latin1")
+    
+    #time_bins,sim_X_1,sim_Y_1,data_X_50_1,std_X_50_1,data_Y_50_1,std_Y_50_1=pickle.load(file, encoding="latin1")
+    file.close()
+    
+    std_power_XY=info['std_power_XY']
+    avg_power_XY=info['avg_power_XY']
+    count_XY=info['count_XY']
+
+    
+
+
+    avg_power_X_raw=avg_power_XY[int(lofar_ant)].T
+    std_power_X_raw=avg_power_XY[int(lofar_ant)].T
+    avg_power_Y_raw=avg_power_XY[int(lofar_ant+1)].T
+    std_power_Y_raw=avg_power_XY[int(lofar_ant+1)].T
+    
+    
+    
+    
+
+    
+    avg_power_X=np.zeros([nFreq,len(bins)])
+    avg_power_Y=np.zeros([nFreq,len(bins)])
+    std_power_X=np.zeros([nFreq,len(bins)])
+    std_power_Y=np.zeros([nFreq,len(bins)])
+    times_data=np.arange(0.0,23.9,.5)
+
+    
+    for f in np.arange(nFreq):
+
+        fXdata = interp1d(times_data, avg_power_X_raw[f],kind='cubic',fill_value='extrapolate')
+        fYdata = interp1d(times_data, avg_power_Y_raw[f],kind='cubic',fill_value='extrapolate')
+        fXstd = interp1d(times_data, std_power_X_raw[f],kind='cubic',fill_value='extrapolate')
+        fYstd = interp1d(times_data, std_power_Y_raw[f],kind='cubic',fill_value='extrapolate')
+
+        avg_power_X[f]=fXdata(bins)
+        avg_power_Y[f]=fYdata(bins)
+        std_power_X[f]=fXstd(bins)
+        std_power_Y[f]=fYstd(bins)
+        
+        
+    print('----> int sim shape ',int_sim_X.shape)
+    print('----> avg pow shape ',avg_power_X.shape)
+    print('----> avg std shape ',std_power_X.shape)
+
+    
+    
+
+    
+    
+    cable_info=np.genfromtxt('/vol/astro3/lofar/sim/kmulrey/calibration/TBBdata/cable_info/CS002_cables.txt')
+        
+    cables_X=cable_info[int(lofar_ant)]
+    cables_Y=cable_info[int(lofar_ant+1)]
+    
+    pickfile = open(con_dir+'/power_'+station+'_antenna_'+str(antenna_no)+'.p','wb')
+
+    pickle.dump((bins,int_sim_X,int_sim_Y,avg_power_X,std_power_X,avg_power_Y,std_power_Y,cables_X,cables_Y),pickfile)
+
+    pickfile.close()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     nFreq=51
     nTimes=96
