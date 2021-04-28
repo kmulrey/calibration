@@ -158,7 +158,7 @@ def e_ACGMB_allCables(pars,data_X_50,std_X_50,sim_X_50,data_X_80,std_X_80,sim_X_
 
     return 100*X2/(6*nF*nT)
 
-def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenuation,RCU_gain,s):
+def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenuation_X,cable_attenuation_Y,RCU_gain,s):
     
     
     nF=len(data_X)
@@ -213,9 +213,9 @@ def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenu
             sim_corr_Y[f][t]=(sim_Y[f][t]+a*jones[f])
             
            
-            data_corr_X[f][t]=((data_X[f][t]-d[f])/(rcu80[f]*s)-c)*np.power(10.0,(cable_attenuation[f]/10.0))
+            data_corr_X[f][t]=((data_X[f][t]-d[f])/(rcu80[f]*s)-c)*np.power(10.0,(cable_attenuation_X[f]/10.0))
             
-            data_corr_Y[f][t]=((data_Y[f][t]-d[f])/(rcu80[f]*s)-c)*np.power(10.0,(cable_attenuation[f]/10.0))
+            data_corr_Y[f][t]=((data_Y[f][t]-d[f])/(rcu80[f]*s)-c)*np.power(10.0,(cable_attenuation_Y[f]/10.0))
         
 
 
@@ -228,9 +228,9 @@ def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenu
     for f in np.arange(nF):
         for t in np.arange(nT):
             
-            sim_corrected_X[f][t]=((((sim_X[f][t]+a*jones[f])*A_X[f])/np.power(10.0,(cable_attenuation[f]/10.0)))+c)*rcu80[f]*s+d[f]
+            sim_corrected_X[f][t]=((((sim_X[f][t]+a*jones[f])*A_X[f])/np.power(10.0,(cable_attenuation_X[f]/10.0)))+c)*rcu80[f]*s+d[f]
             
-            sim_corrected_Y[f][t]=((((sim_Y[f][t]+a*jones[f])*A_Y[f])/np.power(10.0,(cable_attenuation[f]/10.0)))+c)*rcu80[f]*s+d[f]
+            sim_corrected_Y[f][t]=((((sim_Y[f][t]+a*jones[f])*A_Y[f])/np.power(10.0,(cable_attenuation_Y[f]/10.0)))+c)*rcu80[f]*s+d[f]
             
     X2=0
     
