@@ -943,3 +943,148 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     fout=open(outputfile,"wb")
     pickle.dump(analysisinfo,fout)
     fout.close()
+
+
+def do_fit_single(con_dir,fit_data_dir,fit_dir,name,station,ant_id,pol):
+    nFreq=51
+    nTimes=96
+    frequencies=np.arange(30,80.5,1)
+    times=np.arange(0,24.0,0.5)
+    
+    
+    
+    print(con_dir+'/power_'+station+'_antenna_'+str(ant_id)+'.p')
+
+   
+    
+    file=open(con_dir+'/power_'+station+'_antenna_'+str(ant_id)+'.p','rb')
+    time_bins,sim_X,sim_Y,data_X,std_X,data_Y,std_Y,cables_X,cables_Y=pickle.load(file, encoding="latin1")
+    file.close()
+
+  
+    if pol=='X':
+        sim=sim_X*337.0*121#*2e4
+        data=data_X
+        std=std_X
+        cables=int(cables_X)
+    if pol=='Y':
+        sim=sim_Y*337.0*121#*2e4
+        data=data_Y
+        std=std_Y
+        cables=int(cables_Y)
+
+
+    cable_attenuation=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_'+str(int(cables))+'m.txt',usecols=1)
+    #cable_attenuation_Y=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_'+str(int(cables_Y))+'m.txt',usecols=1)
+    RCU_gain=np.genfromtxt(fit_data_dir+'/RCU_gain_new_5.txt',usecols=0)
+    jones_vals=np.genfromtxt(fit_data_dir+'/antenna_gain.txt')
+    #jones_vals=121*np.ones([51])
+
+    
+    g=21.08423462
+    c=3.0e-11
+    a=5.0e-15
+    s=9e7
+    b=1.54646899e-02
+
+    gain_curve=np.power(10,RCU_gain/10)
+    
+    #fig = plt.figure()
+    ##ax1 = fig.add_subplot(1,2,1)
+    #ax2 = fig.add_subplot(1,2,2)
+
+    #ax1.plot(int_sim_X[20])
+    #print(data_X[20].shape)
+    #ax1.plot(data_Y[20],'.')
+    ##ax2.plot(sim_Y[20])
+    #plt.show()
+    
+    res=minimize(cal.e_ACGMB_single,[a,c,g,b],args=(data,std,sim,jones_vals,cable_attenuation,int(cables),RCU_gain,s),method='Nelder-Mead', options={'disp': True})
+
+    
+    print('\n')
+    print('___________________ done with fit _________________')
+    print('\n')
+
+    print(res['success'])
+    print(res['fun'])
+    pars=res['x']
+    print(pars)
+
+    a=pars[0]
+    c=pars[1]
+    g=pars[2]
+    
+    
+    if int(cables)==50:
+        gC=np.power(10,(g-2.75)/10)
+    if int(cables)==80:
+        gC=np.power(10,(g-1.5)/10)
+    if int(cables)==115:
+        gC=np.power(10,(g/10))
+
+  
+    
+    b=pars[3]*0.9
+
+    print('a={0}'.format(a))
+    print('c={0}'.format(c))
+    print('g={0}'.format(g))
+    print('d={0}'.format(b))
+    print('s={0}'.format(s))
+
+
+    A=np.zeros([nFreq])
+
+    d=np.zeros([nFreq])
+
+    for f in np.arange(nFreq):
+        d[f]=b#m*(float(f))+b
+
+
+
+    rcuC=gC*gain_curve
+
+
+    sim_corr=np.zeros([nFreq,nTimes])
+
+    data_corr=np.zeros([nFreq,nTimes])
+
+    sim_to_data=np.zeros([nFreq,nTimes])
+
+    sim_to_data_raw=np.zeros([nFreq,nTimes])
+
+    
+    for f in np.arange(nFreq):
+        for t in np.arange(nTimes):
+            sim_corr[f][t]=(sim[f][t]+a*jones_vals[f])
+            data_corr[f][t]=(((((data[f][t]-d[f])/s))/rcuC[f])-c)*np.power(10.0,(cable_attenuation[f]/10.0))
+
+            
+
+          
+    for f in np.arange(nFreq):
+        A[f]=np.average(data_corr[f])/np.average(sim_corr[f])
+
+
+    for f in np.arange(nFreq):
+        for t in np.arange(nTimes):
+            sim_to_data[f][t]=(((((sim[f][t]+a*jones_vals[f])*A[f])/np.power(10.0,(cable_attenuation[f]/10.0))+c)*rcuC[f])*s+d[f])
+
+
+
+    cal_total=np.sqrt(1/((A*(1/np.power(10.0,(cable_attenuation/10.0)))*rcuC)*s))
+
+
+    cal_raw=np.sqrt(np.average(sim,axis=1)/np.average(data,axis=1))
+    
+    
+    
+    outputfile=fit_dir+'/fits_'+name+'_'+station+'_antenna_'+str(ant_id)+'_'+pol+'.p'
+    print(outputfile)
+
+    analysisinfo={'a':a,'c':c,'cal':cal_total,'g':g,'d':b,'sim':sim,'sim_to_data':sim_to_data,'data':data,'std':std,'x2':res['fun'],'A':A}
+    fout=open(outputfile,"wb")
+    pickle.dump(analysisinfo,fout)
+    fout.close()
+    

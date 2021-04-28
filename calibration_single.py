@@ -84,3 +84,9 @@ if consol_flag==1:
         os.makedirs(consolidate_dir)
 
     cal.consolidate_single(consolidate_dir,power_dir,data_dir,station,antenna_no)
+
+
+print('doing calibration')
+
+cal.do_fit_single(consolidate_dir,fit_data_dir,fit_dir,name,station,antenna_no,'X')
+cal.do_fit_single(consolidate_dir,fit_data_dir,fit_dir,name,station,antenna_no,'y')
