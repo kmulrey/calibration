@@ -89,4 +89,4 @@ if consol_flag==1:
 print('doing calibration')
 
 cal.do_fit_single(consolidate_dir,fit_data_dir,fit_dir,name,station,antenna_no,'X')
-cal.do_fit_single(consolidate_dir,fit_data_dir,fit_dir,name,station,antenna_no,'y')
+cal.do_fit_single(consolidate_dir,fit_data_dir,fit_dir,name,station,antenna_no,'Y')

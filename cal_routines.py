@@ -999,7 +999,7 @@ def do_fit_single(con_dir,fit_data_dir,fit_dir,name,station,ant_id,pol):
     ##ax2.plot(sim_Y[20])
     #plt.show()
     
-    res=minimize(cal.e_ACGMB_single,[a,c,g,b],args=(data,std,sim,jones_vals,cable_attenuation,int(cables),RCU_gain,s),method='Nelder-Mead', options={'disp': True})
+    res=minimize(e_ACGMB_single,[a,c,g,b],args=(data,std,sim,jones_vals,cable_attenuation,int(cables),RCU_gain,s),method='Nelder-Mead', options={'disp': True})
 
     
     print('\n')
