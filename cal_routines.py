@@ -158,7 +158,96 @@ def e_ACGMB_allCables(pars,data_X_50,std_X_50,sim_X_50,data_X_80,std_X_80,sim_X_
 
     return 100*X2/(6*nF*nT)
 
+def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenuation,,RCU_gain,s):
+    
+    
+    nF=len(data_X)
+    nT=len(data_X0[0])
+    a=pars[0]
+    c=pars[1]
+    g=pars[2]
+    
 
+    g80=np.power(10,(g-1.5)/10)
+    
+    
+    b=pars[3]
+    
+    d=np.zeros([nFreq])
+    
+    for f in np.arange(nFreq):
+        d[f]=b
+    
+
+    gain_curve=np.power(10,RCU_gain/10)
+    
+    rcu=g*gain_curve
+    rcu80=g80*gain_curve
+    
+    
+    A=np.zeros([nF])
+  
+    A_X=np.zeros([nF])
+    A_Y=np.zeros([nF])
+ 
+    
+    
+    
+    data_corr_X=np.zeros([nF,nT])
+    sim_corr_X=np.zeros([nF,nT])
+  
+
+    data_corr_Y=np.zeros([nF,nT])
+    sim_corr_Y=np.zeros([nF,nT])
+    
+    
+    sim_corrected_X=np.zeros([nF,nT])
+    sim_corrected_Y=np.zeros([nF,nT])
+    
+    
+    
+    for f in np.arange(nF):
+        for t in np.arange(nT):
+            sim_corr_X[f][t]=(sim_X[f][t]+a*jones[f])
+        
+            sim_corr_Y[f][t]=(sim_Y[f][t]+a*jones[f])
+            
+           
+            data_corr_X[f][t]=((data_X[f][t]-d[f])/(rcu80[f]*s)-c)*np.power(10.0,(cable_attenuation[f]/10.0))
+            
+            data_corr_Y[f][t]=((data_Y[f][t]-d[f])/(rcu80[f]*s)-c)*np.power(10.0,(cable_attenuation[f]/10.0))
+        
+
+
+
+    for f in np.arange(nF):
+        A_X[f]=np.average(data_corr_X[f])/np.average(sim_corr_X[f])
+        A_Y[f]=np.average(data_corr_Y[f])/np.average(sim_corr_Y[f])
+    
+    
+    for f in np.arange(nF):
+        for t in np.arange(nT):
+            
+            sim_corrected_X[f][t]=((((sim_X[f][t]+a*jones[f])*A_X[f])/np.power(10.0,(cable_attenuation[f]/10.0)))+c)*rcu80[f]*s+d[f]
+            
+            sim_corrected_Y[f][t]=((((sim_Y[f][t]+a*jones[f])*A_Y[f])/np.power(10.0,(cable_attenuation[f]/10.0)))+c)*rcu80[f]*s+d[f]
+            
+    X2=0
+    
+    X2_X=0
+    X2_Y=0
+    
+    for f in np.arange(nF):
+        for t in np.arange(nT):
+            
+            
+            X2_X=np.power((data_X[f][t]-sim_corrected_X[f][t]),2)/(std_X[f][t]*std_X[f][t])
+            X2_Y=np.power((data_Y[f][t]-sim_corrected_Y[f][t]),2)/(std_Y[f][t]*std_Y[f][t])
+            
+
+            X2=X2+X2_X+X2_Y
+
+    return 100*X2/(6*nF*nT)
 
 
 def average_model(jones_dir):
