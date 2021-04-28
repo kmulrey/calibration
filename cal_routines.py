@@ -172,14 +172,13 @@ def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenu
     if cX==80:
         gX=np.power(10,(g-1.5)/10)
     if cX==115:
-        gX=np.power(10,(g/10)
-        
+        gX=np.power(10,(g/10))
     if cY==50:
         gY=np.power(10,(g-2.75)/10)
     if cY==80:
         gY=np.power(10,(g-1.5)/10)
     if cY==115:
-        gY=np.power(10,(g/10)
+        gY=np.power(10,(g/10))
 
     
     b=pars[3]
