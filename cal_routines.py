@@ -162,7 +162,7 @@ def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenu
     
     
     nF=len(data_X)
-    nT=len(data_X0[0])
+    nT=len(data_X[0])
     a=pars[0]
     c=pars[1]
     g=pars[2]
