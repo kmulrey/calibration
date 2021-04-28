@@ -158,7 +158,7 @@ def e_ACGMB_allCables(pars,data_X_50,std_X_50,sim_X_50,data_X_80,std_X_80,sim_X_
 
     return 100*X2/(6*nF*nT)
 
-def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenuation,,RCU_gain,s):
+def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenuation,RCU_gain,s):
     
     
     nF=len(data_X)
