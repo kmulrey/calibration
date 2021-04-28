@@ -247,7 +247,7 @@ def e_ACGMB_single(pars,data_X,std_X,sim_X,data_Y,std_Y,sim_Y,jones,cable_attenu
 
             X2=X2+X2_X+X2_Y
 
-    return 100*X2/(6*nF*nT)
+    return 100*X2/(2*nF*nT)
 
 
 def average_model(jones_dir):
