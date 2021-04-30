@@ -195,7 +195,6 @@ def get_simulation(event, station, caltype):
 
 
     procesed_length=80
-    sim=np.zeros([nantennas,2,procesed_length])
 
     f_real_theta0 = interp1d(frequencies_50, jm.T[0].real)
     f_imag_theta0 = interp1d(frequencies_50, jm.T[0].imag)
