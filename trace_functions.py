@@ -242,7 +242,7 @@ def get_simulation(event, station, caltype):
         instr_spec[:,0] = jm_use_theta0 * spec[:,0] + jm_use_phi0 * spec[:,1]
         instr_spec[:,1] = jm_use_theta1 * spec[:,0] + jm_use_phi1 * spec[:,1]
     
-        inv_spec=np.fft.irfft(instr_spec_new, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
+        inv_spec=np.fft.irfft(instr_spec, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
 
 
         lowco=30
