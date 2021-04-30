@@ -256,7 +256,7 @@ def get_simulation(event, station, caltype):
         maxfreqbin= int(np.floor(tstep/5e-9 * dlength/2.)+1) # Apply frequency bandpass only up to 100 MHz i.e. LOFAR maximum
         shortspec=np.array([instr_spec[0:maxfreqbin,0]*window[0,0:maxfreqbin,0],instr_spec[0:maxfreqbin,1]*window[0,0:maxfreqbin,0]])
 
-        filt=np.fft.irfft(shortspec_new, axis=-1)
+        filt=np.fft.irfft(shortspec, axis=-1)
 
         dlength_new=filt.shape[1]
         filt_new *= 1.0*dlength_new/dlength
