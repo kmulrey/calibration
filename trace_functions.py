@@ -269,7 +269,7 @@ def get_simulation(event, station, caltype):
         processed_signal[0][j]=filt[0]
         processed_signal[1][j]=filt[1]
 
-    return time3, filt
+    return time3, processed_signal
 
 
 
