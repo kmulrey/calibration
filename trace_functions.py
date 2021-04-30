@@ -168,10 +168,10 @@ def get_simulation(event, station, caltype):
         info=pickle.load(file, encoding="latin1")
         file.close()
 
-        antenna_model_new[f][0]=info['jones_thetaX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
-        antenna_model_new[f][1]=info['jones_phiX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
-        antenna_model_new[f][2]=info['jones_thetaY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
-        antenna_model_new[f][3]=info['jones_phiY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model[f][0]=info['jones_thetaX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model[f][1]=info['jones_phiX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model_[f][2]=info['jones_thetaY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model[f][3]=info['jones_phiY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
 
 
 
@@ -197,14 +197,14 @@ def get_simulation(event, station, caltype):
     procesed_length=80
     sim=np.zeros([nantennas,2,procesed_length])
 
-    f_real_theta0 = interp1d(frequencies_50, jm_new.T[0].real)
-    f_imag_theta0 = interp1d(frequencies_50, jm_new.T[0].imag)
-    f_real_phi0 = interp1d(frequencies_50, jm_new.T[1].real)
-    f_imag_phi0 = interp1d(frequencies_50, jm_new.T[1].imag)
-    f_real_theta1 = interp1d(frequencies_50, jm_new.T[2].real)
-    f_imag_theta1 = interp1d(frequencies_50, jm_new.T[2].imag)
-    f_real_phi1 = interp1d(frequencies_50, jm_new.T[3].real)
-    f_imag_phi1 = interp1d(frequencies_50, jm_new.T[3].imag)
+    f_real_theta0 = interp1d(frequencies_50, jm.T[0].real)
+    f_imag_theta0 = interp1d(frequencies_50, jm.T[0].imag)
+    f_real_phi0 = interp1d(frequencies_50, jm.T[1].real)
+    f_imag_phi0 = interp1d(frequencies_50, jm.T[1].imag)
+    f_real_theta1 = interp1d(frequencies_50, jm.T[2].real)
+    f_imag_theta1 = interp1d(frequencies_50, jm.T[2].imag)
+    f_real_phi1 = interp1d(frequencies_50, jm.T[3].real)
+    f_imag_phi1 = interp1d(frequencies_50, jm.T[3].imag)
     
     '''
     for j in np.arange(nantennas):
