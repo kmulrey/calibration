@@ -263,6 +263,7 @@ def get_simulation(event, station, caltype):
       
         time3=5e-9*np.arange(0,len(filt[0]))
         
+        
     return time3, filt
 
 
