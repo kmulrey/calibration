@@ -210,7 +210,7 @@ def get_simulation(event, station, caltype):
     processed_signal=np.zeros([2,int(nantennas/2),80])
     
 
-    for j in np.arange(nantennas):
+    for j in np.arange(int(nantennas/2)):
 
         a=j*2
         coreasfile = sim_list[j]
