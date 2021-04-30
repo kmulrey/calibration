@@ -170,7 +170,7 @@ def get_simulation(event, station, caltype):
 
         antenna_model[f][0]=info['jones_thetaX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
         antenna_model[f][1]=info['jones_phiX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
-        antenna_model_[f][2]=info['jones_thetaY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model[f][2]=info['jones_thetaY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
         antenna_model[f][3]=info['jones_phiY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
 
 
