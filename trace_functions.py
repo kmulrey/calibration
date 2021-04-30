@@ -106,7 +106,7 @@ def get_data(event, station, Calibration_curve, Calibration_curve_new):
         data_all[a][0]=data_0pol_new[a]
         data_all[a][1]=data_1pol_new[a]
 
-    return time0,data_0pol_new,data_all
+    return time0,data_all
     
     
     
