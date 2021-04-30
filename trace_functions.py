@@ -206,7 +206,7 @@ def get_simulation(event, station, caltype):
     f_real_phi1 = interp1d(frequencies_50, jm.T[3].real)
     f_imag_phi1 = interp1d(frequencies_50, jm.T[3].imag)
     
-    '''
+
     for j in np.arange(nantennas):
 
         a=j*2
@@ -235,25 +235,15 @@ def get_simulation(event, station, caltype):
         instr_spec_std=np.ndarray([int(dlength/2+1),2],dtype=complex)
 
 
-        jm_use_theta0_new=f_real_theta0_new(frequencies)+f_imag_theta0_new(frequencies)*1j
-        jm_use_phi0_new=f_real_phi0_new(frequencies)+f_imag_phi0_new(frequencies)*1j
-        jm_use_theta1_new=f_real_theta1_new(frequencies)+f_imag_theta1_new(frequencies)*1j
-        jm_use_phi1_new=f_real_phi1_new(frequencies)+f_imag_phi1_new(frequencies)*1j
+        jm_use_theta0=f_real_theta0(frequencies)+f_imag_theta0(frequencies)*1j
+        jm_use_phi0=f_real_phi0(frequencies)+f_imag_phi0(frequencies)*1j
+        jm_use_theta1=f_real_theta1(frequencies)+f_imag_theta1(frequencies)*1j
+        jm_use_phi1=f_real_phi1(frequencies)+f_imag_phi1(frequencies)*1j
     
-        jm_use_theta0_std=f_real_theta0_std(frequencies)+f_imag_theta0_std(frequencies)*1j
-        jm_use_phi0_std=f_real_phi0_std(frequencies)+f_imag_phi0_std(frequencies)*1j
-        jm_use_theta1_std=f_real_theta1_std(frequencies)+f_imag_theta1_std(frequencies)*1j
-        jm_use_phi1_std=f_real_phi1_std(frequencies)+f_imag_phi1_std(frequencies)*1j
-  
-
-        instr_spec_new[:,0] = jm_use_theta0_new * spec[:,0] + jm_use_phi0_new * spec[:,1]
-        instr_spec_new[:,1] = jm_use_theta1_new * spec[:,0] + jm_use_phi1_new * spec[:,1]
+        instr_spec[:,0] = jm_use_theta0 * spec[:,0] + jm_use_phi0 * spec[:,1]
+        instr_spec[:,1] = jm_use_theta1 * spec[:,0] + jm_use_phi1 * spec[:,1]
     
-        instr_spec_std[:,0] = jm_use_theta0_std * spec[:,0] + jm_use_phi0_std * spec[:,1]
-        instr_spec_std[:,1] = jm_use_theta1_std * spec[:,0] + jm_use_phi1_std * spec[:,1]
-    
-        inv_spec_new=np.fft.irfft(instr_spec_new, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
-        inv_spec_std=np.fft.irfft(instr_spec_std, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
+        inv_spec=np.fft.irfft(instr_spec_new, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
 
 
         lowco=30
@@ -265,29 +255,15 @@ def get_simulation(event, station, caltype):
         window[0,fb:lb+1,0]=1
         pol1_rev=np.fft.irfft(spec[:,1])
         maxfreqbin= int(np.floor(tstep/5e-9 * dlength/2.)+1) # Apply frequency bandpass only up to 100 MHz i.e. LOFAR maximum
-        shortspec_new=np.array([instr_spec_new[0:maxfreqbin,0]*window[0,0:maxfreqbin,0],instr_spec_new[0:maxfreqbin,1]*window[0,0:maxfreqbin,0]])
-        shortspec_std=np.array([instr_spec_std[0:maxfreqbin,0]*window[0,0:maxfreqbin,0],instr_spec_std[0:maxfreqbin,1]*window[0,0:maxfreqbin,0]])
+        shortspec=np.array([instr_spec[0:maxfreqbin,0]*window[0,0:maxfreqbin,0],instr_spec[0:maxfreqbin,1]*window[0,0:maxfreqbin,0]])
 
-        filt_new=np.fft.irfft(shortspec_new, axis=-1)
-        filt_std=np.fft.irfft(shortspec_std, axis=-1)
+        filt=np.fft.irfft(shortspec_new, axis=-1)
 
-        dlength_new=filt_new.shape[1]
+        dlength_new=filt.shape[1]
         filt_new *= 1.0*dlength_new/dlength
-        filt_new_lna *= 1.0*dlength_new/dlength
-        filt_std *= 1.0*dlength_new/dlength
-
+      
         time2=tstep*np.arange(0,len(filt_new[0]))
         time3=5e-9*np.arange(0,len(filt_new[0]))
-
-        roll=40
-        roll2=40
-
-        arg=np.argmax(data_0pol[a])
-
-
-
-    '''
-
 
 
 
