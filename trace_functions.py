@@ -206,6 +206,9 @@ def get_simulation(event, station, caltype):
     f_real_phi1 = interp1d(frequencies_50, jm.T[3].real)
     f_imag_phi1 = interp1d(frequencies_50, jm.T[3].imag)
     
+    
+    processed_signal=np.zeros([2,(nantennas/2),80])
+    
 
     for j in np.arange(nantennas):
 
@@ -263,7 +266,8 @@ def get_simulation(event, station, caltype):
       
         time3=5e-9*np.arange(0,len(filt[0]))
         
-        
+        processed_signal[0][a]=filt
+
     return time3, filt
 
 
