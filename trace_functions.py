@@ -17,7 +17,6 @@ from scipy.signal import resample
 
 
 
-
 def correlate(data,sim,event,station,antenna,pol,caltype):
     a_raw=data
     b_raw=1*sim
@@ -105,7 +104,7 @@ def get_data(event, station, Calibration_curve, Calibration_curve_new):
     
     
     
-def get_simulation(event, station, Calibration_curve, Calibration_curve_new):
+def get_simulation(event, station, caltype):
 
     sim_dir='/vol/astro3/lofar/sim/kmulrey/calibration/final/compare/sims/corsika/'+event+'/'
     list_file=glob.glob(sim_dir+'*.list')[0]
@@ -164,4 +163,84 @@ def get_simulation(event, station, Calibration_curve, Calibration_curve_new):
     
     
     
+    antenna_response_dir='/vol/astro7/lofar/kmulrey/calibration/antenna_model/jones_'+caltype+'/'
+    antenna_response_std='/vol/astro7/lofar/kmulrey/calibration/antenna_model/jones_standard/'
+
+    for f in np.arange(0,100):
+        frequency=str(f)
+        file=open(antenna_response_std+'/jones_all_'+frequency+'.p','rb')
+        info=pickle.load(file, encoding="latin1")
+        file.close()
+
+        antenna_model_standard[f][0]=info['jones_thetaX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model_standard[f][1]=info['jones_phiX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model_standard[f][2]=info['jones_thetaY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model_standard[f][3]=info['jones_phiY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
     
+    for f in np.arange(30,81):
+        frequency=str(f)#str(f+30)
+        file=open(antenna_response_dir+'/jones_all_'+frequency+'.p','rb')
+
+        info=pickle.load(file, encoding="latin1")
+        file.close()
+
+        antenna_model_new[f][0]=info['jones_thetaX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model_new[f][1]=info['jones_phiX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model_new[f][2]=info['jones_thetaY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+        antenna_model_new[f][3]=info['jones_phiY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
+
+
+
+    sim_list=glob.glob(coreas_dir+'*{0}*'.format(station))
+    nantennas=len(sim_list)
+    print('{0} antennas'.format(nantennas))
+
+
+
+    rawcoreas=[]
+    XYZcoreas=[]
+    pol=[]
+    filteredsignal=[]
+    hilbertsignal=[]
+    rawfft=[]
+    antennafft=[]
+    onskypower=np.zeros([nantennas,2])
+    
+    
+    frequencies_50=1e6*np.arange(0,5002,1)
+    jm_new=np.zeros([len(frequencies_50),4],dtype=complex)
+    jm_std=np.zeros([len(frequencies_50),4],dtype=complex)
+
+    jm_std[30:81]=antenna_model_standard[30:81]
+    jm_new[30:81]=antenna_model_new[30:81]
+
+
+    procesed_length=80
+    data_standard=np.zeros([nantennas,2,procesed_length])
+    data_new=np.zeros([nantennas,2,procesed_length])
+    sim_standard=np.zeros([nantennas,2,procesed_length])
+    sim_new=np.zeros([nantennas,2,procesed_length])
+
+    f_real_theta0_new = interp1d(frequencies_50, jm_new.T[0].real)
+    f_imag_theta0_new = interp1d(frequencies_50, jm_new.T[0].imag)
+    f_real_phi0_new = interp1d(frequencies_50, jm_new.T[1].real)
+    f_imag_phi0_new = interp1d(frequencies_50, jm_new.T[1].imag)
+    f_real_theta1_new = interp1d(frequencies_50, jm_new.T[2].real)
+    f_imag_theta1_new = interp1d(frequencies_50, jm_new.T[2].imag)
+    f_real_phi1_new = interp1d(frequencies_50, jm_new.T[3].real)
+    f_imag_phi1_new = interp1d(frequencies_50, jm_new.T[3].imag)
+    
+
+    f_real_theta0_std = interp1d(frequencies_50, jm_std.T[0].real)
+    f_imag_theta0_std = interp1d(frequencies_50, jm_std.T[0].imag)
+    f_real_phi0_std = interp1d(frequencies_50, jm_std.T[1].real)
+    f_imag_phi0_std = interp1d(frequencies_50, jm_std.T[1].imag)
+    f_real_theta1_std = interp1d(frequencies_50, jm_std.T[2].real)
+    f_imag_theta1_std = interp1d(frequencies_50, jm_std.T[2].imag)
+    f_real_phi1_std = interp1d(frequencies_50, jm_std.T[3].real)
+    f_imag_phi1_std = interp1d(frequencies_50, jm_std.T[3].imag)
+
+
+
+
+
