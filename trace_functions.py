@@ -207,12 +207,11 @@ def get_simulation(event, station, caltype):
     f_imag_phi1 = interp1d(frequencies_50, jm.T[3].imag)
     
     
-    processed_signal=np.zeros([2,int(nantennas/2),80])
+    processed_signal=np.zeros([2,int(nantennas),80])
     
 
-    for j in np.arange(int(nantennas/2)):
+    for j in np.arange(int(nantennas)):
 
-        a=j*2
         coreasfile = sim_list[j]
         data=np.genfromtxt(coreasfile)
         data[:,1:]*=2.99792458e4 # convert Ex, Ey and Ez (not time!) to Volt/meter
