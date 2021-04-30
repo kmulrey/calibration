@@ -266,8 +266,8 @@ def get_simulation(event, station, caltype):
       
         time3=5e-9*np.arange(0,len(filt[0]))
         
-        processed_signal[0][a]=filt[0]
-        processed_signal[1][a]=filt[1]
+        processed_signal[0][j]=filt[0]
+        processed_signal[1][j]=filt[1]
 
     return time3, filt
 
