@@ -259,10 +259,9 @@ def get_simulation(event, station, caltype):
         filt=np.fft.irfft(shortspec, axis=-1)
 
         dlength_new=filt.shape[1]
-        filt_new *= 1.0*dlength_new/dlength
+        filt *= 1.0*dlength_new/dlength
       
-        time2=tstep*np.arange(0,len(filt_new[0]))
-        time3=5e-9*np.arange(0,len(filt_new[0]))
+        time2=tstep*np.arange(0,len(filt[0]))
 
 
 
