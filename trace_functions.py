@@ -261,8 +261,9 @@ def get_simulation(event, station, caltype):
         dlength_new=filt.shape[1]
         filt *= 1.0*dlength_new/dlength
       
-        time2=tstep*np.arange(0,len(filt[0]))
-
+        time3=5e-9*np.arange(0,len(filt[0]))
+        
+    return time3, filt
 
 
 
