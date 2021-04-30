@@ -100,7 +100,13 @@ def get_data(event, station, Calibration_curve, Calibration_curve_new):
     data_0pol_new=np.fft.irfft(data_0pol_fft_new)
     data_1pol_new=np.fft.irfft(data_1pol_fft_new)
     
-    return time0,data_0pol_new,data_1pol_new
+    data_all=np.zeros([len(data_0pol_new),2,len(data_0pol_new[0])])
+
+    for a in np.arange(len(data_1pol_new)):
+        data_all[a][0]=data_0pol_new[a]
+        data_all[a][1]=data_1pol_new[a]
+
+    return time0,data_0pol_new,data_all
     
     
     
@@ -206,7 +212,7 @@ def get_simulation(event, station, caltype):
     f_imag_phi1 = interp1d(frequencies_50, jm.T[3].imag)
     
     
-    processed_signal=np.zeros([2,int(nantennas),80])
+    processed_signal=np.zeros([int(nantennas),2,80])
     
 
     for j in np.arange(int(nantennas)):
@@ -264,8 +270,8 @@ def get_simulation(event, station, caltype):
       
         time3=5e-9*np.arange(0,len(filt[0]))
         
-        processed_signal[0][j]=filt[0]
-        processed_signal[1][j]=filt[1]
+        processed_signal[j][0]=filt[0]
+        processed_signal[j][1]=filt[1]
 
 
     position=np.zeros([2,nantennas])
