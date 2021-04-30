@@ -102,3 +102,66 @@ def get_data(event, station, Calibration_curve, Calibration_curve_new):
     data_1pol_new=np.fft.irfft(data_1pol_fft_new)
     
     return time0,data_0pol_new,data_1pol_new
+    
+    
+    
+def get_data(event, station, Calibration_curve, Calibration_curve_new):
+
+    sim_dir='/vol/astro3/lofar/sim/kmulrey/calibration/final/compare/sims/corsika/'+event+'/'
+    list_file=glob.glob(sim_dir+'*.list')[0]
+    RUNNR=list_file.split('SIM')[1].split('.list')[0]
+    coreas_dir=sim_dir+'SIM'+RUNNR+'_coreas/'
+    file3 = open(list_file, 'r')
+    Lines = file3.readlines()
+    x_sim_pos=[]
+    y_sim_pos=[]
+    count = 0
+    # Strips the newline character
+    for line in Lines:
+        count += 1
+        if station in line:
+            #print("Line{}: {}".format(count, line.strip()))
+            x_sim_pos.append(float(line.strip().split('=')[1].split('760.0')[0].split(' ')[1])/100)
+            y_sim_pos.append(float(line.strip().split('=')[1].split('760.0')[0].split(' ')[2])/100)
+    x_sim_pos=np.asarray(x_sim_pos)
+    y_sim_pos=np.asarray(y_sim_pos)
+
+    fitfile='/vol/astro3/lofar/sim/kmulrey/calibration/final/compare/sims/make_sims/CR_event_info.txt'
+    info=np.genfromtxt(fitfile)
+
+    event_number=info.T[0].astype(int)
+
+    index=event_number.tolist().index(int(event))
+
+    core_x_fit=info[index][2]
+    core_y_fit=info[index][3]
+
+    azimuth_fit=info[index][6]
+    zenith_fit=info[index][5]
+
+
+    x_temp=x_sim_pos
+    y_temp=y_sim_pos
+
+    x_sim_pos2=-1.0*y_temp+core_x_fit#-12
+    y_sim_pos2=x_temp+core_y_fit#12
+    
+    
+    
+    steerfile='/vol/astro3/lofar/sim/kmulrey/calibration/final/compare/sims/corsika/'+event+'/RUN'+RUNNR+'.inp'
+    file4 = open(steerfile, 'r')
+    Lines = file4.readlines()
+    for line in Lines:
+        count += 1
+        if 'THETAP' in line:
+            sim_zenith=float(line.strip().split(' ')[1])
+        if 'PHIP' in line:
+            sim_azimuth=float(line.strip().split(' ')[1])
+
+
+    antenna_model_standard=np.zeros([100,4],dtype=complex)
+    antenna_model_new=np.zeros([100,4],dtype=complex)
+    
+    
+    
+    
