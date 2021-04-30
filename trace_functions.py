@@ -105,7 +105,7 @@ def get_data(event, station, Calibration_curve, Calibration_curve_new):
     
     
     
-def get_data(event, station, Calibration_curve, Calibration_curve_new):
+def get_simulation(event, station, Calibration_curve, Calibration_curve_new):
 
     sim_dir='/vol/astro3/lofar/sim/kmulrey/calibration/final/compare/sims/corsika/'+event+'/'
     list_file=glob.glob(sim_dir+'*.list')[0]
