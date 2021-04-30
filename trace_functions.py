@@ -231,8 +231,7 @@ def get_simulation(event, station, caltype):
         frequencies = np.fft.rfftfreq(dlength, tstep) # Ends at 5000 MHz as it should for tstep=0.1 ns
         freqstep = (frequencies[1] - frequencies[0]) / 1.0e6 # MHz
 
-        instr_spec_new=np.ndarray([int(dlength/2+1),2],dtype=complex)
-        instr_spec_std=np.ndarray([int(dlength/2+1),2],dtype=complex)
+        instr_spec=np.ndarray([int(dlength/2+1),2],dtype=complex)
 
 
         jm_use_theta0=f_real_theta0(frequencies)+f_imag_theta0(frequencies)*1j
