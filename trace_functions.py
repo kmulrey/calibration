@@ -191,7 +191,7 @@ def get_simulation(event, station, caltype):
     
     frequencies_50=1e6*np.arange(0,5002,1)
     jm=np.zeros([len(frequencies_50),4],dtype=complex)
-    jm[30:81]=antenna_model_standard[30:81]
+    jm[30:81]=antenna_model[30:81]
 
 
     procesed_length=80
