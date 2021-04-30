@@ -207,7 +207,7 @@ def get_simulation(event, station, caltype):
     f_imag_phi1 = interp1d(frequencies_50, jm.T[3].imag)
     
     
-    processed_signal=np.zeros([2,(nantennas/2),80])
+    processed_signal=np.zeros([2,int(nantennas/2),80])
     
 
     for j in np.arange(nantennas):
