@@ -267,7 +267,12 @@ def get_simulation(event, station, caltype):
         processed_signal[0][j]=filt[0]
         processed_signal[1][j]=filt[1]
 
-    return time3, processed_signal
+
+    position=np.zeros([2,nantennas])
+    position[0]=x_sim_pos2
+    position[1]=y_sim_pos2
+
+    return time3, processed_signal,position
 
 
 
