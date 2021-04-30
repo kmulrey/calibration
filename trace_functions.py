@@ -158,25 +158,9 @@ def get_simulation(event, station, caltype):
             sim_azimuth=float(line.strip().split(' ')[1])
 
 
-    antenna_model_standard=np.zeros([100,4],dtype=complex)
-    antenna_model_new=np.zeros([100,4],dtype=complex)
-    
-    
-    
+    antenna_model=np.zeros([100,4],dtype=complex)
     antenna_response_dir='/vol/astro7/lofar/kmulrey/calibration/antenna_model/jones_'+caltype+'/'
-    antenna_response_std='/vol/astro7/lofar/kmulrey/calibration/antenna_model/jones_standard/'
 
-    for f in np.arange(0,100):
-        frequency=str(f)
-        file=open(antenna_response_std+'/jones_all_'+frequency+'.p','rb')
-        info=pickle.load(file, encoding="latin1")
-        file.close()
-
-        antenna_model_standard[f][0]=info['jones_thetaX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
-        antenna_model_standard[f][1]=info['jones_phiX_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
-        antenna_model_standard[f][2]=info['jones_thetaY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
-        antenna_model_standard[f][3]=info['jones_phiY_complex'][int((sim_azimuth+720)%360)][int(sim_zenith)]
-    
     for f in np.arange(30,81):
         frequency=str(f)#str(f+30)
         file=open(antenna_response_dir+'/jones_all_'+frequency+'.p','rb')
@@ -195,8 +179,6 @@ def get_simulation(event, station, caltype):
     nantennas=len(sim_list)
     print('{0} antennas'.format(nantennas))
 
-
-
     rawcoreas=[]
     XYZcoreas=[]
     pol=[]
@@ -208,37 +190,105 @@ def get_simulation(event, station, caltype):
     
     
     frequencies_50=1e6*np.arange(0,5002,1)
-    jm_new=np.zeros([len(frequencies_50),4],dtype=complex)
-    jm_std=np.zeros([len(frequencies_50),4],dtype=complex)
-
-    jm_std[30:81]=antenna_model_standard[30:81]
-    jm_new[30:81]=antenna_model_new[30:81]
+    jm=np.zeros([len(frequencies_50),4],dtype=complex)
+    jm[30:81]=antenna_model_standard[30:81]
 
 
     procesed_length=80
-    data_standard=np.zeros([nantennas,2,procesed_length])
-    data_new=np.zeros([nantennas,2,procesed_length])
-    sim_standard=np.zeros([nantennas,2,procesed_length])
-    sim_new=np.zeros([nantennas,2,procesed_length])
+    sim=np.zeros([nantennas,2,procesed_length])
 
-    f_real_theta0_new = interp1d(frequencies_50, jm_new.T[0].real)
-    f_imag_theta0_new = interp1d(frequencies_50, jm_new.T[0].imag)
-    f_real_phi0_new = interp1d(frequencies_50, jm_new.T[1].real)
-    f_imag_phi0_new = interp1d(frequencies_50, jm_new.T[1].imag)
-    f_real_theta1_new = interp1d(frequencies_50, jm_new.T[2].real)
-    f_imag_theta1_new = interp1d(frequencies_50, jm_new.T[2].imag)
-    f_real_phi1_new = interp1d(frequencies_50, jm_new.T[3].real)
-    f_imag_phi1_new = interp1d(frequencies_50, jm_new.T[3].imag)
+    f_real_theta0 = interp1d(frequencies_50, jm_new.T[0].real)
+    f_imag_theta0 = interp1d(frequencies_50, jm_new.T[0].imag)
+    f_real_phi0 = interp1d(frequencies_50, jm_new.T[1].real)
+    f_imag_phi0 = interp1d(frequencies_50, jm_new.T[1].imag)
+    f_real_theta1 = interp1d(frequencies_50, jm_new.T[2].real)
+    f_imag_theta1 = interp1d(frequencies_50, jm_new.T[2].imag)
+    f_real_phi1 = interp1d(frequencies_50, jm_new.T[3].real)
+    f_imag_phi1 = interp1d(frequencies_50, jm_new.T[3].imag)
     
+    '''
+    for j in np.arange(nantennas):
 
-    f_real_theta0_std = interp1d(frequencies_50, jm_std.T[0].real)
-    f_imag_theta0_std = interp1d(frequencies_50, jm_std.T[0].imag)
-    f_real_phi0_std = interp1d(frequencies_50, jm_std.T[1].real)
-    f_imag_phi0_std = interp1d(frequencies_50, jm_std.T[1].imag)
-    f_real_theta1_std = interp1d(frequencies_50, jm_std.T[2].real)
-    f_imag_theta1_std = interp1d(frequencies_50, jm_std.T[2].imag)
-    f_real_phi1_std = interp1d(frequencies_50, jm_std.T[3].real)
-    f_imag_phi1_std = interp1d(frequencies_50, jm_std.T[3].imag)
+        a=j*2
+        coreasfile = sim_list[j]
+        data=np.genfromtxt(coreasfile)
+        data[:,1:]*=2.99792458e4 # convert Ex, Ey and Ez (not time!) to Volt/meter
+        dlength=data.shape[0]
+        poldata=np.ndarray([dlength,2])
+        az_rot=sim_azimuth+3*np.pi/2    #conversion from CORSIKA coordinates to 0=east, pi/2=north
+        zen_rot=sim_zenith
+        XYZ=np.zeros([dlength,3])
+        XYZ[:,0]=-data[:,2] #conversion from CORSIKA coordinates to 0=east, pi/2=north
+        XYZ[:,1]=data[:,1]
+        XYZ[:,2]=data[:,3]
+        XYZcoreas.append(XYZ)
+
+        poldata[:, 0] = -data[:, 2] * np.cos(zen_rot)*np.cos(az_rot) + data[:, 1] * np.cos(zen_rot)*np.sin(az_rot) - np.sin(zen_rot)*data[:, 3]
+        poldata[:,1] = np.sin(az_rot)*data[:,2] + np.cos(az_rot)*data[:,1] # -sin(phi) *x + cos(phi)*y in coREAS 0=positive y, 1=negative x
+        spec=np.fft.rfft(poldata, axis=-2)
+
+        tstep = data[1,0]-data[0,0]
+        frequencies = np.fft.rfftfreq(dlength, tstep) # Ends at 5000 MHz as it should for tstep=0.1 ns
+        freqstep = (frequencies[1] - frequencies[0]) / 1.0e6 # MHz
+
+        instr_spec_new=np.ndarray([int(dlength/2+1),2],dtype=complex)
+        instr_spec_std=np.ndarray([int(dlength/2+1),2],dtype=complex)
+
+
+        jm_use_theta0_new=f_real_theta0_new(frequencies)+f_imag_theta0_new(frequencies)*1j
+        jm_use_phi0_new=f_real_phi0_new(frequencies)+f_imag_phi0_new(frequencies)*1j
+        jm_use_theta1_new=f_real_theta1_new(frequencies)+f_imag_theta1_new(frequencies)*1j
+        jm_use_phi1_new=f_real_phi1_new(frequencies)+f_imag_phi1_new(frequencies)*1j
+    
+        jm_use_theta0_std=f_real_theta0_std(frequencies)+f_imag_theta0_std(frequencies)*1j
+        jm_use_phi0_std=f_real_phi0_std(frequencies)+f_imag_phi0_std(frequencies)*1j
+        jm_use_theta1_std=f_real_theta1_std(frequencies)+f_imag_theta1_std(frequencies)*1j
+        jm_use_phi1_std=f_real_phi1_std(frequencies)+f_imag_phi1_std(frequencies)*1j
+  
+
+        instr_spec_new[:,0] = jm_use_theta0_new * spec[:,0] + jm_use_phi0_new * spec[:,1]
+        instr_spec_new[:,1] = jm_use_theta1_new * spec[:,0] + jm_use_phi1_new * spec[:,1]
+    
+        instr_spec_std[:,0] = jm_use_theta0_std * spec[:,0] + jm_use_phi0_std * spec[:,1]
+        instr_spec_std[:,1] = jm_use_theta1_std * spec[:,0] + jm_use_phi1_std * spec[:,1]
+    
+        inv_spec_new=np.fft.irfft(instr_spec_new, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
+        inv_spec_std=np.fft.irfft(instr_spec_std, axis=-2)#spec=np.fft.rfft(poldata, axis=-2)
+
+
+        lowco=30
+        hico=80
+        #print(inv_spec_new.shape)
+        fb = int(np.floor(lowco/freqstep))
+        lb = int(np.floor(hico/freqstep)+1)
+        window = np.zeros([1,int(dlength/2+1),1])
+        window[0,fb:lb+1,0]=1
+        pol1_rev=np.fft.irfft(spec[:,1])
+        maxfreqbin= int(np.floor(tstep/5e-9 * dlength/2.)+1) # Apply frequency bandpass only up to 100 MHz i.e. LOFAR maximum
+        shortspec_new=np.array([instr_spec_new[0:maxfreqbin,0]*window[0,0:maxfreqbin,0],instr_spec_new[0:maxfreqbin,1]*window[0,0:maxfreqbin,0]])
+        shortspec_std=np.array([instr_spec_std[0:maxfreqbin,0]*window[0,0:maxfreqbin,0],instr_spec_std[0:maxfreqbin,1]*window[0,0:maxfreqbin,0]])
+
+        filt_new=np.fft.irfft(shortspec_new, axis=-1)
+        filt_std=np.fft.irfft(shortspec_std, axis=-1)
+
+        dlength_new=filt_new.shape[1]
+        filt_new *= 1.0*dlength_new/dlength
+        filt_new_lna *= 1.0*dlength_new/dlength
+        filt_std *= 1.0*dlength_new/dlength
+
+        time2=tstep*np.arange(0,len(filt_new[0]))
+        time3=5e-9*np.arange(0,len(filt_new[0]))
+
+        roll=40
+        roll2=40
+
+        arg=np.argmax(data_0pol[a])
+
+
+
+    '''
+
+
 
 
 
