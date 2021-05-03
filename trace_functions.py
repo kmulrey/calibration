@@ -15,7 +15,7 @@ import re
 from scipy import signal
 from scipy.signal import resample
 
-roll=40
+roll=30
 
 
 def correlate(data,sim,event,station,antenna,pol,caltype):
@@ -280,4 +280,20 @@ def get_simulation(event, station, caltype):
 
 
 
+def reduce_data(data,dlen):
+
+    window=int(dlen/2)
+
+    #data=np.roll(data,roll)
+    
+    new_data=np.zeros([len(data),2,dlen])
+    
+    for a in np.arange(len(data)):
+        for j in np.arange(2):
+            hold=np.roll(data[a][j],roll)
+            arg=np.argmax(hold)
+            new_data[a][j]=hold[(arg-window):(arg+window)]
+    
+    
+    return new_data
 
