@@ -13,6 +13,13 @@ events=[105465463,  123314680,  127163030,  168608146,  183321178,  207028458,  
 121029645,  127108374,  157129793,  167252541,  181699538,  198490827,  211084564,  48361669,81409140,  86129434,  95228015]
 
 
+parser = OptionParser()
+parser.add_option('-c', '--caltype', default = 'standard', help = 'type of calibration')
+
+(options, args) = parser.parse_args()
+caltype = str(options.caltype)
+
+
 for e in np.arange(len(events)):
     os.chdir(station_info_dir)
 
@@ -24,3 +31,4 @@ for e in np.arange(len(events)):
         
     for s in np.arange(len(stations)):
         print(str(events[e]),stations[s])
+        python3 correlate.py -e str(events[e]) -s stations[s] -c caltype
