@@ -322,4 +322,4 @@ def run_correlation(data,sim):
             time_corr[a][1]=new_t_1
             correlation_value[a][1]=val_1
             
-    return time_corr, data_corr, sim_corr correlation_value
+    return time_corr, data_corr, sim_corr, correlation_value
