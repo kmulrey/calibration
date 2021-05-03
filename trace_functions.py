@@ -342,6 +342,7 @@ def run_correlation(data,sim):
     for a in np.arange(nantennas):
             new_t_pos, new_a_pos, new_b_pos, val_pos=correlate(data[a],sim[a])
             new_t_neg, new_a_neg, new_b_neg, val_neg=correlate(data[a],-1*sim[a])
+            print(val_pos,val_neg)
             
             if val_pos>val_neg:
                 data_corr[a][0:len(new_a_pos)]=new_a_pos
