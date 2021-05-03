@@ -332,11 +332,11 @@ def run_correlation(data,sim):
 
     nantennas=len(data)
     
-    data_corr=np.nan*np.zeros([ nantennas,correlate_resample_size+100])
-    sim_corr=np.nan*np.zeros([ nantennas,correlate_resample_size+100])
-    time_corr=np.nan*np.zeros([ nantennas,correlate_resample_size+100])
-    correlation_value=np.zeros([ nantennas])
-    sign=np.zeros([ nantennas])
+    data_corr=np.nan*np.zeros([nantennas,correlate_resample_size+100])
+    sim_corr=np.nan*np.zeros([nantennas,correlate_resample_size+100])
+    time_corr=np.nan*np.zeros([nantennas,correlate_resample_size+100])
+    correlation_value=np.zeros([nantennas])
+    sign=np.zeros([nantennas])
 
     
     for a in np.arange(nantennas):
@@ -364,7 +364,7 @@ def find_pearsonnr(data,sim):
 
     window1=50
     window2=150
-    pearson_value=np.zeros([len(data),len(data[0])])
+    pearson_value=np.zeros([len(data),2])
 
     for a in np.arange(len(data)):
         for p in np.arange(2):
