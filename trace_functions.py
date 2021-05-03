@@ -14,6 +14,7 @@ import glob
 import re
 from scipy import signal
 from scipy.signal import resample
+from scipy.stats.stats import pearsonr 
 
 roll=20
 correlate_resample_size=400
