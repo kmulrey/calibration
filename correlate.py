@@ -33,12 +33,6 @@ antenna_response_dir='/vol/astro7/lofar/kmulrey/calibration/antenna_model/jones_
 output_dir='/vol/astro7/lofar/kmulrey/calibration/compare/correlations/'
 
 
-os.chdir(station_info_dir)
-for file in glob.glob('*'+str(event)+'*'):
-    station_file=file
-    
-with open(station_file) as f:
-    lines = [line.rstrip() for line in f]
     
 file=open(data_dir+'info_'+event+'_'+station+'.dat','rb')
 core_x, core_y , stname, positions, signals, power11, rms, noisepower, time, lora_x, lora_y, lora_dens, azimuth, zenith, lora_zenith, xyz_files=pickle.load(file, encoding="latin1")
