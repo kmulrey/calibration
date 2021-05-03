@@ -15,7 +15,7 @@ import re
 from scipy import signal
 from scipy.signal import resample
 
-roll=15
+roll=20
 correlate_resample_size=400
 
 
@@ -298,6 +298,7 @@ def reduce_data(data,dlen):
     
     return new_data
 
+'''
 def run_correlation(data,sim):
 
     nantennas=len(data)
@@ -324,3 +325,53 @@ def run_correlation(data,sim):
             correlation_value[a][1]=val_1
             
     return time_corr, data_corr, sim_corr, correlation_value
+'''
+
+
+def run_correlation(data,sim):
+
+    nantennas=len(data)
+    
+    data_corr=np.nan*np.zeros([ nantennas,correlate_resample_size+100])
+    sim_corr=np.nan*np.zeros([ nantennas,correlate_resample_size+100])
+    time_corr=np.nan*np.zeros([ nantennas,correlate_resample_size+100])
+    correlation_value=np.zeros([ nantennas])
+    sign=np.zeros([ nantennas])
+
+    
+    for a in np.arange(nantennas):
+            new_t_pos, new_a_pos, new_b_pos, val_pos=correlate(data[a],sim[a])
+            new_t_neg, new_a_neg, new_b_neg, val_neg=correlate(data[a],-1*sim[a])
+            
+            if val_pos>val_neg:
+                data_corr[a][0:len(new_a_0)]=new_a_pos
+                sim_corr[a][0:len(new_b_0)]= new_b_pos
+                time_corr[a][0:len(new_t_0)]=new_t_pos
+                correlation_value[a]=val_pos
+                sign[a]=0
+            else:
+                data_corr[a][0:len(new_a_0)]=new_a_neg
+                sim_corr[a][0:len(new_b_0)]= new_b_neg
+                time_corr[a][0:len(new_t_0)]=new_t_neg
+                correlation_value[a]=val_neg
+                sign[a]=0
+            
+    return time_corr, data_corr, sim_corr, correlation_value, sign
+
+
+
+def find_pearsonnr(data,sim):
+
+    window1=50
+    window2=150
+
+    d=data_corr[a][0]
+    s=sim_corr[a][0]
+
+    where_are_NaNs = np.isnan(d)
+    d[where_are_NaNs] = 0
+
+    where_are_NaNs = np.isnan(s)
+    s[where_are_NaNs] = 0
+
+    
