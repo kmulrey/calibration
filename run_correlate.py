@@ -33,5 +33,8 @@ for e in np.arange(len(events)):
         
     for s in np.arange(len(stations)):
         print(str(events[e]),stations[s])
-        os.chdir('/vol/astro7/lofar/kmulrey/calibration/calibration/')
-        os.system('python3 correlate.py -e {0} -s {1} -c {2}'.format(str(events[e]),stations[s],caltype))
+        try:
+            os.chdir('/vol/astro7/lofar/kmulrey/calibration/calibration/')
+            os.system('python3 correlate.py -e {0} -s {1} -c {2}'.format(str(events[e]),stations[s],caltype))
+        except:
+            print('error')
