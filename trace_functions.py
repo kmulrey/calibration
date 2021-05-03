@@ -378,6 +378,7 @@ def find_pearsonnr(data,sim):
                 where_are_NaNs = np.isnan(s)
                 s[where_are_NaNs] = 0
 
-                    pearson_value[a][p]=pearsonr(d,s)
+                pearson_value[a][p]=pearsonr(d,s)
+                
     return pearson_value
     
