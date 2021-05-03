@@ -18,7 +18,7 @@ from scipy.signal import resample
 roll=20
 
 
-def correlate(data,sim,event,station,antenna,pol,caltype):
+def correlate(data,sim):
     a_raw=data
     b_raw=1*sim
     a=resample(a_raw,400)
@@ -297,3 +297,29 @@ def reduce_data(data,dlen):
     
     return new_data
 
+def run_correlation(data,sim):
+
+    nantennas=len(data)
+    
+    data_corr=np.zeros_like(data)
+    sim_corr=np.zeros_like(sim)
+    time_corr=np.zeros_like(sim)
+    correlation_value=np.zeros([len(data),len(data[0])])
+
+    
+    for a in np.arange(nantennas):
+            new_t_0, new_a_0, new_b_0, val_0=correlate(data[a][0],-1*sim[a][0])
+            new_t_1, new_a_1, new_b_1, val_1=correlate(data[a][1],-1*sim[a][1])
+
+            data_corr[a][0]=new_a_0
+            sim_corr[a][0]= new_b_0
+            time_corr[a][0]=new_t_0
+            correlation_value[a][0]=val_0
+
+
+            data_corr[a][1]=new_a_1
+            sim_corr[a][1]= new_b_1
+            time_corr[a][1]=new_t_1
+            correlation_value[a][1]=val_1
+            
+    return time_corr, data_corr, sim_corr correlation_value
