@@ -22,5 +22,5 @@ for e in np.arange(len(events)):
     with open(station_file) as f:
         stations = [line.rstrip() for line in f]
         
-    for s in np.arange(len(statoins)):
+    for s in np.arange(len(stations)):
         print(str(events[e]),stations[s])
