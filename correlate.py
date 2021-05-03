@@ -13,7 +13,6 @@ import trace_functions as trace
 parser = OptionParser()
 
 parser.add_option('-e', '--event', default = '105465463', help = 'event number')
-
 parser.add_option('-s', '--station', default = 'CS002', help = 'station')
 parser.add_option('-c', '--caltype', default = 'standard', help = 'type of calibration')
 
