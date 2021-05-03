@@ -15,7 +15,7 @@ import re
 from scipy import signal
 from scipy.signal import resample
 
-roll=20
+roll=15
 correlate_resample_size=400
 
 
