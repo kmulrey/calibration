@@ -304,7 +304,7 @@ def run_correlation(data,sim):
     
     data_corr=np.nan*np.zeros([len(data),len(data[0]),correlate_resample_size+100])
     sim_corr=np.nan*np.zeros([len(data),len(data[0]),correlate_resample_size+100])
-    time_corr=np.zeros([len(data),len(data[0]),correlate_resample_size+100])
+    time_corr=np.nan*np.zeros([len(data),len(data[0]),correlate_resample_size+100])
     correlation_value=np.zeros([len(data),len(data[0])])
 
     
