@@ -15,6 +15,7 @@ import re
 from scipy import signal
 from scipy.signal import resample
 
+roll=40
 
 
 def correlate(data,sim,event,station,antenna,pol,caltype):
@@ -76,7 +77,6 @@ def get_data(event, station, Calibration_curve, Calibration_curve_new):
     info=np.load(file,encoding='bytes')
     file.close()
     nAntData=len(info[::2])
-    print('{0} antennas'.format(nAntData))
     
     dt=5.0e-9
     time0=np.arange(0,len(info[0]))*dt
@@ -125,7 +125,6 @@ def get_simulation(event, station, caltype):
     for line in Lines:
         count += 1
         if station in line:
-            #print("Line{}: {}".format(count, line.strip()))
             x_sim_pos.append(float(line.strip().split('=')[1].split('760.0')[0].split(' ')[1])/100)
             y_sim_pos.append(float(line.strip().split('=')[1].split('760.0')[0].split(' ')[2])/100)
     x_sim_pos=np.asarray(x_sim_pos)
@@ -183,7 +182,6 @@ def get_simulation(event, station, caltype):
 
     sim_list=glob.glob(coreas_dir+'*{0}*'.format(station))
     nantennas=len(sim_list)
-    print('{0} antennas'.format(nantennas))
 
     rawcoreas=[]
     XYZcoreas=[]
@@ -254,7 +252,6 @@ def get_simulation(event, station, caltype):
 
         lowco=30
         hico=80
-        #print(inv_spec_new.shape)
         fb = int(np.floor(lowco/freqstep))
         lb = int(np.floor(hico/freqstep)+1)
         window = np.zeros([1,int(dlength/2+1),1])
@@ -270,8 +267,8 @@ def get_simulation(event, station, caltype):
       
         time3=5e-9*np.arange(0,len(filt[0]))
         
-        processed_signal[j][0]=filt[0]
-        processed_signal[j][1]=filt[1]
+        processed_signal[j][0]=np.roll(filt[0],roll)
+        processed_signal[j][1]=np.roll(filt[1],roll)
 
 
     position=np.zeros([2,nantennas])
