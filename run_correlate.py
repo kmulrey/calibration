@@ -20,8 +20,8 @@ parser.add_option('-c', '--caltype', default = 'standard', help = 'type of calib
 caltype = str(options.caltype)
 
 
-#for e in np.arange(len(events)):
-for e in np.arange(1):
+for e in np.arange(len(events)):
+#for e in np.arange(1):
 
     os.chdir(station_info_dir)
 
