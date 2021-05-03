@@ -14,7 +14,7 @@ import glob
 import re
 from scipy import signal
 from scipy.signal import resample
-from scipy.stats.stats import pearsonr 
+from scipy.stats.stats import pearsonr
 
 roll=20
 correlate_resample_size=400
@@ -379,7 +379,7 @@ def find_pearsonnr(data,sim):
                 where_are_NaNs = np.isnan(s)
                 s[where_are_NaNs] = 0
 
-                pearson_value[a][p]=pearsonr(d,s)
+                pearson_value[a][p]=pearsonr(d,s)[0]
                 
     return pearson_value
     
