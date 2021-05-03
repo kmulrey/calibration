@@ -16,13 +16,14 @@ from scipy import signal
 from scipy.signal import resample
 
 roll=20
+correlate_resample_size=400
 
 
 def correlate(data,sim):
     a_raw=data
     b_raw=1*sim
-    a=resample(a_raw,400)
-    b=resample(b_raw,400)
+    a=resample(a_raw,correlate_resample_size)
+    b=resample(b_raw,correlate_resample_size)
     #scale=np.max(a)/np.max(b)
     #b=b*scale
     a=a/np.max(a)
@@ -30,7 +31,7 @@ def correlate(data,sim):
 
     timestep = 1
     start = 0
-    end = 400#80*51
+    end = correlate_resample_size#80*51
     signal_size = abs(end-start)
     lag_values = np.arange(-signal_size+timestep, signal_size, timestep)
     t = np.linspace(start, end, int(end/timestep))
@@ -301,24 +302,24 @@ def run_correlation(data,sim):
 
     nantennas=len(data)
     
-    data_corr=np.zeros_like(data)
-    sim_corr=np.zeros_like(sim)
-    time_corr=np.zeros_like(sim)
-    correlation_value=np.zeros([len(data),len(data[0])])
+    data_corr=np.nan*np.zeros([len(data),len(data[0]),correlate_resample_size+100])
+    sim_corr=np.nan*np.zeros([len(data),len(data[0]),correlate_resample_size+100])
+    time_corr=np.zeros([len(data),len(data[0]),correlate_resample_size+100])
+    correlation_value=np.zeros([len(data),len(data[0]),correlate_resample_size+100])
 
     
     for a in np.arange(nantennas):
             new_t_0, new_a_0, new_b_0, val_0=correlate(data[a][0],-1*sim[a][0])
             new_t_1, new_a_1, new_b_1, val_1=correlate(data[a][1],-1*sim[a][1])
 
-            data_corr[a][0]=new_a_0
-            sim_corr[a][0]= new_b_0
+            data_corr[a][0][0:len(new_a_0)]=new_a_0
+            sim_corr[a][0][0:len(new_b_0)]= new_b_0
             time_corr[a][0]=new_t_0
             correlation_value[a][0]=val_0
 
 
-            data_corr[a][1]=new_a_1
-            sim_corr[a][1]= new_b_1
+            data_corr[a][1][0:len(new_a_1)]=new_a_1
+            sim_corr[a][1][0:len(new_b_1)]= new_b_1
             time_corr[a][1]=new_t_1
             correlation_value[a][1]=val_1
             
