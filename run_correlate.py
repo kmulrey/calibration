@@ -33,4 +33,5 @@ for e in np.arange(1):
         
     for s in np.arange(len(stations)):
         print(str(events[e]),stations[s])
-        python3 correlate.py -e str(events[e]) -s stations[s] -c caltype
+        
+        os.system('python3 correlate.py -e str(events[e]) -s stations[s] -c caltype')
