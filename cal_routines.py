@@ -819,7 +819,7 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     
     
     
-    sim_X_50=sim_X*337.0*121#*2e4
+    sim_X_50=sim_X*337.0*121#*2e4   # the 121 is here to account for LNA gain
     sim_X_80=sim_X*337.0*121#*2e4
     sim_X_115=sim_X*337.0*121#*2e4
 

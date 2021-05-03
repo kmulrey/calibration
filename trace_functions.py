@@ -15,7 +15,7 @@ import re
 from scipy import signal
 from scipy.signal import resample
 
-roll=30
+roll=20
 
 
 def correlate(data,sim,event,station,antenna,pol,caltype):
@@ -275,7 +275,7 @@ def get_simulation(event, station, caltype):
     position[0]=x_sim_pos2
     position[1]=y_sim_pos2
 
-    return time3, processed_signal,position
+    return time3, 11*processed_signal,position  #11 to account for LNA gain included in cal
 
 
 
