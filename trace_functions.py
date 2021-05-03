@@ -342,7 +342,6 @@ def run_correlation(data,sim):
     for a in np.arange(nantennas):
             new_t_pos, new_a_pos, new_b_pos, val_pos=correlate(data[a],sim[a])
             new_t_neg, new_a_neg, new_b_neg, val_neg=correlate(data[a],-1*sim[a])
-            print(val_pos,val_neg)
             
             if val_pos>val_neg:
                 data_corr[a][0:len(new_a_pos)]=new_a_pos
@@ -355,7 +354,7 @@ def run_correlation(data,sim):
                 sim_corr[a][0:len(new_b_neg)]= new_b_neg
                 time_corr[a][0:len(new_t_neg)]=new_t_neg
                 correlation_value[a]=val_neg
-                sign[a]=0
+                sign[a]=1
             
     return time_corr, data_corr, sim_corr, correlation_value, sign
 
@@ -365,14 +364,20 @@ def find_pearsonnr(data,sim):
 
     window1=50
     window2=150
+    pearson_value=np.zeros(len(data),len(data[0]))
 
-    d=data_corr[a][0]
-    s=sim_corr[a][0]
+    for a in np.arange(len(data)):
+        for p in np.arange(2):
+        
+                d=data[a][0]
+                s=sim[a][0]
 
-    where_are_NaNs = np.isnan(d)
-    d[where_are_NaNs] = 0
+                where_are_NaNs = np.isnan(d)
+                d[where_are_NaNs] = 0
 
-    where_are_NaNs = np.isnan(s)
-    s[where_are_NaNs] = 0
+                where_are_NaNs = np.isnan(s)
+                s[where_are_NaNs] = 0
 
+                    pearson_value[a][p]=pearsonr(d,s)
+    return pearson_value
     
