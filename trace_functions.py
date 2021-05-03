@@ -305,7 +305,7 @@ def run_correlation(data,sim):
     data_corr=np.nan*np.zeros([len(data),len(data[0]),correlate_resample_size+100])
     sim_corr=np.nan*np.zeros([len(data),len(data[0]),correlate_resample_size+100])
     time_corr=np.zeros([len(data),len(data[0]),correlate_resample_size+100])
-    correlation_value=np.zeros([len(data),len(data[0]),correlate_resample_size+100])
+    correlation_value=np.zeros([len(data),len(data[0])])
 
     
     for a in np.arange(nantennas):
@@ -314,13 +314,13 @@ def run_correlation(data,sim):
 
             data_corr[a][0][0:len(new_a_0)]=new_a_0
             sim_corr[a][0][0:len(new_b_0)]= new_b_0
-            time_corr[a][0]=new_t_0
+            time_corr[a][0][0:len(new_t_0)]=new_t_0
             correlation_value[a][0]=val_0
 
 
             data_corr[a][1][0:len(new_a_1)]=new_a_1
             sim_corr[a][1][0:len(new_b_1)]= new_b_1
-            time_corr[a][1]=new_t_1
+            time_corr[a][1][0:len(new_t_1)]=new_t_1
             correlation_value[a][1]=val_1
             
     return time_corr, data_corr, sim_corr, correlation_value
