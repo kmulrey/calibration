@@ -364,7 +364,7 @@ def find_pearsonnr(data,sim):
 
     window1=50
     window2=150
-    pearson_value=np.zeros(len(data),len(data[0]))
+    pearson_value=np.zeros([len(data),len(data[0])])
 
     for a in np.arange(len(data)):
         for p in np.arange(2):
