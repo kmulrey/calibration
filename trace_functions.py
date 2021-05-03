@@ -309,7 +309,7 @@ def run_correlation(data,sim):
 
     
     for a in np.arange(nantennas):
-            new_t_0, new_a_0, new_b_0, val_0=correlate(data[a][0],-1*sim[a][0])
+            new_t_0, new_a_0, new_b_0, val_0=correlate(data[a][0],1*sim[a][0])
             new_t_1, new_a_1, new_b_1, val_1=correlate(data[a][1],-1*sim[a][1])
 
             data_corr[a][0][0:len(new_a_0)]=new_a_0
