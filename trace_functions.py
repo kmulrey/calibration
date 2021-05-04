@@ -389,7 +389,7 @@ def find_pearsonnr(data,sim):
 
                 pearson_value[a][p]=pearsonr(d,s)[0]
                 
-                chi2[a][p]=(np.sum((s-d)**2/s)/len(s))
+                chi2[a][p]=(np.sum((np.abs(s)-np.abs(d))**2/np.abs(s))/len(s))
                 
     return pearson_value,chi2
     
