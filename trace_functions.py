@@ -349,10 +349,10 @@ def run_correlation(data,sim):
             new_t_neg, new_a_neg, new_b_neg, val_neg=correlate(data[a],-1*sim[a])
             
             
-            d1_pos=new_a_pos[0:len(new_a_pos)]
-            s1_pos=new_b_pos[0:len(new_b_pos)]
-            d1_neg=new_a_neg[0:len(new_a_neg)]
-            s1_neg=new_b_neg[0:len(new_b_neg)]
+            d1_pos=np.asarray(new_a_pos[0:len(new_a_pos)])
+            s1_pos=np.asarray(new_b_pos[0:len(new_b_pos)])
+            d1_neg=np.asarray(new_a_neg[0:len(new_a_neg)])
+            s1_neg=np.asarray(new_b_neg[0:len(new_b_neg)])
             
                 
             where_are_NaNs = np.isnan(d1_pos)
