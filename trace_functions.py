@@ -329,7 +329,7 @@ def run_correlation(data,sim):
 '''
 
 
-def run_correlation(data,sim):
+def run_correlation_flip(data,sim):
 
     window1=50
     window2=150
@@ -395,6 +395,26 @@ def run_correlation(data,sim):
         flipped=1
             
     return time_corr, data_corr, sim_corr, correlation_value, sign, flipped
+    
+def run_correlation(data,sim):
+
+    nantennas=len(data)
+    
+    data_corr=np.nan*np.zeros([nantennas,correlate_resample_size+100])
+    sim_corr=np.nan*np.zeros([nantennas,correlate_resample_size+100])
+    time_corr=np.nan*np.zeros([nantennas,correlate_resample_size+100])
+    correlation_value=np.zeros([nantennas])
+  
+    
+    for a in np.arange(nantennas):
+            new_t_pos, new_a_pos, new_b_pos, val_pos=correlate(data[a],sim[a])
+            data_corr[a][0:len(new_a_pos)]=new_a_pos
+            sim_corr[a][0:len(new_b_pos)]= new_b_pos
+            time_corr[a][0:len(new_t_pos)]=new_t_pos
+            correlation_value[a]=val_pos
+        
+                
+    return time_corr, data_corr, sim_corr, correlation_value
 
 
 
