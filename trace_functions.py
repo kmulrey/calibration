@@ -378,7 +378,7 @@ def run_correlation(data,sim):
             pearson_neg=pearsonr(d_neg,s_neg)[0]
 
             
-            if pearson_pos>pearson_neg:
+            if pearson_pos>1000:
                 data_corr[a][0:len(new_a_pos)]=new_a_pos
                 sim_corr[a][0:len(new_b_pos)]= new_b_pos
                 time_corr[a][0:len(new_t_pos)]=new_t_pos
