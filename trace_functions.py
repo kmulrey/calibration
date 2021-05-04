@@ -175,10 +175,10 @@ def get_simulation(event, station, caltype):
         info=pickle.load(file, encoding="latin1")
         file.close()
         #antenna_model[f][0]=info['jones_thetaX_complex'][int((180-sim_azimuth+720)%360)][int(sim_zenith)]
-        antenna_model[f][0]=info['jones_thetaX_complex'][int((180-sim_azimuth)%360)][int(sim_zenith)]
-        antenna_model[f][1]=info['jones_phiX_complex'][int((180-sim_azimuth)%360)][int(sim_zenith)]
-        antenna_model[f][2]=info['jones_thetaY_complex'][int((180-sim_azimuth)%360)][int(sim_zenith)]
-        antenna_model[f][3]=info['jones_phiY_complex'][int((180-sim_azimuth)%360)][int(sim_zenith)]
+        antenna_model[f][0]=info['jones_thetaX_complex'][int((sim_azimuth)%360)][int(sim_zenith)]
+        antenna_model[f][1]=info['jones_phiX_complex'][int((sim_azimuth)%360)][int(sim_zenith)]
+        antenna_model[f][2]=info['jones_thetaY_complex'][int((sim_azimuth)%360)][int(sim_zenith)]
+        antenna_model[f][3]=info['jones_phiY_complex'][int((sim_azimuth)%360)][int(sim_zenith)]
         # put in the 180 to see if it fixes problem
 
 
@@ -277,7 +277,7 @@ def get_simulation(event, station, caltype):
     position[0]=x_sim_pos2
     position[1]=y_sim_pos2
 
-    return time3, 11*processed_signal,position  #11 to account for LNA gain included in cal
+    return time3, 11*processed_signal,position,sim_azimuth,sim_zenith  #11 to account for LNA gain included in cal
 
 
 
