@@ -375,17 +375,17 @@ def find_pearsonnr(data,sim):
                 d1=data[a][p]
                 s1=sim[a][p]
                 
+                where_are_NaNs = np.isnan(d1)
+                d1[where_are_NaNs] = 0
+                
+                where_are_NaNs = np.isnan(s1)
+                s1[where_are_NaNs] = 0
+                
                 arg0=np.argmax(d1)
                 arg1=np.argmax(s1)
                 
                 d=d1[(arg0-window1):(arg0+window2)]
                 s=s1[(arg1-window1):(arg1+window2)]
-
-                where_are_NaNs = np.isnan(d)
-                d[where_are_NaNs] = 0
-
-                where_are_NaNs = np.isnan(s)
-                s[where_are_NaNs] = 0
 
                 pearson_value[a][p]=pearsonr(d,s)[0]
                 
