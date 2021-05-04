@@ -349,7 +349,6 @@ def run_correlation(data,sim):
             new_t_neg, new_a_neg, new_b_neg, val_neg=correlate(data[a],-1*sim[a])
             
             
-            
             d1_pos=new_a_pos[0:len(new_a_pos)]
             s1_pos=new_b_pos[0:len(new_b_pos)]
             d1_neg=new_a_neg[0:len(new_a_neg)]
@@ -358,8 +357,8 @@ def run_correlation(data,sim):
                 
             where_are_NaNs = np.isnan(d1_pos)
             
-            print(len(d1_pos))
-            print(len(where_are_NaNs))
+            print(d1_pos.shape)
+            print(where_are_NaNs.shape)
 
             d1_pos[where_are_NaNs] = 0
             where_are_NaNs = np.isnan(s1_pos)
