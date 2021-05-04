@@ -358,7 +358,7 @@ def run_correlation(data,sim):
                 correlation_value[a]=val_neg
                 sign[a]=1
                 
-    if(np.sum(sign.T[0])>(len(sign)/2)):
+    if(np.sum(sign)>(len(sign)/2)):
         flipped=1
             
     return time_corr, data_corr, sim_corr, correlation_value, sign, flipped
