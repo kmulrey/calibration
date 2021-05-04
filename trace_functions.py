@@ -338,6 +338,7 @@ def run_correlation(data,sim):
     time_corr=np.nan*np.zeros([nantennas,correlate_resample_size+100])
     correlation_value=np.zeros([nantennas])
     sign=np.zeros([nantennas])
+    flipped=0
 
     
     for a in np.arange(nantennas):
@@ -356,6 +357,9 @@ def run_correlation(data,sim):
                 time_corr[a][0:len(new_t_neg)]=new_t_neg
                 correlation_value[a]=val_neg
                 sign[a]=1
+                
+    if(np.sum(sign.T[0])>(len(sign)/2)):
+        flipped=1
             
     return time_corr, data_corr, sim_corr, correlation_value, sign
 
