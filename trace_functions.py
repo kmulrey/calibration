@@ -372,14 +372,14 @@ def find_pearsonnr(data,sim):
         for p in np.arange(2):
         
                 
-                d=data[a][0]
-                s=sim[a][0]
+                d1=data[a][p]
+                s1=sim[a][p]
                 
-                arg0=np.argmax(d)
-                arg1=np.argmax(s)
+                arg0=np.argmax(d1)
+                arg1=np.argmax(s1)
                 
-                d=d[(arg0-window1):(arg0+window2)]
-                s=s[(arg0-window1):(arg0+window2)]
+                d=d1[(arg0-window1):(arg0+window2)]
+                s=s1[(arg1-window1):(arg1+window2)]
 
                 where_are_NaNs = np.isnan(d)
                 d[where_are_NaNs] = 0
