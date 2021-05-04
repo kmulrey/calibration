@@ -331,6 +331,9 @@ def run_correlation(data,sim):
 
 def run_correlation(data,sim):
 
+    window1=50
+    window2=150
+    
     nantennas=len(data)
     
     data_corr=np.nan*np.zeros([nantennas,correlate_resample_size+100])
@@ -345,7 +348,35 @@ def run_correlation(data,sim):
             new_t_pos, new_a_pos, new_b_pos, val_pos=correlate(data[a],sim[a])
             new_t_neg, new_a_neg, new_b_neg, val_neg=correlate(data[a],-1*sim[a])
             
-            if val_pos>val_neg:
+            d1_pos=new_a_pos
+            s1_pos=new_b_pos
+            d1_neg=new_a_neg
+            s1_neg=new_b_neg
+                
+            where_are_NaNs = np.isnan(d1_pos)
+            d1_pos[where_are_NaNs] = 0
+            where_are_NaNs = np.isnan(s1_pos)
+            s1_pos[where_are_NaNs] = 0
+            where_are_NaNs = np.isnan(d1_neg)
+            d1_neg[where_are_NaNs] = 0
+            where_are_NaNs = np.isnan(s1_neg)
+            s1_neg[where_are_NaNs] = 0
+                
+            arg0_pos=np.argmax(d1_pos)
+            arg1_pos=np.argmax(s1_pos)
+            arg0_neg=np.argmax(d1_neg)
+            arg1_neg=np.argmax(s1_neg)
+                
+            d_pos=d1_pos[(arg0_pos-window1):(arg0_pos+window2)]
+            s_pos=s1_pos[(arg1_pos-window1):(arg1_pos+window2)]
+            d_neg=d1_pos[(arg0_neg-window1):(arg0_neg+window2)]
+            s_neg=s1_pos[(arg1_neg-window1):(arg1_neg+window2)]
+            
+            pearson_pos=pearsonr(d_pos,s_pos)[0]
+            pearson_neg=pearsonr(d_neg,s_neg)[0]
+
+            
+            if pearson_pos>pearson_neg:
                 data_corr[a][0:len(new_a_pos)]=new_a_pos
                 sim_corr[a][0:len(new_b_pos)]= new_b_pos
                 time_corr[a][0:len(new_t_pos)]=new_t_pos
