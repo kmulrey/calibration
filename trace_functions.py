@@ -366,7 +366,8 @@ def find_pearsonnr(data,sim):
     window1=50
     window2=150
     pearson_value=np.zeros([len(data),2])
-
+    chi2=np.zeros([len(data),2])
+    
     for a in np.arange(len(data)):
         for p in np.arange(2):
         
@@ -380,6 +381,6 @@ def find_pearsonnr(data,sim):
                 s[where_are_NaNs] = 0
 
                 pearson_value[a][p]=pearsonr(d,s)[0]
-                
-    return pearson_value
+                chi2[a][p]=(np.sum((s-d)**2/s)/len(s)
+    return pearson_value,chi2
     
