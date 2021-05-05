@@ -53,7 +53,7 @@ sim=np.swapaxes(sim,1,0)
 data_reduced=np.swapaxes(data_reduced,1,0)
 
 time_corr_0, data_corr_0, sim_corr_0, correlation_value_0=trace.run_correlation(data_reduced[0],sim[0])
-time_corr_1, data_corr_1, sim_corr_1, correlation_value_1trace.run_correlation(data_reduced[1],sim[1])
+time_corr_1, data_corr_1, sim_corr_1, correlation_value_1=trace.run_correlation(data_reduced[1],sim[1])
 #time_corr, data_corr, sim_corr, correlation_value=trace.run_correlation(data_reduced,sim)
 
 
