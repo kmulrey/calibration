@@ -52,8 +52,8 @@ data_reduced=trace.reduce_data(data,len(time_sim))
 sim=np.swapaxes(sim,1,0)
 data_reduced=np.swapaxes(data_reduced,1,0)
 
-time_corr_0, data_corr_0, sim_corr_0, correlation_value_0,sign_0,flip_0=trace.run_correlation(data_reduced[0],sim[0])
-time_corr_1, data_corr_1, sim_corr_1, correlation_value_1,sign_1,flip_1=trace.run_correlation(data_reduced[1],sim[1])
+time_corr_0, data_corr_0, sim_corr_0, correlation_value_0=trace.run_correlation(data_reduced[0],sim[0])
+time_corr_1, data_corr_1, sim_corr_1, correlation_value_1trace.run_correlation(data_reduced[1],sim[1])
 #time_corr, data_corr, sim_corr, correlation_value=trace.run_correlation(data_reduced,sim)
 
 
@@ -61,13 +61,13 @@ data_corr=np.swapaxes(np.stack((data_corr_0,data_corr_1)),1,0)
 sim_corr=np.swapaxes(np.stack((sim_corr_0,sim_corr_1)),1,0)
 time_corr=np.swapaxes(np.stack((time_corr_0,time_corr_1)),1,0)
 correlation_value=np.swapaxes(np.stack((correlation_value_0,correlation_value_1)),1,0)
-signs=np.swapaxes(np.stack((sign_0,sign_1)),1,0)
-flipped=np.asarray([flip_0,flip_1])
+#signs=np.swapaxes(np.stack((sign_0,sign_1)),1,0)
+#flipped=np.asarray([flip_0,flip_1])
 
 pearson_values, chi2=trace.find_pearsonnr(data_corr,sim_corr)
 
 
-info={'time_corr':time_corr,'data_corr':data_corr,'sim_corr':sim_corr,'correlation_value':correlation_value,'sim_positions':sim_positions,'signs':signs,'pearson_values':pearson_values,'chi2':chi2,'flipped':flipped}
+info={'time_corr':time_corr,'data_corr':data_corr,'sim_corr':sim_corr,'correlation_value':correlation_value,'sim_positions':sim_positions,'pearson_values':pearson_values,'chi2':chi2}
 
 outfile=open(output_dir+event+'_'+station+'_'+caltype+'.p','wb')
 pickle.dump(info,outfile)
