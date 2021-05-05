@@ -46,7 +46,7 @@ core_x, core_y , stname, positions, signals, power11, rms, noisepower, time, lor
 time_data,data_all=trace.get_data(event,station,cal_old, cal_new)
 data=data_all[::2]
 
-time_sim, sim, sim_positions=trace.get_simulation(event,station, caltype)
+time_sim, sim, sim_positions,sim_azimuth,sim_zenith=trace.get_simulation(event,station, caltype)
 data_reduced=trace.reduce_data(data,len(time_sim))
 
 sim=np.swapaxes(sim,1,0)
