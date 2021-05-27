@@ -963,12 +963,12 @@ def do_fit_single(con_dir,fit_data_dir,fit_dir,name,station,ant_id,pol):
 
   
     if pol=='X':
-        sim=sim_X*337.0#*121#*2e4
+        sim=sim_X*337.0*121#*2e4
         data=data_X
         std=std_X
         cables=int(cables_X)
     if pol=='Y':
-        sim=sim_Y*337.0#*121#*2e4
+        sim=sim_Y*337.0*121#*2e4
         data=data_Y
         std=std_Y
         cables=int(cables_Y)
@@ -982,7 +982,7 @@ def do_fit_single(con_dir,fit_data_dir,fit_dir,name,station,ant_id,pol):
 
     
     g=21.08423462
-    g=41.08423462
+    #g=41.08423462
 
     c=3.0e-11
     a=5.0e-15
