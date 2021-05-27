@@ -13,6 +13,7 @@
 		41B3C32D263C29DE003C714A /* trace_functions.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = trace_functions.py; sourceTree = "<group>"; };
 		41B3C32E263C29EA003C714A /* process_comparison.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = process_comparison.py; sourceTree = "<group>"; };
 		41E48CAB2640392D00ADF435 /* run_correlate.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = run_correlate.py; sourceTree = "<group>"; };
+		41E48CB6265E809200ADF435 /* readTBB.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = readTBB.py; sourceTree = "<group>"; };
 		41F9D2C72625EAC600A54232 /* single_end_to_end.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = single_end_to_end.py; sourceTree = "<group>"; };
 		41F9D2C82626DE1100A54232 /* correlate.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = correlate.py; sourceTree = "<group>"; };
 		41F9D2CF2638114500A54232 /* calibration_single.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = calibration_single.py; sourceTree = "<group>"; };
@@ -25,6 +26,7 @@
 				41B3C32E263C29EA003C714A /* process_comparison.py */,
 				41B3C32D263C29DE003C714A /* trace_functions.py */,
 				41558B9325F687F700D1DFD6 /* cal_routines.py */,
+				41E48CB6265E809200ADF435 /* readTBB.py */,
 				41F9D2CF2638114500A54232 /* calibration_single.py */,
 				41A85FAA25FE12700059AC0F /* write_and_save_model.py */,
 				41558B9425F687F700D1DFD6 /* calibration_end_to_end.py */,

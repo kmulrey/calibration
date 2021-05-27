@@ -582,7 +582,7 @@ def consolidate(con_dir,power_dir,data_dir,station,ant_id):
             power[f][t][1]=temp[t][1]
             power[f][t][2]=temp[t][2]
             power[f][t][3]=temp[t][4]
-            power[f][t][4]=temp[t][3]
+            power[f][t][4]=temp[t][3]   ## <---- this is where sim power is swapped!
     
     dh=0.25
     bin_edges=np.arange(0,24.1,dh)
@@ -663,7 +663,7 @@ def consolidate_single(con_dir,power_dir,data_dir,station,antenna_no):
             power[f][t][0]=temp[t][0]
             power[f][t][1]=temp[t][1]
             power[f][t][2]=temp[t][2]
-            power[f][t][3]=temp[t][4]
+            power[f][t][3]=temp[t][4]   ## <---- this is where sim power is swapped!
             power[f][t][4]=temp[t][3]
     
     dh=0.25
@@ -963,12 +963,12 @@ def do_fit_single(con_dir,fit_data_dir,fit_dir,name,station,ant_id,pol):
 
   
     if pol=='X':
-        sim=sim_X*337.0*121#*2e4
+        sim=sim_X*337.0#*121#*2e4
         data=data_X
         std=std_X
         cables=int(cables_X)
     if pol=='Y':
-        sim=sim_Y*337.0*121#*2e4
+        sim=sim_Y*337.0#*121#*2e4
         data=data_Y
         std=std_Y
         cables=int(cables_Y)
@@ -982,6 +982,8 @@ def do_fit_single(con_dir,fit_data_dir,fit_dir,name,station,ant_id,pol):
 
     
     g=21.08423462
+    g=41.08423462
+
     c=3.0e-11
     a=5.0e-15
     s=9e7
