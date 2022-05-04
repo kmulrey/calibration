@@ -837,6 +837,7 @@ def do_fit(consolidate_dir,fit_data_dir,fit_dir,name,station,ant_id):
     cable_attenuation_115=np.genfromtxt(fit_data_dir+'/attenuation/attenuation_coax9_115m.txt',usecols=1)
     RCU_gain=np.genfromtxt(fit_data_dir+'/RCU_gain_new_5.txt',usecols=0)
     jones_vals=np.genfromtxt(fit_data_dir+'/antenna_gain.txt')
+    # ----> this needs to be updated with antenna again for AARTFAAC!!!
     #jones_vals=121*np.ones([51])
 
 
