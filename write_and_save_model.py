@@ -31,12 +31,12 @@ for f in np.arange(30,81):
     print(f)
     JJ=np.zeros([91,361,4],dtype='complex')
     JJ_aartfaac=np.zeros([91,361,4],dtype='complex')
-    
-    CR_jones_file='/vol/astro3/lofar/sim/kmulrey/calibration/final/antenna_model/jones/jones_matrix_'+str(f)+'.p'
-    jonesfile=open(CR_jones_file,'rb')
-    jonesfile.seek(0)
-    jones_matrix = pickle.load(jonesfile, encoding='latin1')
-    
+
+    #CR_jones_file='/vol/astro3/lofar/sim/kmulrey/calibration/final/antenna_model/jones/jones_matrix_'+str(f)+'.p'
+    #jonesfile=open(CR_jones_file,'rb')
+    #jonesfile.seek(0)
+    #jones_matrix = pickle.load(jonesfile, encoding='latin1')
+
     for el in np.arange(90):
         for az in np.arange(360):
             theta=90-el
@@ -48,15 +48,15 @@ for f in np.arange(30,81):
 
             Jones_matrices = antenna_model.Jones_Matrices( [float(f)*1e6], zenith=theta, azimuth=i_az )
 
-            JJ[el][i_az][0]=jones_matrix[az][el][0]
-            JJ[el][i_az][1]=jones_matrix[az][el][1]
-            JJ[el][i_az][2]=jones_matrix[az][el][2]
-            JJ[el][i_az][3]=jones_matrix[az][el][3]
+            #JJ[el][i_az][0]=jones_matrix[az][el][0]
+            #JJ[el][i_az][1]=jones_matrix[az][el][1]
+            #JJ[el][i_az][2]=jones_matrix[az][el][2]
+            #JJ[el][i_az][3]=jones_matrix[az][el][3]
             JJ_aartfaac[90-el][i_az][0]=Jones_matrices[0][0][0]
             JJ_aartfaac[90-el][i_az][1]=Jones_matrices[0][0][1]
             JJ_aartfaac[90-el][i_az][2]=Jones_matrices[0][1][0]
             JJ_aartfaac[90-el][i_az][3]=Jones_matrices[0][1][1]
-            
+
     #info={'jones_aartfaac':JJ_aartfaac,'jones_cr':JJ,'antenna_XYZ':antenna_XYZ,'AART_ant_id':AART_ant_id}
     info={'jones_aartfaac':JJ_aartfaac,'antenna_XYZ':antenna_XYZ,'AART_ant_id':AART_ant_id}
 
