@@ -67,7 +67,7 @@ for f in np.arange(51):
     if path.exists(power_dir+'/integrated_power_'+str(freq)+'_antenna_'+str(antenna_no)+'.txt')==False:
         power_flag=1
         print('no power {0}, {1}'.format(freq,power_dir+'/'+'integrated_power_'+str(freq)+'.txt'))
-   
+
 if power_flag==1 or reprocess_power_flag==1:
     print('calculating power as a function of LST')
     #cal.find_simulated_power(jones_dir, power_dir)
@@ -77,7 +77,7 @@ consol_flag=0
 if path.exists(consolidate_dir+'/power_'+station+'_antenna_'+str(antenna_no)+'.p')==False:
     consol_flag=1
     print('no consolidated info {0}'.format(consolidate_dir))
-        
+
 if consol_flag==1:
     print('now consolidating info')
     if not os.path.exists(consolidate_dir):

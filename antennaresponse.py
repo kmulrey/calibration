@@ -69,10 +69,10 @@ class AntennaResponse(Task):
                 self.vt = np.loadtxt(os.environ["LOFARSOFT"] + "/data/lofar/antenna_response_model/LBA_Vout_theta.txt", skiprows=1)
             if self.vp is None:
                 self.vp = np.loadtxt(os.environ["LOFARSOFT"] + "/data/lofar/antenna_response_model/LBA_Vout_phi.txt", skiprows=1)
-    
+
             cvt = cr.hArray(self.vt[:, 3] + 1j * self.vt[:, 4])
             cvp = cr.hArray(self.vp[:, 3] + 1j * self.vp[:, 4])
-    
+
             fstart = 10.0 * 1.e6
             fstep = 1.0 * 1.e6
             fn = 101
@@ -87,10 +87,10 @@ class AntennaResponse(Task):
                 self.vt = np.loadtxt(os.environ["LOFARSOFT"] + "/data/lofar/antenna_response_model/HBA_Vout_theta.txt", skiprows=1)
             if self.vp is None:
                 self.vp = np.loadtxt(os.environ["LOFARSOFT"] + "/data/lofar/antenna_response_model/HBA_Vout_phi.txt", skiprows=1)
-    
+
             cvt = cr.hArray(self.vt[:, 3] + 1j * self.vt[:, 4])
             cvp = cr.hArray(self.vp[:, 3] + 1j * self.vp[:, 4])
-    
+
             fstart = 100.0 * 1.e6
             fstep = 10.0 * 1.e6
             fn = 21
@@ -133,4 +133,3 @@ class AntennaResponse(Task):
             else:
                 print "unfolding antenna pattern (backwards)"
                 cr.hMatrixMix(self.on_sky_polarization[0:self.nantennas:2, ...], self.on_sky_polarization[1:self.nantennas:2, ...], self.jones_matrix)
-
